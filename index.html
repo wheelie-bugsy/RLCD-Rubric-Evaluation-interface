@@ -1,0 +1,1713 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nimble Rubric Evaluator</title>
+<style>
+:root{
+  --bg:#f6f7fb; --surface:#ffffff; --surface-2:#f1f3f9; --border:#e3e6ef; --text:#1b1f2e; --muted:#636b83;
+  --accent:#4f46e5; --accent-2:#eef0ff; --accent-text:#ffffff;
+  --good:#15803d; --good-bg:#e8f6ed; --warn:#b45309; --warn-bg:#fdf3e2; --bad:#b91c1c; --bad-bg:#fdecec;
+  --l0:#ef4444; --l1:#f59e0b; --l2:#eab308; --l3:#22c55e; --l4:#0ea5e9;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 16px rgba(16,24,40,.06); --radius:14px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1220; --surface:#171b2e; --surface-2:#1e2338; --border:#2a3050; --text:#e7e9f3; --muted:#9aa2bf;
+    --accent:#818cf8; --accent-2:#252a4a; --accent-text:#0f1220;
+    --good:#4ade80; --good-bg:#14301f; --warn:#fbbf24; --warn-bg:#33270f; --bad:#f87171; --bad-bg:#3a1717;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1220; --surface:#171b2e; --surface-2:#1e2338; --border:#2a3050; --text:#e7e9f3; --muted:#9aa2bf;
+  --accent:#818cf8; --accent-2:#252a4a; --accent-text:#0f1220;
+  --good:#4ade80; --good-bg:#14301f; --warn:#fbbf24; --warn-bg:#33270f; --bad:#f87171; --bad-bg:#3a1717;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:14.5px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.top-inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.01em}
+.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
+nav.tabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:11px;border:1px solid var(--border)}
+nav.tabs button{border:0;background:transparent;color:var(--muted);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer;display:flex;gap:7px;align-items:center}
+nav.tabs button.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+nav.tabs .count{background:var(--accent-2);color:var(--accent);border-radius:99px;padding:0 7px;font-size:12px}
+.conn{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;padding:6px 10px;border-radius:9px;border:1px solid var(--border);background:var(--surface)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.dot.ok{background:var(--good);box-shadow:0 0 0 3px var(--good-bg)} .dot.bad{background:var(--bad);box-shadow:0 0 0 3px var(--bad-bg)} .dot.demo{background:var(--warn);box-shadow:0 0 0 3px var(--warn-bg)}
+main{max-width:1280px;margin:0 auto;padding:22px 20px 80px}
+.tab{display:none} .tab.active{display:block}
+.grid2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px}
+@media (max-width:980px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.card + .card{margin-top:16px}
+.card h2{font-size:15px;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.card .sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.step{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-text);display:inline-grid;place-items:center;font-size:12px;font-weight:700}
+label.f{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:10px 0 5px}
+input[type=text],input[type=number],input[type=url],select,textarea{width:100%;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 10px;outline:none;transition:border-color .15s,box-shadow .15s}
+textarea{resize:vertical;min-height:80px;line-height:1.45}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-2)}
+.mono{font-family:var(--mono);font-size:12.5px}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-weight:600;font-size:13.5px;padding:7px 13px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-text)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.big{padding:11px 20px;font-size:15px;border-radius:11px}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:4px 9px;font-size:12.5px;border-radius:7px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.between{justify-content:space-between}
+.spacer{flex:1}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;font-size:12.5px;padding:5px 11px;border-radius:7px;cursor:pointer}
+.seg button.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.hint{font-size:12.5px;color:var(--muted)}
+.pill{white-space:nowrap;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:99px;padding:2px 9px;background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.pill.good{background:var(--good-bg);color:var(--good);border-color:transparent}
+.pill.warn{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.pill.bad{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.pill.acc{background:var(--accent-2);color:var(--accent);border-color:transparent}
+.crit{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface-2);margin-bottom:10px}
+.crit-head{display:grid;grid-template-columns:1fr 130px 80px auto;gap:8px;align-items:end}
+@media (max-width:600px){.crit-head{grid-template-columns:1fr 1fr}}
+.levels{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.lvl{display:grid;grid-template-columns:26px 140px 1fr 64px 28px;gap:6px;align-items:start}
+@media (max-width:600px){.lvl{grid-template-columns:26px 1fr 54px 28px}.lvl .lbl{display:none}}
+.lvl .idx{height:34px;display:grid;place-items:center;border-radius:8px;font-weight:700;font-size:12px;color:#fff}
+.lvl textarea{min-height:34px;height:34px;padding:6px 9px}
+.iconbtn{border:0;background:transparent;color:var(--muted);cursor:pointer;width:28px;height:30px;border-radius:7px;font-size:16px;line-height:1}
+.iconbtn:hover{background:var(--surface);color:var(--bad)}
+.meter{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)}
+.meter > i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.meter.warn > i{background:var(--warn)} .meter.bad > i{background:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
+.stat .k{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.stat .v{font-size:26px;font-weight:750;letter-spacing:-.02em;margin-top:2px}
+.stat .s{font-size:12.5px;color:var(--muted)}
+.tablewrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface)}
+table.data th{position:sticky;top:0;background:var(--surface-2);text-align:left;font-size:12px;color:var(--muted);font-weight:650;padding:9px 11px;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+table.data td{padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:middle}
+table.data tr:last-child td{border-bottom:0}
+table.data tbody tr{cursor:pointer}
+table.data tbody tr:hover td{background:var(--surface-2)}
+.chip{display:inline-flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:92px}
+.chip b{font-size:12.5px;font-weight:650;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
+.chip .bar{height:5px;width:90px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.chip .bar i{display:block;height:100%}
+.chip small{font-size:11px;color:var(--muted)}
+.score-big{font-weight:750;font-size:15px}
+.empty{text-align:center;color:var(--muted);padding:50px 20px}
+.empty .ico{font-size:34px;margin-bottom:8px}
+.progress-wrap{margin-top:14px;display:none}
+.progress-wrap.show{display:block}
+.log{font-family:var(--mono);font-size:12px;color:var(--muted);max-height:120px;overflow:auto;margin-top:8px}
+.bars .b{display:grid;grid-template-columns:minmax(100px,220px) 1fr 54px;gap:10px;align-items:center;margin:7px 0;font-size:13px}
+.bars .b .track{height:12px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)}
+.bars .b .track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),#06b6d4)}
+.dist{display:flex;height:22px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.dist i{display:block;height:100%}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+dialog{border:0;padding:0;border-radius:18px;background:var(--surface);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.35);width:min(980px,96vw);max-height:92vh}
+dialog::backdrop{background:rgba(10,12,25,.55);backdrop-filter:blur(2px)}
+.dlg-head{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:2}
+.dlg-body{padding:18px 20px;overflow:auto;max-height:calc(92vh - 64px)}
+.response-text{white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;max-height:260px;overflow:auto;font-size:13.5px}
+.cdetail{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:10px}
+.prob{display:grid;grid-template-columns:minmax(120px,240px) 1fr 46px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}
+.prob .track{height:9px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.prob .track i{display:block;height:100%;background:var(--muted)}
+.prob.top .track i{background:var(--accent)}
+.prob.top{font-weight:650}
+.prob.human span:first-child::after{content:" ✎ human";color:var(--good);font-weight:700}
+.feedback{white-space:pre-wrap;background:var(--accent-2);border-radius:10px;padding:12px 14px;font-size:13.5px}
+details.raw summary{cursor:pointer;color:var(--muted);font-size:12.5px;margin-top:12px}
+details.raw pre{font-family:var(--mono);font-size:11.5px;background:var(--surface-2);padding:10px;border-radius:9px;overflow:auto;max-height:280px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;opacity:0;transition:.2s;z-index:100;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.alert{border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px}
+.alert.warn{background:var(--warn-bg);color:var(--warn)} .alert.bad{background:var(--bad-bg);color:var(--bad)} .alert.info{background:var(--accent-2);color:var(--accent)}
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:4px 18px}
+.switch{display:flex;align-items:center;gap:9px;margin:10px 0;font-size:13.5px;cursor:pointer}
+.switch input{width:16px;height:16px;accent-color:var(--accent)}
+.kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--surface-2)}
+.flex-col{display:flex;flex-direction:column;gap:6px}
+.resp-list{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow:auto;margin-top:8px}
+.resp-item{display:flex;gap:10px;align-items:center;padding:7px 10px;border:1px solid var(--border);border-radius:9px;font-size:13px;background:var(--surface-2)}
+.resp-item .who{font-weight:650;min-width:90px}
+.resp-item .ex{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.resp-item .st{font-size:12px}
+.filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.filters input{max-width:260px}
+.agree td,.agree th{padding:7px 10px}
+/* ---- evaluate layout ---- */
+.rubstrip{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;background:var(--surface);box-shadow:var(--shadow);margin-bottom:16px}
+.minigrid{display:grid;gap:2px}
+.minigrid i{width:12px;height:7px;border-radius:2px;display:block}
+.evalgrid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.evalgrid{grid-template-columns:1fr}}
+.evalgrid .card + .card{margin-top:0}
+.runcard{position:sticky;top:76px}
+.assign{font-size:13px;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:9px 11px;max-height:120px;overflow:auto;white-space:pre-wrap}
+.assign.missing{color:var(--warn);background:var(--warn-bg);border-color:transparent}
+/* ---- rubrics tab ---- */
+.rsplit{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:60vh}
+@media (max-width:860px){.rsplit{grid-template-columns:minmax(0,1fr)}.rsplit .lib{border-right:0;border-bottom:1px solid var(--border)}}
+.rsplit .lib{border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:6px;background:var(--surface-2)}
+#libList{display:flex;flex-direction:column;gap:3px}
+#libList .it{all:unset;cursor:pointer;display:flex;flex-direction:column;padding:8px 10px;border-radius:9px;font-size:13px}
+#libList .it:hover{background:var(--surface)}
+#libList .it.on{background:var(--surface);box-shadow:var(--shadow);outline:1px solid var(--border)}
+#libList .it b{font-weight:650;line-height:1.3}
+#libList .it small{color:var(--muted);font-size:11.5px}
+#libList .it:focus-visible{outline:2px solid var(--accent)}
+.rmain{min-width:0;display:flex;flex-direction:column}
+.subtabs{display:flex;gap:20px;padding:0 18px;border-bottom:1px solid var(--border)}
+.subtabs button{all:unset;cursor:pointer;padding:12px 0 10px;font-weight:650;font-size:13.5px;color:var(--muted);border-bottom:2px solid transparent}
+.subtabs button.active{color:var(--text);border-color:var(--accent)}
+.subtabs button:focus-visible{outline:2px solid var(--accent)}
+.rbody{padding:16px 18px 18px;min-width:0}
+.title-input{font-size:19px!important;font-weight:750!important;letter-spacing:-.01em;border-color:transparent!important;padding-left:4px!important;background:transparent!important}
+.title-input:hover{border-color:var(--border)!important}
+.title-input:focus{border-color:var(--accent)!important}
+.gridwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:14px;background:var(--surface)}
+table.rg{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;table-layout:fixed}
+table.rg th,table.rg td{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:9px 10px;vertical-align:top;text-align:left}
+table.rg tr>*:last-child{border-right:0}
+table.rg tbody tr:last-child>*{border-bottom:0}
+table.rg thead th{background:var(--surface-2);font-size:12.5px;font-weight:650;position:sticky;top:0;z-index:1}
+table.rg th.critcol{width:250px}
+table.rg th.rowno,table.rg td.rowno{width:50px;color:var(--muted);font-size:12px;text-align:center}
+table.rg .sw{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;flex:none}
+table.rg .pts{color:var(--muted);font-weight:500}
+table.rg td.cname b{display:block;font-size:13.5px}
+table.rg td.cname .q{color:var(--muted);font-size:12px;margin-top:3px}
+table.rg td.cname .meta{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+table.rg td.unused{background:repeating-linear-gradient(135deg,var(--surface-2) 0 6px,var(--surface) 6px 12px);color:var(--muted);font-size:12px;text-align:center;vertical-align:middle}
+table.rg td.yn .tag{font-size:10.5px;font-weight:750;letter-spacing:.05em;display:block;margin-bottom:3px}
+table.rg td.yn.no .tag{color:var(--bad)} table.rg td.yn.yes .tag{color:var(--good)}
+table.rg tr.sect td{background:var(--surface-2);font-size:11.5px;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:7px 10px}
+table.rg tr.err td{background:var(--bad-bg)}
+table.rg tr.wrn td{background:var(--warn-bg)}
+table.rg tr.err td.unused,table.rg tr.wrn td.unused{background:transparent}
+/* editable grid: borderless fields that look like the grid */
+table.rg.editable td{padding:0}
+table.rg.editable td.cname{padding:8px 10px}
+table.rg.editable textarea{field-sizing:content}
+table.rg.editable input,table.rg.editable textarea{color:var(--text);font-family:inherit;outline:none}
+table.rg.editable .cq{color:var(--muted)}
+table.rg.editable textarea,table.rg.editable input{border:1px solid transparent;border-radius:6px;background:transparent;box-shadow:none;resize:none;min-height:0;font-size:13px;line-height:1.45;padding:6px 8px}
+table.rg.editable td.cell textarea,table.rg.editable td.yn textarea{display:block;width:100%;min-height:64px;padding:9px 10px;border-radius:0}
+table.rg.editable td.cell textarea:hover,table.rg.editable td.yn textarea:hover,table.rg.editable input:hover,table.rg.editable .cq:hover{background:var(--surface-2)}
+table.rg.editable textarea:focus,table.rg.editable input:focus{background:var(--accent-2);border-color:var(--accent);box-shadow:none}
+table.rg.editable td.cell.empty{background:repeating-linear-gradient(135deg,var(--surface-2) 0 6px,var(--surface) 6px 12px)}
+table.rg.editable td.cell.empty textarea::placeholder{color:var(--muted);opacity:.7}
+table.rg.editable td.yn{padding:0}
+table.rg.editable td.yn .tag{padding:8px 10px 0}
+table.rg.editable .cn{font-weight:650;font-size:13.5px;padding:4px 6px}
+table.rg.editable .cq{color:var(--muted);font-size:12px;padding:4px 6px;width:100%}
+table.rg.editable .cmeta{display:flex;align-items:center;gap:2px;margin-top:4px;font-size:12px;color:var(--muted)}
+table.rg.editable .cmeta label{display:flex;align-items:center;gap:4px;padding-left:6px}
+table.rg.editable .cmeta input{width:58px;padding:3px 6px;border-color:var(--border)}
+table.rg.editable .iconbtn{width:26px;height:26px;font-size:14px}
+table.rg.editable .iconbtn.danger:hover{color:var(--bad)}
+.lvhead{display:flex;align-items:center;gap:4px}
+.lvhead input[data-f=label]{flex:1;min-width:0;font-weight:650;font-size:12.5px!important;padding:4px 6px!important}
+.lvhead input[data-f=points]{width:50px;font-size:12px!important;padding:4px 5px!important;color:var(--muted)}
+.lvhead .iconbtn{width:22px;height:22px;font-size:14px}
+.lvhead.sub{margin-top:2px;font-size:11.5px;color:var(--muted);font-weight:500}
+.lvhead.sub label{display:flex;align-items:center;gap:4px;padding-left:15px}
+.cissue{font-size:11.5px;font-weight:600;margin:4px 6px 0;padding:3px 7px;border-radius:6px}
+.cissue.bad{background:var(--bad-bg);color:var(--bad)} .cissue.warn{background:var(--warn-bg);color:var(--warn)}
+.imp{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.drop{border:2px dashed var(--border);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;background:var(--surface);transition:.15s;outline:none}
+.drop.over,.drop:focus{border-color:var(--accent);background:var(--accent-2)}
+.tpl{border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;background:var(--surface-2)}
+details.guide summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--accent)}
+details.guide table.data td,details.guide table.data th{cursor:default;font-size:12.5px}
+details.guide table.data tbody tr{cursor:default}
+/* ---- audit ---- */
+.audit{font-size:13px}
+.audit h4{margin:14px 0 6px;font-size:13.5px}
+.audit table.kv{border-collapse:collapse;margin:8px 0}
+.audit table.kv th{text-align:left;color:var(--muted);font-weight:600;padding:3px 16px 3px 0;white-space:nowrap;vertical-align:top;font-size:12.5px}
+.audit table.kv td{padding:3px 0;word-break:break-all;font-size:12.5px}
+.audit .mono{font-family:var(--mono);font-size:11.5px}
+.audit table.at td,.audit table.at th{font-size:12.5px;cursor:default;vertical-align:top}
+.audit table.at tbody tr{cursor:default}
+.audit .plist div{white-space:nowrap}
+.audit .pmax{color:var(--accent);font-weight:650}
+.audit .num{text-align:right;font-variant-numeric:tabular-nums}
+.audit .calc{margin:8px 0;font-size:12.5px}
+.audit details.raw pre{white-space:pre-wrap;word-break:break-word;max-height:420px}
+@media (max-width:640px){
+  .top-inner{gap:10px;padding:10px 16px}
+  nav.tabs{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}
+  nav.tabs button{padding:6px 10px;white-space:nowrap}
+  .conn{margin-left:auto}
+  main{padding:16px 16px 60px}
+}
+@media print{
+  header.top,.no-print,nav{display:none!important}
+  .tab{display:none!important} #tab-results{display:block!important}
+  body{background:#fff}
+  .card,.stat{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand"><div class="logo">N</div>Nimble Rubric Evaluator</div>
+    <nav class="tabs" id="tabs">
+      <button data-tab="evaluate" class="active">✎ Evaluate</button>
+      <button data-tab="rubrics">☷ Rubrics</button>
+      <button data-tab="results">▦ Results <span class="count" id="resCount" hidden>0</span></button>
+      <button data-tab="history">⟲ History <span class="count" id="histCount" hidden>0</span></button>
+      <button data-tab="settings">⚙ Settings</button>
+    </nav>
+    <div class="conn" id="connBadge" title="Click to re-check connection"><span class="dot" id="connDot"></span><span id="connText">Checking Ollama…</span></div>
+  </div>
+</header>
+
+<main>
+<!-- ===================== EVALUATE ===================== -->
+<section class="tab active" id="tab-evaluate">
+  <div class="rubstrip">
+    <span class="hint" style="font-weight:600">Rubric</span>
+    <select id="evalRubricSel" style="width:auto;min-width:240px;max-width:360px"></select>
+    <div class="minigrid" id="evalMini" aria-hidden="true"></div>
+    <span class="hint" id="evalRubricMeta"></span>
+    <span class="spacer"></span>
+    <button class="btn sm ghost" id="viewGridBtn">View grid</button>
+    <button class="btn sm" id="editRubricBtn">Edit in Rubrics</button>
+  </div>
+  <div class="evalgrid">
+    <div class="card">
+      <div class="row between">
+        <h2>Learner responses</h2>
+        <div class="row">
+          <label class="btn sm">Import CSV / TXT…<input type="file" id="respFile" accept=".csv,.tsv,.txt" hidden></label>
+          <button class="btn sm ghost" id="respTemplateBtn">⬇ Responses template</button>
+          <button class="btn sm ghost" id="loadSampleRespBtn">Try sample</button>
+          <button class="btn sm ghost" id="clearRespBtn">Clear</button>
+        </div>
+      </div>
+      <p class="sub">Separate responses with a line containing only <span class="kbd">---</span>. Start a response with <span class="kbd">Name: Alex</span> to label it, or import a CSV with Name and Response columns.</p>
+      <textarea id="responsesText" rows="14" placeholder="Name: Alex
+Last Tuesday our team missed a client deadline…
+---
+Name: Priya
+I was asked to lead the weekly stand-up…"></textarea>
+      <div class="row" style="margin-top:6px"><span class="hint" id="respSummary">0 responses</span></div>
+      <div class="resp-list" id="respList"></div>
+    </div>
+    <div class="card runcard">
+      <h2>Run</h2>
+      <label class="f">Assignment sent with each response <span class="hint">(from the rubric)</span></label>
+      <div class="assign" id="evalAssign"></div>
+      <input type="text" id="runName" placeholder="Run name (optional)" style="margin-top:10px">
+      <label class="switch"><input type="checkbox" id="optFeedbackLLM"> Narrative feedback <span class="hint" id="fbModelHint"></span></label>
+      <label class="switch"><input type="checkbox" id="optRelevance" checked> On-topic check</label>
+      <div id="preflight"></div>
+      <button class="btn primary big" id="runBtn" style="width:100%;justify-content:center;margin-top:10px">▶ Evaluate responses</button>
+      <div class="row" style="margin-top:6px"><button class="btn" id="cancelBtn" hidden>Cancel</button><button class="btn ghost sm" id="previewBtn">Preview request</button></div>
+      <div class="progress-wrap" id="progressWrap">
+        <div class="row between hint"><span id="progressText">Starting…</span><span id="progressPct">0%</span></div>
+        <div class="meter" style="margin-top:6px"><i id="progressBar" style="width:0"></i></div>
+        <div class="log" id="runLog"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RUBRICS ===================== -->
+<section class="tab" id="tab-rubrics">
+  <div class="rsplit card" style="padding:0;overflow:hidden">
+    <aside class="lib">
+      <div class="row between"><b class="hint" style="font-weight:700">Library</b><button class="btn sm ghost" id="newRubricBtn">+ New</button></div>
+      <div id="libList"></div>
+    </aside>
+    <div class="rmain">
+      <div class="subtabs" id="rubSubtabs">
+        <button data-sub="edit" class="active">Edit</button>
+        <button data-sub="import">Import &amp; template</button>
+      </div>
+
+      <div id="sub-edit" class="rbody">
+        <div class="row" style="align-items:flex-start">
+          <div style="flex:1;min-width:240px">
+            <input type="text" id="rubricName" class="title-input" placeholder="Rubric name">
+            <label class="f">Assignment / question the learner answered <span class="hint">(sent to Nimble with each response)</span></label>
+            <textarea id="rubricPrompt" rows="2" placeholder="e.g. Write a reflective diary entry about a recent situation at work that did not go to plan."></textarea>
+          </div>
+          <div class="row" style="padding-top:4px">
+            <span class="pill" id="dirtyPill" hidden>unsaved</span>
+            <button class="btn sm" id="exportCsvRubricBtn">⬇ Export CSV</button>
+            <button class="btn sm" id="dupRubricBtn">Duplicate</button>
+            <button class="btn sm ghost danger" id="deleteRubricBtn">Delete</button>
+            <button class="btn sm primary" id="saveRubricBtn">Save</button>
+          </div>
+        </div>
+        <div class="gridwrap" id="rubricGrid"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn sm" id="addCritBtn">+ Criterion</button>
+          <button class="btn sm" id="addLevelBtn">+ Level column</button>
+          <button class="btn sm" id="addCheckBtn">+ Yes/No check</button>
+          <span class="spacer"></span>
+          <span class="hint" id="rubricStats"></span>
+        </div>
+        <div id="rubricIssues"></div>
+        <p class="hint">Columns run from lowest level (left) to highest (right). Leave a cell empty if a criterion uses fewer levels. Describe what you would <b>see</b> in the writing at each level: Nimble only knows what the descriptions say.</p>
+      </div>
+
+      <div id="sub-import" class="rbody" hidden>
+        <div class="imp">
+          <div class="drop" id="dropZone" tabindex="0">
+            <b style="font-size:14px">Drop a CSV file here</b>
+            <span class="hint">Or choose a file, or click here and paste (Ctrl+V / ⌘V) straight from Excel, Google Sheets or Word.</span>
+            <div class="row">
+              <label class="btn sm">Choose file…<input type="file" id="rubricFile" accept=".csv,.tsv,.txt,.json,.md" hidden></label>
+              <button class="btn sm ghost" id="pasteToggleBtn">Paste as text instead</button>
+            </div>
+          </div>
+          <div class="tpl">
+            <b style="font-size:14px">Start from a template</b>
+            <span class="hint">Same grid as the editor. The first rows are instructions and are ignored on import.</span>
+            <div class="row">
+              <button class="btn sm primary" id="tplBlankBtn">⬇ Blank template (CSV)</button>
+              <button class="btn sm" id="tplSampleBtn">⬇ Filled sample</button>
+            </div>
+            <details class="guide"><summary>How to fill it in</summary>
+              <table class="data" style="margin-top:8px"><thead><tr><th>Column</th><th>Required</th><th>What goes in it</th></tr></thead><tbody>
+                <tr><td><b>Criterion</b></td><td>Yes</td><td>Short name shown in results, e.g. "Action plan".</td></tr>
+                <tr><td><b>Type</b></td><td>No (score)</td><td><span class="kbd">score</span> for levels, or <span class="kbd">yes/no</span> for a check.</td></tr>
+                <tr><td><b>Weight</b></td><td>No (1)</td><td>How much it counts toward the overall %. 2 counts double.</td></tr>
+                <tr><td><b>Question for the model</b></td><td>No</td><td>The question Nimble answers. Written from the name if blank.</td></tr>
+                <tr><td><b>Label (points)</b> × 2–10</td><td>Yes</td><td>One column per level, lowest first, e.g. <span class="kbd">Developing (1)</span>. Each cell describes that level for the criterion. For yes/no rows: what NO looks like in the first level column, what YES looks like in the last.</td></tr>
+                <tr><td><b>Rubric name</b>, <b>Assignment</b> rows</td><td>No</td><td>Optional rows above the header that prefill the rubric name and assignment.</td></tr>
+              </tbody></table>
+            </details>
+          </div>
+        </div>
+        <div id="pasteBox" hidden style="margin-top:12px">
+          <textarea id="rubricPasteText" rows="8" class="mono" placeholder="Paste CSV, a table copied from Excel/Word/Sheets, a Markdown table, or rubric JSON."></textarea>
+          <div class="row" style="margin-top:8px"><button class="btn sm primary" id="parseRubricBtn">Preview import</button></div>
+        </div>
+        <div id="importPreview"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RESULTS ===================== -->
+<section class="tab" id="tab-results">
+  <div id="resultsEmpty" class="card empty"><div class="ico">▦</div><b>No results yet</b><div>Run an evaluation, or open a past run from History.</div></div>
+  <div id="resultsBody" hidden>
+    <div class="row between" style="margin-bottom:14px">
+      <div>
+        <div style="font-size:20px;font-weight:750;letter-spacing:-.02em" id="runTitle"></div>
+        <div class="hint" id="runMeta"></div>
+      </div>
+      <div class="row no-print">
+        <button class="btn" id="exportCsvBtn">⬇ CSV</button>
+        <button class="btn" id="exportJsonBtn" title="Everything, including raw model requests and outputs">⬇ JSON (full)</button>
+        <button class="btn" id="exportAuditBtn" title="Parsed audit trail plus raw model output for every response">⬇ Audit report</button>
+        <button class="btn" id="exportHtmlBtn">⬇ HTML report</button>
+        <button class="btn" id="printBtn">⎙ Print</button>
+      </div>
+    </div>
+    <div class="stats" id="statCards"></div>
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <h2>Average by criterion</h2>
+        <p class="sub">Mean position on each criterion's scale (0% = lowest level, 100% = highest).</p>
+        <div class="bars" id="critBars"></div>
+      </div>
+      <div class="card">
+        <h2>Outcome bands</h2>
+        <p class="sub">Overall weighted score mapped to the bands in Settings.</p>
+        <div class="dist" id="bandDist"></div>
+        <div class="legend" id="bandLegend"></div>
+        <div id="agreePanel" style="margin-top:16px"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="filters no-print">
+        <h2 style="margin:0">Responses</h2>
+        <span class="spacer"></span>
+        <input type="text" id="resFilter" placeholder="Search learner or text…">
+        <select id="resFlagFilter" style="width:auto"><option value="">All</option><option value="review">Needs review</option><option value="ok">No flags</option><option value="error">Errors</option></select>
+      </div>
+      <div class="tablewrap"><table class="data" id="resTable"></table></div>
+      <p class="hint no-print" style="margin-top:8px">Click a row for the full breakdown, probabilities, feedback and to record a human score.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HISTORY ===================== -->
+<section class="tab" id="tab-history">
+  <div class="card">
+    <div class="row between">
+      <div><h2>Run history</h2><p class="sub" style="margin:0">Saved in this browser. Export anything you want to keep long-term.</p></div>
+      <div class="row">
+        <label class="btn sm">Import run JSON…<input type="file" id="importRunFile" accept=".json" hidden></label>
+        <button class="btn sm" id="exportAllBtn">Export all</button>
+        <button class="btn sm ghost danger" id="clearHistBtn">Clear history</button>
+      </div>
+    </div>
+    <div class="tablewrap" style="margin-top:12px"><table class="data" id="histTable"></table></div>
+    <div id="histEmpty" class="empty" hidden><div class="ico">⟲</div>No runs yet.</div>
+    <p class="hint" id="storageHint"></p>
+  </div>
+</section>
+
+<!-- ===================== SETTINGS ===================== -->
+<section class="tab" id="tab-settings">
+  <div class="card">
+    <h2>Connection</h2>
+    <p class="sub">When you start the app with <span class="kbd">python3 serve.py</span>, leave the URL as <span class="kbd">/ollama</span> (no CORS setup needed). If you open index.html directly, use <span class="kbd">http://localhost:11434</span>.</p>
+    <div class="settings-grid">
+      <div><label class="f">Ollama URL</label><input type="text" id="setUrl"></div>
+      <div><label class="f">Decision model (scores)</label><input type="text" id="setModel" list="modelList"><datalist id="modelList"></datalist></div>
+      <div><label class="f">Feedback model (optional, generative)</label><input type="text" id="setFbModel" list="modelList" placeholder="e.g. qwen3:8b, llama3.1:8b, gemma3"></div>
+      <div><label class="f">keep_alive</label><input type="text" id="setKeep" placeholder="10m"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn primary sm" id="testConnBtn">Test connection</button>
+      <label class="switch" style="margin:0 0 0 8px"><input type="checkbox" id="setDemo"> Demo mode (simulated scores, no Ollama needed)</label>
+    </div>
+    <div id="connResult"></div>
+  </div>
+  <div class="card">
+    <h2>Scoring &amp; review rules</h2>
+    <p class="sub">Nimble returns a probability for every level. The app takes the most likely level, and flags results for human review using these rules.</p>
+    <div class="settings-grid">
+      <div><label class="f">Flag if confidence below</label><input type="number" id="setConf" min="0" max="1" step="0.05"></div>
+      <div><label class="f">Flag if top two levels are within</label><input type="number" id="setMargin" min="0" max="1" step="0.05"></div>
+      <div><label class="f">Flag if response shorter than (words)</label><input type="number" id="setMinWords" min="0" step="10"></div>
+      <div><label class="f">Requests in parallel</label><input type="number" id="setConc" min="1" max="8" step="1"></div>
+    </div>
+    <label class="f" style="margin-top:14px">Outcome bands (lowest overall % for each band, highest first)</label>
+    <textarea id="setBands" rows="4" class="mono"></textarea>
+    <p class="hint">One per line: <span class="kbd">80 Exceeds expectations</span></p>
+  </div>
+  <div class="card">
+    <h2>Appearance &amp; data</h2>
+    <div class="row">
+      <div class="seg" id="themeSeg"><button data-theme="auto">Auto</button><button data-theme="light">Light</button><button data-theme="dark">Dark</button></div>
+      <span class="spacer"></span>
+      <button class="btn sm" id="resetSettingsBtn">Reset settings</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<dialog id="detailDlg"><div class="dlg-head"><b id="dlgTitle" style="font-size:16px"></b><span id="dlgPills" class="row"></span><span class="spacer"></span><button class="btn sm" id="dlgPrev">‹</button><button class="btn sm" id="dlgNext">›</button><button class="btn sm" id="dlgClose">Close</button></div><div class="dlg-body" id="dlgBody"></div></dialog>
+<dialog id="previewDlg"><div class="dlg-head"><b>Request sent to Ollama (first response)</b><span class="spacer"></span><button class="btn sm" id="copyPreviewBtn">Copy curl</button><button class="btn sm" onclick="this.closest('dialog').close()">Close</button></div><div class="dlg-body"><pre class="mono" id="previewPre" style="white-space:pre-wrap"></pre></div></dialog>
+<dialog id="viewDlg"><div class="dlg-head"><b id="viewTitle" style="font-size:16px"></b><span class="spacer"></span><button class="btn sm" onclick="this.closest('dialog').close()">Close</button></div><div class="dlg-body" id="viewBody"></div></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   Nimble Rubric Evaluator
+   Talks to Ollama's /v1/systemone (Jev-style decision API).
+   ============================================================ */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Math.random().toString(36).slice(2, 10);
+const pct = x => (x == null || isNaN(x)) ? "—" : Math.round(x * 100) + "%";
+const LEVEL_COLORS = ["#ef4444","#f97316","#f59e0b","#eab308","#84cc16","#22c55e","#10b981","#14b8a6","#0ea5e9","#6366f1"];
+function levelColor(i, n){ if (n <= 1) return LEVEL_COLORS[5]; return LEVEL_COLORS[Math.round(i/(n-1)*(LEVEL_COLORS.length-1))]; }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+
+/* ---------- storage (always guarded) ---------- */
+const store = {
+  get(k, d){ try { const v = localStorage.getItem("nre."+k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem("nre."+k, JSON.stringify(v)); return true; } catch(e){ toast("Browser storage is full or blocked; export your runs."); return false; } }
+};
+
+/* ---------- settings ---------- */
+const DEFAULTS = {
+  url: location.protocol.startsWith("http") ? "/ollama" : "http://localhost:11434",
+  model: "nimble", fbModel: "", keepAlive: "10m", demo: false,
+  conf: 0.5, margin: 0.15, minWords: 40, conc: 1,
+  bands: "80 Exceeds expectations\n60 Meets expectations\n40 Developing\n0 Not yet",
+  theme: "auto"
+};
+let S = Object.assign({}, DEFAULTS, store.get("settings", {}));
+function saveSettings(){ store.set("settings", S); }
+function bands(){
+  return S.bands.split("\n").map(l => l.trim()).filter(Boolean).map(l => { const m = l.match(/^(\d+(?:\.\d+)?)\s*%?\s+(.+)$/); return m ? {min:+m[1], name:m[2]} : null; })
+    .filter(Boolean).sort((a,b) => b.min - a.min);
+}
+function bandFor(p){ const b = bands(); for (const x of b) if (p*100 >= x.min - 1e-9) return x.name; return b.length ? b[b.length-1].name : ""; }
+function bandColor(name){ const b = bands(); const i = b.findIndex(x => x.name === name); return levelColor(b.length-1-i, b.length); }
+function applyTheme(){ if (S.theme === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", S.theme); $$("#themeSeg button").forEach(b => b.classList.toggle("active", b.dataset.theme === S.theme)); }
+
+/* ---------- rubric model ----------
+   Authoring format (v2, what the grid edits and the library stores):
+     { v:2, id, name, prompt, levels:[{label, points}], criteria:[{id, name, type:"score"|"noul", weight, instructions, cells:[desc…], no, yes}] }
+   Compiled format (what runs, results and history use):
+     { name, prompt, criteria:[{id, name, type, weight, instructions, levels:[{label, desc, points}]}] } */
+const SAMPLE_V1 = {
+  name: "Reflective diary: workplace situation",
+  prompt: "Write a reflective diary entry (200-400 words) about a recent situation at work that did not go as planned. Describe what happened, how you felt, what you learned, and what you will do differently next time.",
+  criteria: [
+    { id:"c1", name:"Description of the situation", type:"score", weight:1, instructions:"How clearly and objectively does the learner describe what happened?", levels:[
+      {label:"Beginning", desc:"The situation is missing, vague or impossible to follow.", points:0},
+      {label:"Developing", desc:"The situation is described but key facts (who, what, when, why it mattered) are missing.", points:1},
+      {label:"Proficient", desc:"A clear account of what happened, who was involved and why it mattered.", points:2},
+      {label:"Exemplary", desc:"A concise, well-structured and objective account with the relevant context and stakes.", points:3}]},
+    { id:"c2", name:"Feelings and self-awareness", type:"score", weight:1, instructions:"How well does the learner examine their own feelings, assumptions and behaviour during the situation?", levels:[
+      {label:"Beginning", desc:"No mention of own feelings or role; blames others or circumstances only.", points:0},
+      {label:"Developing", desc:"Names feelings but does not examine them or their effect on behaviour.", points:1},
+      {label:"Proficient", desc:"Explains feelings and how they influenced own actions, with some honesty about own role.", points:2},
+      {label:"Exemplary", desc:"Candidly analyses own feelings, assumptions and behaviour, and their impact on others.", points:3}]},
+    { id:"c3", name:"Analysis and learning", type:"score", weight:2, instructions:"How deeply does the learner analyse why things happened and draw transferable learning?", levels:[
+      {label:"Beginning", desc:"No analysis; restates events without explaining causes or lessons.", points:0},
+      {label:"Developing", desc:"Some explanation of causes, but learning is generic (e.g. 'communication is important').", points:1},
+      {label:"Proficient", desc:"Identifies specific causes and states clear, relevant lessons learned.", points:2},
+      {label:"Exemplary", desc:"Insightful analysis of causes from several perspectives, linked to principles or models, with transferable lessons.", points:3}]},
+    { id:"c4", name:"Action plan", type:"score", weight:1, instructions:"How specific and realistic is the learner's plan for what they will do differently?", levels:[
+      {label:"Beginning", desc:"No plan or next step is given.", points:0},
+      {label:"Developing", desc:"A vague intention such as 'I will try to do better'.", points:1},
+      {label:"Proficient", desc:"A specific action the learner will take in a similar situation.", points:2},
+      {label:"Exemplary", desc:"Specific, realistic actions with when and how they will be applied and how success will be judged.", points:3}]},
+    { id:"c5", name:"Professional tone", type:"noul", weight:0.5, instructions:"Is the entry written in a professional, respectful tone (no insults or confidential personal details about colleagues)?", levels:[
+      {label:"No", desc:"Contains insults, blame-laden language or confidential personal details about others.", points:0},
+      {label:"Yes", desc:"Respectful and professional throughout.", points:1}]}
+  ]
+};
+const SAMPLE_RESPONSES = `Name: Alex
+Last Tuesday I was responsible for sending the quarterly report to our client, Brightwell, by 5pm. At 3pm I discovered that the sales figures from the regional team were missing, and I spent two hours chasing them instead of telling my manager. The report went out at 7pm and the client complained to our account director.
+
+I felt panicked and embarrassed. Looking back, I think I avoided escalating because I didn't want to look like I couldn't cope, and that pride made the delay worse. My manager told me afterwards she could have called the regional lead directly and fixed it in ten minutes.
+
+The real cause was not the missing data but that I had no checkpoint: I only checked inputs on the deadline day. I also assumed asking for help was a weakness, when in our team escalation is expected. This links to what we covered on "managing up" - surfacing risks early is part of the job.
+
+Next quarter I will set a data-collection deadline three days before the report is due, put it in the shared calendar, and if anything is missing 24 hours before I will message my manager straight away. I'll judge success by whether the report goes out on time with no last-minute chasing.
+---
+Name: Priya
+I had a meeting with a customer and it did not go well. They were unhappy. I think communication is important and I will try to communicate better next time. Overall it was a good learning experience.
+---
+Name: Sam
+The project kickoff was a disaster because Dave from IT is useless and never reads his emails. Honestly the guy should be fired. I did everything right and sent the invite on time. Next time I'll just do it myself.
+---
+Name: Jordan
+During our team retrospective I was asked to facilitate for the first time. Halfway through, two senior colleagues started arguing about the release process and I froze. I let the argument run for fifteen minutes and we ran out of time for the other agenda items.
+
+I felt anxious and out of my depth, partly because they are more senior than me. I realise I assumed I had no authority to interrupt them, but as facilitator that was exactly my role.
+
+I think it happened because I had not agreed ground rules or a timebox at the start. Next time I will open the retro by agreeing a timebox for each item, and I will practise a phrase for parking a debate ("let's take this offline and capture it as an action").`;
+
+const clone = o => JSON.parse(JSON.stringify(o));
+const DEFAULT_LEVELS = [{label:"Beginning", points:0},{label:"Developing", points:1},{label:"Proficient", points:2},{label:"Exemplary", points:3}];
+function blankRubric(){ return { v:2, id: uid(), name: "", prompt: "", levels: clone(DEFAULT_LEVELS), criteria: [newScoreCrit(4)] }; }
+function newScoreCrit(n){ return { id: uid(), name: "", type: "score", weight: 1, instructions: "", cells: new Array(n).fill(""), no: "", yes: "" }; }
+function newCheckCrit(n){ return { id: uid(), name: "", type: "noul", weight: 1, instructions: "", cells: new Array(n).fill(""), no: "", yes: "" }; }
+
+/* compiled (v1) -> grid (v2) */
+function toGrid(rb){
+  if (rb && rb.v === 2) return rb;
+  const scores = (rb.criteria || []).filter(c => c.type !== "noul");
+  const widest = scores.reduce((a, c) => c.levels.length > (a ? a.levels.length : 0) ? c : a, null);
+  const levels = widest ? widest.levels.map((l, i) => ({ label: l.label || `Level ${i}`, points: l.points ?? i })) : clone(DEFAULT_LEVELS);
+  const criteria = (rb.criteria || []).map(c => {
+    const g = { id: c.id || uid(), name: c.name || "", type: c.type === "noul" ? "noul" : "score", weight: c.weight ?? 1, instructions: c.instructions || "", cells: new Array(levels.length).fill(""), no: "", yes: "" };
+    if (g.type === "noul") { g.no = c.levels?.[0]?.desc || ""; g.yes = c.levels?.[1]?.desc || ""; }
+    else c.levels.forEach((l, i) => {
+      let j = levels.findIndex(L => L.label && L.label === l.label);
+      if (j < 0 || g.cells[j]) j = i;
+      if (j < levels.length) g.cells[j] = l.desc || l.label || "";
+    });
+    return g;
+  });
+  return { v:2, id: rb.id || uid(), name: rb.name || "", prompt: rb.prompt || "", levels, criteria };
+}
+/* grid (v2) -> compiled; score criteria first, then checks (same order as the grid) */
+function compileRubric(g){
+  const ordered = [...g.criteria.filter(c => c.type !== "noul"), ...g.criteria.filter(c => c.type === "noul")];
+  return { name: g.name, prompt: g.prompt, criteria: ordered.map(c => c.type === "noul"
+    ? { id: c.id, name: c.name || "Untitled check", type: "noul", weight: +c.weight || 0, instructions: c.instructions || `Does the response meet this requirement: ${c.name}?`,
+        levels: [{label:"No", desc: c.no || "The requirement is not met.", points:0},{label:"Yes", desc: c.yes || "The requirement is clearly met.", points:1}] }
+    : { id: c.id, name: c.name || "Untitled criterion", type: "score", weight: +c.weight || 0, instructions: c.instructions || `How well does the response demonstrate: ${c.name}?`,
+        levels: g.levels.map((L, i) => ({ label: L.label || `Level ${i}`, desc: (c.cells[i] || "").trim(), points: +L.points || 0 })).filter(l => l.desc) }) };
+}
+const SAMPLE_GRID = () => Object.assign(toGrid(clone(SAMPLE_V1)), { id: "sample-reflective-diary" });
+
+let rubric = (() => { const d = store.get("draftRubric", null); try { return d ? toGrid(d) : SAMPLE_GRID(); } catch { return SAMPLE_GRID(); } })();
+let rubricDirty = store.get("draftDirty", false);
+const compiled = () => compileRubric(rubric);
+
+/* ---------- rubric library ---------- */
+function library(){
+  let lib = store.get("rubrics2", null);
+  if (!lib) { lib = store.get("rubrics", []).map(r => toGrid(r)); if (!lib.length) lib = [SAMPLE_GRID()]; store.set("rubrics2", lib); }
+  return lib;
+}
+function saveLibrary(lib){ store.set("rubrics2", lib); renderLibrary(); }
+function rubricCounts(g){ const s = g.criteria.filter(c => c.type !== "noul").length, k = g.criteria.length - s; return `${s} criteria${k ? ` · ${k} check${k>1?"s":""}` : ""} · ${g.levels.length} levels`; }
+function renderLibrary(){
+  const lib = library();
+  $("#libList").innerHTML = lib.map(r => `<button class="it ${r.id === rubric.id ? "on" : ""}" data-id="${esc(r.id)}"><b>${esc(r.name || "Untitled rubric")}</b><small>${esc(rubricCounts(r))}</small></button>`).join("")
+    + (lib.some(r => r.id === rubric.id) ? "" : `<button class="it on" data-id="${esc(rubric.id)}"><b>${esc(rubric.name || "Untitled rubric")}</b><small>not saved yet</small></button>`);
+  $("#evalRubricSel").innerHTML = (lib.some(r => r.id === rubric.id) ? "" : `<option value="${esc(rubric.id)}">${esc(rubric.name || "Untitled rubric")} (unsaved)</option>`)
+    + lib.map(r => `<option value="${esc(r.id)}" ${r.id === rubric.id ? "selected" : ""}>${esc(r.name || "Untitled rubric")}${r.id === rubric.id && rubricDirty ? " (edited)" : ""}</option>`).join("");
+  renderEvalStrip();
+}
+function setDirty(d){ rubricDirty = d; store.set("draftDirty", d); $("#dirtyPill").hidden = !d; }
+function loadRubric(r){
+  if (rubricDirty && r.id !== rubric.id && !confirm(`"${rubric.name || "This rubric"}" has unsaved changes. Discard them?`)) { renderLibrary(); return false; }
+  rubric = clone(toGrid(r)); setDirty(false); saveDraft(); renderRubric(); return true;
+}
+$("#libList").onclick = e => { const b = e.target.closest("[data-id]"); if (!b) return; const r = library().find(x => x.id === b.dataset.id); if (r) { loadRubric(r); setSub("edit"); } };
+$("#evalRubricSel").onchange = e => { const r = library().find(x => x.id === e.target.value); if (r && !loadRubric(r)) e.target.value = rubric.id; };
+$("#newRubricBtn").onclick = () => { if (loadRubric(blankRubric())) { setSub("edit"); $("#rubricName").focus(); } };
+$("#saveRubricBtn").onclick = () => {
+  if (!rubric.name.trim()) { toast("Give the rubric a name first"); $("#rubricName").focus(); return; }
+  const lib = library(); const i = lib.findIndex(r => r.id === rubric.id);
+  if (i >= 0) lib[i] = clone(rubric); else lib.unshift(clone(rubric));
+  saveLibrary(lib); setDirty(false); toast(i >= 0 ? "Rubric saved" : "Rubric added to library");
+};
+$("#dupRubricBtn").onclick = () => { const c = clone(rubric); c.id = uid(); c.name = (rubric.name || "Rubric") + " (copy)"; c.criteria.forEach(x => x.id = uid()); rubric = c; setDirty(true); saveDraft(); renderRubric(); toast("Duplicated: edit and Save"); };
+$("#deleteRubricBtn").onclick = () => {
+  const lib = library(); const i = lib.findIndex(r => r.id === rubric.id);
+  if (i < 0) { if (confirm("Discard this unsaved rubric?")) { setDirty(false); loadRubric(lib[0] || blankRubric()); } return; }
+  if (!confirm(`Delete "${lib[i].name}" from the library? Past runs keep their own copy.`)) return;
+  lib.splice(i, 1); saveLibrary(lib); setDirty(false); loadRubric(lib[0] || blankRubric()); toast("Deleted");
+};
+function saveDraft(){ store.set("draftRubric", rubric); }
+
+/* ---------- rubric grid ---------- */
+function gridStats(){
+  const c = compiled(); const tok = approxTokens(JSON.stringify(buildQuestions(c, true)) + (c.prompt || ""));
+  return `${rubricCounts(rubric)} · total weight ${rubric.criteria.reduce((a, x) => a + (+x.weight || 0), 0)} · rubric ≈${tok.toLocaleString()} of 8,192 tokens`;
+}
+function critIssues(c){
+  if (c.type === "noul") return (!c.no && !c.yes) ? { level: "warn", msg: "Describe what YES and NO look like." } : null;
+  const filled = c.cells.filter(x => (x || "").trim()).length;
+  if (!c.name.trim() && !filled) return null;
+  if (filled < 2) return { level: "bad", msg: `Needs at least 2 levels described (has ${filled}).` };
+  if (!c.name.trim()) return { level: "warn", msg: "Give this criterion a name." };
+  return null;
+}
+/* Shared renderer: editable grid (editor) or read-only grid (preview / view). rowInfo: {critId: {level, msg, row}} */
+function gridHTML(g, { editable = false, rowInfo = null } = {}){
+  const n = g.levels.length;
+  const ta = (attrs, val, ph) => `<textarea ${attrs} rows="1" placeholder="${esc(ph)}">${esc(val)}</textarea>`;
+  const head = `<thead><tr>${rowInfo ? "<th class='rowno'>Row</th>" : ""}<th class="critcol">Criterion</th>${g.levels.map((L, i) => `<th>
+      ${editable ? `<div class="lvhead"><span class="sw" style="background:${levelColor(i, n)}"></span><input data-lv="${i}" data-f="label" value="${esc(L.label)}" placeholder="Level name"></div><div class="lvhead sub"><label>points <input data-lv="${i}" data-f="points" type="number" step="any" value="${esc(L.points)}"></label><span class="spacer"></span><button class="iconbtn" data-act="dellv" data-lv="${i}" title="Remove this level column">×</button></div>`
+        : `<span class="sw" style="background:${levelColor(i, n)}"></span>${esc(L.label || "Level " + i)} <span class="pts">· ${esc(L.points)}</span>`}</th>`).join("")}</tr></thead>`;
+  const critCell = c => {
+    const info = rowInfo && rowInfo[c.id];
+    const issue = editable ? critIssues(c) : (info && info.level !== "good" ? info : null);
+    if (!editable) return `<td class="cname"><b>${esc(c.name || "Untitled")}</b>${c.instructions ? `<div class="q">${esc(c.instructions)}</div>` : ""}<div class="meta"><span class="pill ${+c.weight !== 1 ? "acc" : ""}">weight ${esc(c.weight)}</span></div>${issue ? `<div class="q" style="color:var(--${issue.level === "bad" ? "bad" : "warn"})">${esc(issue.msg)}</div>` : ""}</td>`;
+    return `<td class="cname" data-cid="${esc(c.id)}">
+      <input class="cn" data-c="name" value="${esc(c.name)}" placeholder="${c.type === "noul" ? "Check name" : "Criterion name"}">
+      ${ta('data-c="instructions" class="cq"', c.instructions, c.type === "noul" ? "Question, e.g. Does the learner state a concrete next step?" : "Question for the model (optional)")}
+      <div class="cmeta"><label>weight <input data-c="weight" type="number" step="0.5" min="0" value="${esc(c.weight)}"></label><span class="spacer"></span>
+        <button class="iconbtn" data-act="up" title="Move up">↑</button><button class="iconbtn" data-act="down" title="Move down">↓</button><button class="iconbtn danger" data-act="del" title="Delete">🗑</button></div>
+      ${issue ? `<div class="cissue ${issue.level}">${esc(issue.msg)}</div>` : ""}</td>`;
+  };
+  const rowCls = c => { const i = rowInfo && rowInfo[c.id]; return i ? (i.level === "bad" ? "err" : i.level === "warn" ? "wrn" : "") : ""; };
+  const rowNo = c => rowInfo ? `<td class="rowno">${esc(rowInfo[c.id]?.row ?? "")}</td>` : "";
+  const scores = g.criteria.filter(c => c.type !== "noul"), checks = g.criteria.filter(c => c.type === "noul");
+  const sRows = scores.map(c => `<tr class="${rowCls(c)}" data-cid="${esc(c.id)}">${rowNo(c)}${critCell(c)}${g.levels.map((L, i) => {
+      const v = c.cells[i] || "";
+      if (editable) return `<td class="cell ${v.trim() ? "" : "empty"}">${ta(`data-cell="${i}"`, v, "Not used")}</td>`;
+      return v.trim() ? `<td class="cell">${esc(v)}</td>` : `<td class="unused">not used</td>`;
+    }).join("")}</tr>`).join("");
+  const half = Math.max(1, Math.floor(n / 2)), rest = Math.max(1, n - half);
+  const cRows = checks.map(c => `<tr class="${rowCls(c)}" data-cid="${esc(c.id)}">${rowNo(c)}${critCell(c)}
+      <td class="yn no" colspan="${half}"><span class="tag">NO LOOKS LIKE</span>${editable ? ta('data-c="no"', c.no, "What a NO looks like") : esc(c.no)}</td>
+      <td class="yn yes" colspan="${rest}"><span class="tag">YES LOOKS LIKE</span>${editable ? ta('data-c="yes"', c.yes, "What a YES looks like") : esc(c.yes)}</td></tr>`).join("");
+  const cols = 1 + n + (rowInfo ? 1 : 0);
+  return `<table class="rg ${editable ? "editable" : ""}" style="min-width:${230 + n * 170 + (rowInfo ? 50 : 0)}px">${head}<tbody>${sRows || `<tr><td colspan="${cols}" class="hint" style="padding:14px">No scored criteria yet.</td></tr>`}${checks.length ? `<tr class="sect"><td colspan="${cols}">Yes / No checks</td></tr>${cRows}` : ""}</tbody></table>`;
+}
+function renderRubric(){
+  $("#rubricName").value = rubric.name || ""; $("#rubricPrompt").value = rubric.prompt || "";
+  $("#rubricGrid").innerHTML = gridHTML(rubric, { editable: true });
+  $$("#rubricGrid textarea, #rubricPrompt").forEach(autoGrow);
+  $("#rubricStats").textContent = gridStats();
+  $("#dirtyPill").hidden = !rubricDirty;
+  renderLibrary(); preflight();
+}
+function autoGrow(t){ if (!t.offsetParent) return; t.style.height = "auto"; t.style.height = (t.scrollHeight + 2) + "px"; }
+function regrow(){ $$("#rubricGrid textarea, #rubricPrompt").forEach(autoGrow); }
+function crit(id){ return rubric.criteria.find(c => c.id === id); }
+function touched(){ setDirty(true); saveDraft(); $("#rubricStats").textContent = gridStats(); renderEvalStrip(); preflight(); }
+$("#rubricGrid").addEventListener("input", e => {
+  const t = e.target, tr = t.closest("tr[data-cid]");
+  if (t.dataset.lv != null) { const L = rubric.levels[+t.dataset.lv]; L[t.dataset.f] = t.dataset.f === "points" ? +t.value : t.value; }
+  else if (tr) {
+    const c = crit(tr.dataset.cid);
+    if (t.dataset.cell != null) { c.cells[+t.dataset.cell] = t.value; t.closest("td").classList.toggle("empty", !t.value.trim()); }
+    else if (t.dataset.c) c[t.dataset.c] = t.dataset.c === "weight" ? +t.value : t.value;
+  }
+  if (t.tagName === "TEXTAREA") autoGrow(t);
+  touched();
+});
+$("#rubricGrid").addEventListener("focusout", e => { // refresh issue hints when leaving a row
+  const tr = e.target.closest("tr[data-cid]"); if (!tr || tr.contains(e.relatedTarget)) return;
+  const c = crit(tr.dataset.cid); if (!c) return; const td = tr.querySelector(".cname"); const old = td.querySelector(".cissue"); if (old) old.remove();
+  const is = critIssues(c); if (is) td.insertAdjacentHTML("beforeend", `<div class="cissue ${is.level}">${esc(is.msg)}</div>`);
+});
+$("#rubricGrid").addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const act = b.dataset.act;
+  if (act === "dellv") {
+    const i = +b.dataset.lv; if (rubric.levels.length <= 2) return toast("A rubric needs at least 2 level columns");
+    const used = rubric.criteria.filter(c => c.type !== "noul" && (c.cells[i] || "").trim()).length;
+    if (used && !confirm(`Remove the "${rubric.levels[i].label}" column? ${used} description(s) in it will be deleted.`)) return;
+    rubric.levels.splice(i, 1); rubric.criteria.forEach(c => c.cells.splice(i, 1)); touched(); return renderRubric();
+  }
+  const id = b.closest("tr[data-cid]")?.dataset.cid; if (!id) return;
+  const C = rubric.criteria, i = C.findIndex(c => c.id === id), c = C[i];
+  const same = C.map((x, k) => k).filter(k => C[k].type === c.type); const pos = same.indexOf(i);
+  if (act === "del") { if ((c.name || c.cells.some(Boolean) || c.yes || c.no) && !confirm(`Delete "${c.name || "this row"}"?`)) return; C.splice(i, 1); }
+  if (act === "up" && pos > 0) { const j = same[pos-1]; [C[j], C[i]] = [C[i], C[j]]; }
+  if (act === "down" && pos < same.length - 1) { const j = same[pos+1]; [C[j], C[i]] = [C[i], C[j]]; }
+  touched(); renderRubric();
+});
+$("#rubricName").addEventListener("input", e => { rubric.name = e.target.value; touched(); renderLibrary(); });
+$("#rubricPrompt").addEventListener("input", e => { rubric.prompt = e.target.value; autoGrow(e.target); touched(); });
+$("#addCritBtn").onclick = () => { const c = newScoreCrit(rubric.levels.length); const lastScore = rubric.criteria.map(x => x.type).lastIndexOf("score"); rubric.criteria.splice(lastScore + 1, 0, c); touched(); renderRubric(); $(`#rubricGrid tr[data-cid="${c.id}"] .cn`).focus(); };
+$("#addCheckBtn").onclick = () => { const c = newCheckCrit(rubric.levels.length); rubric.criteria.push(c); touched(); renderRubric(); $(`#rubricGrid tr[data-cid="${c.id}"] .cn`).focus(); };
+$("#addLevelBtn").onclick = () => {
+  if (rubric.levels.length >= 10) return toast("Nimble accepts at most 10 levels");
+  const last = rubric.levels[rubric.levels.length - 1]; rubric.levels.push({ label: "", points: last ? (+last.points || 0) + 1 : 0 });
+  rubric.criteria.forEach(c => c.cells.push("")); touched(); renderRubric();
+  const inp = $$("#rubricGrid thead input[data-f=label]").pop(); if (inp) inp.focus();
+};
+// Enter in a cell = next row same column (Shift+Enter for a line break)
+$("#rubricGrid").addEventListener("keydown", e => {
+  if (e.key !== "Enter" || e.shiftKey || e.target.dataset.cell == null) return;
+  e.preventDefault(); const col = e.target.dataset.cell; const tr = e.target.closest("tr").nextElementSibling;
+  const nxt = tr && tr.querySelector(`textarea[data-cell="${col}"]`); if (nxt) nxt.focus(); else e.target.blur();
+});
+
+/* ---------- rubrics sub-tabs ---------- */
+function setSub(s){ setTimeout(regrow); $$("#rubSubtabs button").forEach(b => b.classList.toggle("active", b.dataset.sub === s)); $("#sub-edit").hidden = s !== "edit"; $("#sub-import").hidden = s !== "import"; }
+$("#rubSubtabs").onclick = e => { const b = e.target.closest("button"); if (b) setSub(b.dataset.sub); };
+
+/* ---------- evaluate strip ---------- */
+function renderEvalStrip(){
+  const n = rubric.levels.length, rows = Math.min(3, rubric.criteria.filter(c => c.type !== "noul").length || 1);
+  $("#evalMini").style.gridTemplateColumns = `repeat(${n}, 12px)`;
+  $("#evalMini").innerHTML = Array.from({ length: rows * n }, (_, k) => `<i style="background:${levelColor(k % n, n)}"></i>`).join("");
+  $("#evalRubricMeta").textContent = rubricCounts(rubric) + (rubricDirty ? " · unsaved edits" : "");
+  $("#evalAssign").textContent = rubric.prompt || "No assignment text. Add one in Rubrics so Nimble knows what the learner was asked.";
+  $("#evalAssign").classList.toggle("missing", !rubric.prompt);
+}
+$("#editRubricBtn").onclick = () => { switchTab("rubrics"); setSub("edit"); };
+$("#viewGridBtn").onclick = () => { $("#viewTitle").textContent = rubric.name || "Rubric"; $("#viewBody").innerHTML = `${rubric.prompt ? `<p class="hint"><b>Assignment:</b> ${esc(rubric.prompt)}</p>` : ""}<div class="gridwrap">${gridHTML(rubric)}</div>`; $("#viewDlg").showModal(); };
+
+/* ---------- CSV helpers ---------- */
+function parseCSV(text, delim){
+  if (!delim) { const lines = text.split(/\r?\n/).filter(l => l.trim() && !/^\s*"?#/.test(l)); const s = lines.slice(0, 5).join("\n"); delim = (s.match(/\t/g) || []).length > (s.match(/,/g) || []).length / 3 ? "\t" : (s.match(/;/g)||[]).length > (s.match(/,/g)||[]).length ? ";" : ","; }
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"' && text[i+1] === '"') { cur += '"'; i++; } else if (ch === '"') q = false; else cur += ch; }
+    else if (ch === '"' && cur === "") q = true;
+    else if (ch === delim) { row.push(cur); cur = ""; }
+    else if (ch === "\n" || ch === "\r") { if (ch === "\r" && text[i+1] === "\n") i++; row.push(cur); rows.push(row); row = []; cur = ""; }
+    else cur += ch;
+  }
+  if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+  return rows.map(r => r.map(c => c.trim()));
+}
+const toCSV = rows => "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
+const TEMPLATE_NOTES = [
+  "# RUBRIC TEMPLATE for Nimble Rubric Evaluator. Lines starting with # are instructions and are ignored on import. You can delete them.",
+  "# One row per criterion. Level columns go LOWEST first (left) to HIGHEST (right). Write each level header as Label (points), e.g. Developing (1). Use 2 to 10 level columns.",
+  "# Type: score (default) or yes/no. For yes/no rows, put what NO looks like in the FIRST level column and what YES looks like in the LAST level column.",
+  "# Weight (default 1) sets how much a criterion counts toward the overall %. Question for the model is optional; if blank it is written from the criterion name.",
+  "# Describe what you would SEE in the writing at each level, one idea per criterion. Leave a cell blank if a criterion uses fewer levels.",
+  "# Save as CSV (UTF-8) and import it in the app under Rubrics > Import & template."
+];
+function rubricToCSV(g, { notes = true } = {}){
+  const n = g.levels.length;
+  const rows = notes ? TEMPLATE_NOTES.map(t => [t]) : [];
+  rows.push(["Rubric name", g.name || ""], ["Assignment", g.prompt || ""], []);
+  rows.push(["Criterion", "Type", "Weight", "Question for the model", ...g.levels.map((L, i) => `${L.label || "Level " + i} (${L.points})`)]);
+  const ordered = [...g.criteria.filter(c => c.type !== "noul"), ...g.criteria.filter(c => c.type === "noul")];
+  ordered.forEach(c => {
+    const cells = c.type === "noul" ? g.levels.map((_, i) => i === 0 ? c.no : i === n - 1 ? c.yes : "") : g.levels.map((_, i) => c.cells[i] || "");
+    rows.push([c.name, c.type === "noul" ? "yes/no" : "score", c.weight, c.instructions, ...cells]);
+  });
+  return toCSV(rows);
+}
+$("#tplBlankBtn").onclick = () => {
+  const g = { name: "", prompt: "", levels: clone(DEFAULT_LEVELS), criteria: [] };
+  let csv = rubricToCSV(g); csv += toCSV(Array.from({ length: 6 }, () => ["", "score", "1", "", "", "", "", ""])).replace(/^﻿/, "");
+  download("rubric-template.csv", csv, "text/csv");
+};
+$("#tplSampleBtn").onclick = () => download("rubric-template-sample.csv", rubricToCSV(SAMPLE_GRID()), "text/csv");
+$("#exportCsvRubricBtn").onclick = () => download(`${slug(rubric.name || "rubric")}.rubric.csv`, rubricToCSV(rubric, { notes: false }), "text/csv");
+
+/* ---------- rubric import ---------- */
+const HIGH_WORDS = /^(excellent|exemplary|outstanding|exceeds|exceptional|distinguished|advanced|expert|mastery|superior|high|strong)/i;
+function parseLevelHeader(h, i){
+  const m = h.match(/^(.*?)[\s(\[]*(-?\d+(?:\.\d+)?)\s*(?:pts?|points?)?[)\]]?\s*$/i);
+  if (m) return { label: m[1].replace(/[-–:|]\s*$/, "").trim() || `Level ${m[2]}`, points: +m[2], hasPts: true };
+  return { label: h.trim(), points: i, hasPts: false };
+}
+/* Returns { grid, rowInfo, notices, errors, ready } */
+function importRubric(text){
+  text = text.replace(/^﻿/, "").replace(/\r/g, "").trim();
+  if (!text) throw new Error("Nothing to import.");
+  if (/^[\[{]/.test(text)) { // JSON (app export, v1 or v2)
+    const j = JSON.parse(text); const r = j.rubric || j;
+    if (!Array.isArray(r.criteria)) throw new Error("JSON needs a 'criteria' array.");
+    if (r.v !== 2) r.criteria.forEach((c, i) => { c.levels = (c.levels || []).map((l, k) => typeof l === "string" ? { label: "", desc: l, points: k } : l); });
+    const grid = toGrid(r); grid.id = uid();
+    const rowInfo = {}; grid.criteria.forEach((c, i) => { const is = critIssues(c); rowInfo[c.id] = Object.assign({ row: i + 1, level: "good" }, is || {}); });
+    return finishImport(grid, rowInfo, []);
+  }
+  // Markdown tables -> tab separated
+  if (text.split("\n").filter(l => /^\s*\|.*\|\s*$/.test(l)).length >= 2)
+    text = text.split("\n").filter(l => !/^\s*\|?[\s:|-]+\|?\s*$/.test(l) || !l.includes("-")).map(l => l.trim().replace(/^\||\|$/g, "").split("|").map(s => s.trim()).join("\t")).join("\n");
+  const rows = parseCSV(text);
+  if (!rows.some(r => r.length > 2)) return finishImport(toGrid(parseRubricHeadings(text.split("\n"))), null, ["Read as a text rubric (## headings)."]);
+  const notices = [];
+  let name = "", prompt = "", hi = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i], a = (r[0] || "").toLowerCase();
+    if (a.startsWith("#") || !r.some(Boolean)) continue;
+    if (/^(rubric name|rubric|name|title)$/.test(a) && hi < 0 && !r.slice(2).some(Boolean)) { name = r[1] || ""; continue; }
+    if (/^(assignment|prompt|task|question given)$/.test(a) && hi < 0 && !r.slice(2).some(Boolean)) { prompt = r[1] || ""; continue; }
+    if (hi < 0) { hi = i; break; }
+  }
+  if (hi < 0) throw new Error("No header row found. The first non-instruction row should be: Criterion, Type, Weight, Question for the model, then one column per level.");
+  const H = rows[hi]; const role = H.map((h, i) => {
+    const x = h.toLowerCase().trim();
+    if (/^(criterion|criteria|name|dimension|skill|area)$/.test(x)) return "name";
+    if (/^type$/.test(x)) return "type";
+    if (/^weight(ing)?$/.test(x)) return "weight";
+    if (/^(question|question for the model|instructions?|prompt|description)$/.test(x)) return "q";
+    if (!x) return "skip";
+    return "level";
+  });
+  if (!role.includes("name")) { role[0] = "name"; notices.push(`No "Criterion" header found, so column A was used as the criterion name.`); }
+  let lvCols = role.map((r, i) => r === "level" ? i : -1).filter(i => i >= 0);
+  if (lvCols.length < 2) throw new Error(`Found ${lvCols.length} level column(s) in the header row (row ${hi + 1}). Add at least 2, e.g. "Beginning (0)", "Developing (1)".`);
+  if (lvCols.length > 10) throw new Error(`Found ${lvCols.length} level columns; Nimble accepts at most 10.`);
+  let levels = lvCols.map((c, i) => parseLevelHeader(H[c], i));
+  const ptsAll = levels.every(l => l.hasPts);
+  let reverse = ptsAll ? levels[0].points > levels[levels.length - 1].points : (HIGH_WORDS.test(levels[0].label) && !HIGH_WORDS.test(levels[levels.length - 1].label));
+  if (reverse) { lvCols = lvCols.slice().reverse(); levels = levels.slice().reverse(); notices.push(`Your level columns ran highest to lowest ("${levels[levels.length-1].label}" first), so they were flipped to lowest first. Check the order below.`); }
+  if (!ptsAll) { levels.forEach((l, i) => { if (!l.hasPts) l.points = i; }); notices.push("Some level headers had no points, so points were numbered 0, 1, 2… from lowest."); }
+  levels = levels.map(l => ({ label: l.label, points: l.points }));
+  const col = k => role.indexOf(k);
+  const criteria = [], rowInfo = [];
+  for (let i = hi + 1; i < rows.length; i++) {
+    const r = rows[i]; if (!r.some(Boolean) || (r[0] || "").startsWith("#")) continue;
+    const cells = lvCols.map(c => r[c] || "");
+    const nm = r[col("name")] || ""; const typeRaw = col("type") >= 0 ? (r[col("type")] || "") : "";
+    if (!nm && !cells.some(Boolean)) continue;
+    const isCheck = /yes|no|bool|check|y\/n|pass/i.test(typeRaw);
+    const wRaw = col("weight") >= 0 ? r[col("weight")] : "";
+    const c = { id: uid(), name: nm, type: isCheck ? "noul" : "score", weight: wRaw === "" || wRaw == null ? 1 : +wRaw, instructions: col("q") >= 0 ? (r[col("q")] || "") : "", cells: isCheck ? new Array(levels.length).fill("") : cells, no: "", yes: "" };
+    const info = { row: i + 1, level: "good", msg: "" }; const warn = [];
+    if (isNaN(c.weight)) { c.weight = 1; warn.push(`Weight "${wRaw}" is not a number, so 1 was used.`); }
+    if (typeRaw && !isCheck && !/score|level|scale|rating|grade/i.test(typeRaw)) warn.push(`Type "${typeRaw}" not recognised, so it was read as score.`);
+    if (isCheck) {
+      const filled = cells.map((v, k) => v ? k : -1).filter(k => k >= 0);
+      if (filled.length >= 2) { c.no = cells[filled[0]]; c.yes = cells[filled[filled.length - 1]]; }
+      else if (filled.length === 1) { info.level = "bad"; info.msg = "Yes/no row: put what NO looks like in the first level column and what YES looks like in the last."; }
+      else warn.push("No YES/NO descriptions, so generic ones will be used.");
+    } else {
+      const filled = cells.filter(Boolean).length;
+      if (filled < 2) { info.level = "bad"; info.msg = `Only ${filled} level${filled === 1 ? "" : "s"} filled in. A score criterion needs at least 2.`; }
+    }
+    if (!nm) { info.level = "bad"; info.msg = "No criterion name."; }
+    if (info.level !== "bad" && !c.instructions) warn.push("No question given, so one will be written from the name.");
+    if (info.level !== "bad" && warn.length) { info.level = "warn"; info.msg = warn.join(" "); }
+    criteria.push(c); rowInfo.push([c.id, info]);
+  }
+  if (!criteria.length) throw new Error("The header row was found but no criteria rows are filled in under it. Add at least one row with a criterion name and level descriptions.");
+  return finishImport({ v: 2, id: uid(), name, prompt, levels, criteria }, Object.fromEntries(rowInfo), notices);
+}
+function finishImport(grid, rowInfo, notices){
+  if (!rowInfo) { rowInfo = {}; grid.criteria.forEach((c, i) => { const is = critIssues(c); rowInfo[c.id] = Object.assign({ row: i + 1, level: "good" }, is || {}); }); }
+  const v = Object.values(rowInfo);
+  return { grid, rowInfo, notices, ready: v.filter(x => x.level !== "bad").length, warns: v.filter(x => x.level === "warn").length, errors: v.filter(x => x.level === "bad").length };
+}
+/* legacy "## heading" text format (returns compiled/v1 shape) */
+function parseRubricHeadings(lines){
+  const out = { name: "", prompt: "", criteria: [] }; let c = null;
+  const flush = () => { if (c) { fin(c); out.criteria.push(c); } c = null; };
+  const fin = c => {
+    if (c.type === "noul") {
+      const yes = c._l.find(l => /^(yes|true|met)/i.test(l.label)) || { desc: c._l[1]?.desc || "" };
+      const no = c._l.find(l => /^(no|false|not)/i.test(l.label)) || { desc: c._l[0]?.desc || "" };
+      c.levels = [{ label: "No", desc: no.desc, points: 0 }, { label: "Yes", desc: yes.desc, points: 1 }];
+    } else {
+      let lv = c._l; const ps = lv.map(l => l.points);
+      if ((ps.every(p => p != null) && ps[0] > ps[ps.length-1]) || (lv.length > 1 && HIGH_WORDS.test(lv[0].label) && !HIGH_WORDS.test(lv[lv.length-1].label))) lv = lv.slice().reverse();
+      c.levels = lv.map((l, i) => ({ label: l.label || `Level ${i}`, desc: l.desc, points: l.points != null ? l.points : i }));
+    }
+    delete c._l;
+  };
+  for (const raw of lines) {
+    const line = raw.trim(); if (!line) continue; let m;
+    if ((m = line.match(/^#\s+(.+)/)) && !line.startsWith("##")) { out.name = m[1].trim(); continue; }
+    if ((m = line.match(/^##+\s*(.+)$/))) {
+      flush(); let name = m[1].trim(), weight = 1, type = "score";
+      const w = name.match(/[(\[]\s*weight\s*[:=]?\s*(\d+(?:\.\d+)?)\s*[)\]]/i); if (w) { weight = +w[1]; name = name.replace(w[0], "").trim(); }
+      if (/[\[(]\s*(yes\s*\/\s*no|y\/n|check)\s*[\])]/i.test(name)) { type = "noul"; name = name.replace(/[\[(][^\])]*[\])]/g, "").trim(); }
+      c = { id: uid(), name, type, weight, instructions: "", _l: [] }; continue;
+    }
+    if ((m = line.match(/^(?:assignment|task|prompt)\s*[:-]\s*(.+)$/i)) && !c) { out.prompt = m[1]; continue; }
+    if (!c) continue;
+    if ((m = line.match(/^(?:question|instructions?)\s*[:-]\s*(.+)$/i))) { c.instructions = m[1]; continue; }
+    let body = line.replace(/^[-*•]\s*/, ""), points = null, label = "";
+    if ((m = body.match(/^(-?\d+(?:\.\d+)?)\s*[|:.)-]\s*(.+)$/))) { points = +m[1]; body = m[2]; }
+    if ((m = body.match(/^([^:]{1,40}?)\s*:\s*(.+)$/))) { label = m[1].trim(); body = m[2]; }
+    c._l.push({ label, desc: body.trim(), points });
+  }
+  flush();
+  if (!out.criteria.length) throw new Error("Couldn't find a rubric. Use the CSV template, paste a table, or use '## Criterion' headings.");
+  return out;
+}
+let pendingImport = null;
+function showImportPreview(text, source){
+  try { pendingImport = importRubric(text); pendingImport.source = source; }
+  catch (e) { pendingImport = null; $("#importPreview").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  const p = pendingImport, g = p.grid;
+  if (!g.name) g.name = (source || "Imported rubric").replace(/\.(csv|tsv|txt|json|md)$/i, "").replace(/[-_]+/g, " ");
+  $("#importPreview").innerHTML = `
+    <div class="row" style="margin:16px 0 8px"><b style="font-size:15px">Preview: ${esc(source || "pasted rubric")}</b>
+      <span class="pill good">${p.ready} ready</span>${p.warns ? `<span class="pill warn">${p.warns} warning${p.warns>1?"s":""}</span>` : ""}${p.errors ? `<span class="pill bad">${p.errors} error${p.errors>1?"s":""}</span>` : ""}</div>
+    <div class="row" style="gap:10px;margin-bottom:8px"><label class="f" style="margin:0">Name</label><input type="text" id="impName" value="${esc(g.name)}" style="max-width:420px"></div>
+    ${g.prompt ? `<p class="hint" style="margin:0 0 8px"><b>Assignment:</b> ${esc(g.prompt)}</p>` : `<p class="hint" style="margin:0 0 8px">No assignment row found. You can add it in the editor.</p>`}
+    ${p.notices.map(n => `<div class="alert info" style="margin:0 0 8px">${esc(n)}</div>`).join("")}
+    <div class="gridwrap">${gridHTML(g, { rowInfo: p.rowInfo })}</div>
+    <div class="row" style="margin-top:12px"><button class="btn ghost" id="impCancel">Cancel</button><span class="spacer"></span>
+      <button class="btn" id="impEdit">Open in editor${p.errors ? " to fix" : ""}</button>
+      <button class="btn primary" id="impSave" ${p.ready ? "" : "disabled"}>Save to library${p.errors ? ` (skip ${p.errors} row${p.errors>1?"s":""} with errors)` : ""}</button></div>`;
+  $("#impName").oninput = e => g.name = e.target.value;
+  $("#impCancel").onclick = () => { pendingImport = null; $("#importPreview").innerHTML = ""; };
+  $("#impEdit").onclick = () => { if (loadRubric(g)) { setDirty(true); saveDraft(); renderRubric(); setSub("edit"); $("#importPreview").innerHTML = ""; toast("Imported into the editor. Fix any rows, then Save"); } };
+  $("#impSave").onclick = () => {
+    const keep = clone(g); keep.criteria = keep.criteria.filter(c => p.rowInfo[c.id]?.level !== "bad");
+    const lib = library(); lib.unshift(keep); saveLibrary(lib);
+    if (loadRubric(keep)) { setSub("edit"); $("#importPreview").innerHTML = ""; toast(`Saved "${keep.name}" with ${keep.criteria.length} rows`); }
+  };
+  $("#importPreview").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+$("#parseRubricBtn").onclick = () => showImportPreview($("#rubricPasteText").value, "pasted rubric");
+$("#pasteToggleBtn").onclick = () => { $("#pasteBox").hidden = !$("#pasteBox").hidden; if (!$("#pasteBox").hidden) $("#rubricPasteText").focus(); };
+$("#rubricFile").onchange = async e => { const f = e.target.files[0]; if (!f) return; e.target.value = ""; showImportPreview(await readFileText(f), f.name); };
+async function readFileText(f){
+  if (/\.(xlsx|xls)$/i.test(f.name)) { toast("Save the spreadsheet as CSV (UTF-8) first"); return ""; }
+  const buf = await f.arrayBuffer(); let t = new TextDecoder("utf-8").decode(buf);
+  if (t.includes("�")) t = new TextDecoder("windows-1252").decode(buf); // older Excel "CSV" exports
+  return t;
+}
+const dz = $("#dropZone");
+["dragenter","dragover"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add("over"); }));
+["dragleave","drop"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove("over"); }));
+dz.addEventListener("drop", async e => { const f = e.dataTransfer.files[0]; if (f) showImportPreview(await readFileText(f), f.name); });
+dz.addEventListener("paste", e => { const t = e.clipboardData.getData("text/plain"); if (t) { e.preventDefault(); showImportPreview(t, "pasted table"); } });
+
+/* ---------- responses ---------- */
+function parseResponses(text){
+  text = text.replace(/\r/g, "");
+  if (!text.trim()) return [];
+  const chunks = text.split(/^\s*(?:-{3,}|={3,})\s*$/m).map(s => s.trim()).filter(Boolean);
+  return chunks.map((ch, i) => {
+    let name = `Response ${i+1}`; const m = ch.match(/^(?:name|learner|id|user|participant)\s*:\s*(.+)\n?/i);
+    if (m) { name = m[1].trim(); ch = ch.slice(m[0].length).trim(); }
+    return { id: uid(), name, text: ch };
+  }).filter(r => r.text);
+}
+function responsesFromCSV(text){
+  const rows = parseCSV(text.replace(/^﻿/, "")).filter(r => r.some(Boolean) && !(r[0] || "").startsWith("#")); if (rows.length < 2) return null;
+  const h = rows[0].map(x => x.toLowerCase());
+  let ti = h.findIndex(x => /response|answer|text|reflection|entry|diary|submission/.test(x));
+  let ni = h.findIndex((x, i) => i !== ti && /name|learner|id|user|participant|email/.test(x));
+  if (ti < 0) { const avg = h.map((_, i) => rows.slice(1).reduce((a,r) => a + (r[i]||"").length, 0)); ti = avg.indexOf(Math.max(...avg)); }
+  return rows.slice(1).filter(r => (r[ti]||"").trim()).map((r, i) => ({ id: uid(), name: ni >= 0 && r[ni] ? r[ni] : `Response ${i+1}`, text: r[ti] }));
+}
+function words(s){ return (s.match(/\S+/g) || []).length; }
+let responses = [];
+function onResponsesChanged(){
+  responses = parseResponses($("#responsesText").value);
+  store.set("draftResponses", $("#responsesText").value);
+  $("#respSummary").textContent = `${responses.length} response${responses.length===1?"":"s"}`;
+  $("#respList").innerHTML = responses.map(r => `<div class="resp-item" data-id="${r.id}"><span class="who">${esc(r.name)}</span><span class="ex">${esc(r.text.slice(0,140))}</span><span class="st hint">${words(r.text)} words</span></div>`).join("");
+  preflight();
+}
+$("#responsesText").addEventListener("input", onResponsesChanged);
+$("#clearRespBtn").onclick = () => { $("#responsesText").value = ""; onResponsesChanged(); };
+$("#respTemplateBtn").onclick = () => download("responses-template.csv", toCSV([
+  ["# RESPONSES TEMPLATE. One row per learner. Lines starting with # are ignored. Keep each response in one cell (line breaks inside the cell are fine)."],
+  ["Name", "Response"], ["Alex", "Last Tuesday I was responsible for sending the quarterly report…"], ["Priya", "I had a meeting with a customer and it did not go well…"]]), "text/csv");
+$("#respFile").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return; const t = await readFileText(f); e.target.value = "";
+  let rs = /\.(csv|tsv)$/i.test(f.name) ? responsesFromCSV(t) : null;
+  if (rs && rs.length) $("#responsesText").value = rs.map(r => `Name: ${r.name}\n${r.text}`).join("\n---\n");
+  else $("#responsesText").value = t;
+  onResponsesChanged(); toast(`Imported ${responses.length} responses`);
+};
+
+/* ---------- request building ---------- */
+function qKey(c, i){ return `c${i+1}_` + (c.name || "criterion").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 40); }
+function levelText(l){ return l.label && l.desc ? `${l.label}: ${l.desc}` : (l.desc || l.label); }
+function buildQuestions(rb, relevance){
+  const qs = {};
+  rb.criteria.forEach((c, i) => {
+    const instr = c.instructions || `How well does the response demonstrate: ${c.name}?`;
+    if (c.type === "score") qs[qKey(c,i)] = { type: "score", instructions: `Criterion "${c.name}". ${instr}`, criteria: c.levels.map(levelText) };
+    else if (c.type === "noul") qs[qKey(c,i)] = { type: "noul", instructions: instr, criteria: { "true": c.levels[1]?.desc || "Yes", "false": c.levels[0]?.desc || "No" } };
+    else if (c.type === "choice") { const crit = {}; c.levels.forEach((l, li) => crit[l.label || `option_${li}`] = l.desc || l.label); qs[qKey(c,i)] = { type: "choice", instructions: instr, criteria: crit }; }
+  });
+  if (relevance && rb.prompt) qs["_on_topic"] = { type: "noul", instructions: "Is the learner's response a genuine attempt to answer the assignment?", criteria: { "true": "The response addresses the assignment.", "false": "The response is off-topic, empty, copied instructions, or nonsense." } };
+  return qs;
+}
+function buildState(rb, r){
+  return (rb.prompt ? `ASSIGNMENT GIVEN TO THE LEARNER:\n${rb.prompt}\n\n` : "") + `LEARNER'S WRITTEN RESPONSE:\n${r.text}`;
+}
+function buildRequest(rb, r, relevance){
+  const body = { model: S.model, state: buildState(rb, r), questions: buildQuestions(rb, relevance) };
+  if (S.keepAlive) body.keep_alive = S.keepAlive;
+  return body;
+}
+const approxTokens = s => Math.ceil(s.length / 3.6);
+function validateRubric(){
+  const rubric = compiled();
+  const errs = [], warns = [];
+  if (!rubric.criteria.length) errs.push("Add at least one criterion.");
+  rubric.criteria.forEach((c, i) => {
+    const nm = c.name || `Criterion ${i+1}`;
+    if (!c.name) warns.push(`Criterion ${i+1} has no name.`);
+    if (c.type === "score" && (c.levels.length < 2 || c.levels.length > 10)) errs.push(`"${nm}" needs 2 to 10 levels (has ${c.levels.length}).`);
+    if (c.type === "choice" && c.levels.length < 2) errs.push(`"${nm}" needs at least 2 options.`);
+    if (c.levels.some(l => !l.desc && !l.label)) errs.push(`"${nm}" has an empty level.`);
+    else if (c.levels.some(l => !l.desc)) warns.push(`"${nm}": levels without descriptions score much less reliably. Describe what each level looks like.`);
+    if (c.type === "choice") { const ks = c.levels.map(l => l.label); if (new Set(ks).size !== ks.length) errs.push(`"${nm}" has duplicate option labels.`); }
+  });
+  if (rubric.criteria.length > 63) errs.push("Nimble accepts at most 64 questions per request.");
+  return { errs, warns };
+}
+function preflight(){
+  const rubric = compiled();
+  const { errs, warns } = validateRubric(); const out = [];
+  if (responses.length) {
+    const longest = responses.reduce((a, r) => r.text.length > a.text.length ? r : a, responses[0]);
+    const t = approxTokens(JSON.stringify(buildRequest(rubric, longest, $("#optRelevance").checked)));
+    if (t > 8192) errs.push(`"${longest.name}" plus the rubric is about ${t.toLocaleString()} tokens; Nimble's limit is 8,192. Shorten level descriptions or split the response.`);
+    else if (t > 6500) warns.push(`Largest request is about ${t.toLocaleString()} tokens (limit 8,192).`);
+    const short = responses.filter(r => words(r.text) < S.minWords).length;
+    if (short) warns.push(`${short} response${short>1?"s are":" is"} under ${S.minWords} words and will be flagged for review.`);
+  }
+  if (errs.length) out.push(`<div class="alert bad">${errs.map(esc).join("<br>")}</div>`);
+  if (warns.length) out.push(`<div class="alert warn">${warns.map(esc).join("<br>")}</div>`);
+  $("#preflight").innerHTML = out.join("");
+  $("#runBtn").disabled = !!errs.length || !responses.length || running;
+  return !errs.length;
+}
+
+/* ---------- Ollama calls ---------- */
+function apiBase(){ return (S.url || "/ollama").replace(/\/+$/, ""); }
+async function ollamaFetch(path, opts={}, signal, cap){
+  let res;
+  try { res = await fetch(apiBase() + path, Object.assign({ headers: { "Content-Type": "application/json" }, signal }, opts)); }
+  catch (e) { if (e.name === "AbortError") throw e; throw new Error(location.protocol === "file:" ? "Could not reach Ollama. Start the app with 'python3 serve.py' (recommended) or set OLLAMA_ORIGINS='*' before 'ollama serve'." : `Could not reach Ollama at ${apiBase()} (${e.message}).`); }
+  const text = await res.text(); let data; try { data = JSON.parse(text); } catch { data = { raw: text }; }
+  if (cap) { cap.url = apiBase() + path; cap.httpStatus = res.status; cap.responseText = text; cap.finishedAt = new Date().toISOString(); }
+  if (!res.ok) {
+    let msg = data.error?.message || data.error || data.raw || res.statusText;
+    if (res.status === 404 && path.includes("systemone")) msg = /model/i.test(msg) && !/page not found/i.test(msg) ? `${msg}. Run: ollama pull ${S.model}` : `This Ollama has no /v1/systemone endpoint (${msg}). Update Ollama to 0.35 or later.`;
+    if (res.status === 404 && path.includes("/api/chat")) msg = `${msg}. Run: ollama pull ${S.fbModel}`;
+    const err = new Error(`${res.status}: ${msg}`); err.status = res.status; throw err;
+  }
+  return data;
+}
+async function checkConnection(verbose){
+  const dot = $("#connDot"), txt = $("#connText");
+  if (S.demo) { dot.className = "dot demo"; txt.textContent = "Demo mode"; return; }
+  dot.className = "dot"; txt.textContent = "Checking Ollama…";
+  try {
+    const tags = await ollamaFetch("/api/tags");
+    const models = (tags.models || []).map(m => m.name);
+    $("#modelList").innerHTML = models.map(m => `<option value="${esc(m)}">`).join("");
+    let ver = ""; try { ver = (await ollamaFetch("/api/version")).version || ""; } catch {}
+    const has = models.some(m => m === S.model || m.split(":")[0] === S.model.split(":")[0]);
+    dot.className = "dot " + (has ? "ok" : "bad");
+    txt.textContent = has ? `${S.model} ready${ver ? " · Ollama " + ver : ""}` : `${S.model} not installed`;
+    if (verbose) $("#connResult").innerHTML = `<div class="alert ${has ? "info" : "warn"}">Connected${ver ? " to Ollama " + esc(ver) : ""}. ${models.length} model(s): ${models.map(esc).join(", ") || "none"}.${has ? "" : ` <b>Run <span class="kbd">ollama pull ${esc(S.model)}</span></b>.`}${ver && cmpVer(ver, "0.35.0") < 0 ? " <b>Nimble needs Ollama 0.35 or newer.</b>" : ""}</div>`;
+  } catch (e) {
+    dot.className = "dot bad"; txt.textContent = "Ollama offline";
+    if (verbose) $("#connResult").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`;
+  }
+}
+function cmpVer(a, b){ const p = s => s.replace(/[^\d.]/g, "").split(".").map(Number); const x = p(a), y = p(b); for (let i = 0; i < 3; i++) { if ((x[i]||0) !== (y[i]||0)) return (x[i]||0) - (y[i]||0); } return 0; }
+
+/* ---------- demo simulator (no Ollama) ---------- */
+function hash(s){ let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967296; }
+function simulate(body){
+  const st = body.state, w = words(st.split("RESPONSE:\n")[1] || st), answers = {};
+  const quality = Math.min(1, w / 260) * 0.75 + (/(I will|next time|learned|realis|because)/i.test(st) ? 0.2 : 0) - (/(useless|fired|stupid|idiot)/i.test(st) ? 0.35 : 0);
+  for (const [k, q] of Object.entries(body.questions)) {
+    const r = hash(st + k);
+    if (q.type === "score") {
+      const n = q.criteria.length, center = Math.max(0, Math.min(n-1, quality * (n-1) + (r - 0.5) * 1.2));
+      let ps = q.criteria.map((_, i) => Math.exp(-((i - center) ** 2) / (0.35 + r * 0.6))); const s = ps.reduce((a,b)=>a+b,0); ps = ps.map(p => p/s);
+      const probabilities = {}, legend = {}; ps.forEach((p,i) => { probabilities[i] = +p.toFixed(3); legend[i] = q.criteria[i]; });
+      answers[k] = { type: "score", score: +ps.reduce((a,p,i)=>a+p*i,0).toFixed(2), legend, probabilities, confidence: +(Math.max(...ps) * 0.9).toFixed(2) };
+    } else if (q.type === "noul") {
+      let p = k === "_on_topic" ? (w > 15 ? 0.97 : 0.3) : Math.max(0.03, Math.min(0.97, quality + 0.3 + (r - 0.5) * 0.3));
+      answers[k] = { type: "noul", noul: +p.toFixed(3) };
+    } else {
+      const keys = Object.keys(q.criteria), probs = {}; keys.forEach((kk, i) => probs[kk] = i === Math.floor(r * keys.length) ? 0.8 : 0.2 / (keys.length - 1 || 1));
+      answers[k] = { type: "choice", choice: keys[Math.floor(r * keys.length)], probabilities: probs, confidence: 0.7 };
+    }
+  }
+  return new Promise(res => setTimeout(() => res({ model: "demo-simulator", answers, usage: { prompt_tokens: approxTokens(JSON.stringify(body)) } }), 250 + r2() * 400));
+}
+const r2 = Math.random;
+
+/* ---------- answer parsing (defensive across API variants) ---------- */
+function entropyConfidence(ps){ const n = ps.length; if (n < 2) return 1; const h = -ps.reduce((a,p) => a + (p > 0 ? p*Math.log(p) : 0), 0); return Math.max(0, 1 - h/Math.log(n)); }
+function interpret(c, ans){
+  if (!ans) return { error: "No answer returned for this criterion" };
+  const n = c.levels.length;
+  if (c.type === "score") {
+    let probs = new Array(n).fill(0);
+    if (ans.probabilities) for (const [k, v] of Object.entries(ans.probabilities)) { const i = parseInt(k, 10); if (i >= 0 && i < n) probs[i] = +v || 0; }
+    const sum = probs.reduce((a,b)=>a+b,0);
+    let expected = typeof ans.score === "number" ? ans.score : (sum ? probs.reduce((a,p,i)=>a+p*i,0)/sum : null);
+    if (!sum && expected != null) { const i = Math.max(0, Math.min(n-1, Math.round(expected))); probs[i] = 1; }
+    const level = probs.indexOf(Math.max(...probs));
+    const sorted = [...probs].sort((a,b)=>b-a);
+    return { level, expected, probs, confidence: typeof ans.confidence === "number" ? ans.confidence : entropyConfidence(probs), margin: sorted[0] - (sorted[1]||0) };
+  }
+  if (c.type === "noul") {
+    let p = null;
+    if (typeof ans.noul === "number") p = ans.noul;
+    else if (typeof ans.noul === "boolean") p = ans.probabilities?.true ?? (ans.noul ? 1 : 0);
+    else if (ans.probabilities && ("true" in ans.probabilities)) p = +ans.probabilities.true;
+    else if (typeof ans.value === "boolean") p = ans.value ? 1 : 0;
+    else if (typeof ans.answer === "boolean") p = ans.answer ? 1 : 0;
+    if (p == null) return { error: "Could not read yes/no answer", raw: ans };
+    const probs = [1-p, p];
+    return { level: p >= 0.5 ? 1 : 0, expected: p, probs, confidence: typeof ans.confidence === "number" ? ans.confidence : Math.abs(p - 0.5) * 2, margin: Math.abs(2*p - 1) };
+  }
+  // choice
+  const labels = c.levels.map((l, li) => l.label || `option_${li}`);
+  const probs = labels.map(l => +(ans.probabilities?.[l] ?? 0));
+  let level = labels.indexOf(ans.choice);
+  if (level < 0) level = probs.indexOf(Math.max(...probs));
+  if (!probs.some(Boolean) && level >= 0) probs[level] = 1;
+  const sorted = [...probs].sort((a,b)=>b-a);
+  return { level, expected: level, probs, confidence: typeof ans.confidence === "number" ? ans.confidence : sorted[0], margin: sorted[0] - (sorted[1]||0) };
+}
+function critPct(c, level){
+  if (level == null || level < 0) return null;
+  const pts = c.levels.map(l => +l.points || 0), mx = Math.max(...pts), mn = Math.min(...pts);
+  return mx === mn ? 1 : (pts[level] - mn) / (mx - mn);
+}
+function scoreResult(rb, res){
+  // Uses human override where present, else model level.
+  let tw = 0, acc = 0, pts = 0, maxPts = 0;
+  rb.criteria.forEach(c => {
+    const s = res.scores[c.id]; if (!s || s.error) return;
+    const lvl = s.human != null ? s.human : s.level;
+    const p = critPct(c, lvl); if (p == null) return;
+    const w = +c.weight || 0; tw += w; acc += w * p;
+    const ps = c.levels.map(l => +l.points || 0); pts += ps[lvl]; maxPts += Math.max(...ps);
+  });
+  res.overall = tw ? acc / tw : null;
+  res.points = pts; res.maxPoints = maxPts;
+  res.band = res.overall == null ? "" : bandFor(res.overall);
+}
+function computeFlags(rb, res){
+  const f = [];
+  if (res.error) { res.flags = ["Error"]; return; }
+  rb.criteria.forEach(c => { const s = res.scores[c.id]; if (!s) return;
+    if (s.error) f.push(`${c.name}: no answer`);
+    else if (s.human == null && s.confidence < S.conf) f.push(`Low confidence: ${c.name}`);
+    else if (s.human == null && c.type !== "noul" && s.margin < S.margin) f.push(`Borderline: ${c.name}`);
+  });
+  if (res.onTopic != null && res.onTopic < 0.5) f.push("Possibly off-topic");
+  if (res.words < S.minWords) f.push(`Short (${res.words} words)`);
+  res.flags = f;
+}
+
+/* ---------- feedback ---------- */
+function templateFeedback(rb, res){
+  const lines = [];
+  const strengths = [], next = [];
+  rb.criteria.forEach(c => {
+    const s = res.scores[c.id]; if (!s || s.error) return;
+    const lvl = s.human != null ? s.human : s.level, L = c.levels[lvl]; if (!L) return;
+    if (c.type === "noul") { if (lvl === 1) strengths.push(`${c.name}: ${L.desc || "met"}`); else next.push(`${c.name}: ${c.levels[1].desc || "this requirement is not yet met"}`); return; }
+    if (c.type === "choice") { lines.push(`${c.name}: ${L.label}${L.desc ? " (" + L.desc + ")" : ""}`); return; }
+    const top = lvl === c.levels.length - 1;
+    if (lvl >= Math.ceil((c.levels.length - 1) / 2)) strengths.push(`${c.name} (${L.label || "level " + lvl}): ${L.desc}`);
+    if (!top) { const N = c.levels[lvl+1]; next.push(`${c.name}: you are at "${L.label || "level " + lvl}". To reach "${N.label || "level " + (lvl+1)}": ${N.desc}`); }
+  });
+  if (strengths.length) lines.push("What you did well:\n" + strengths.map(s => "• " + s).join("\n"));
+  if (next.length) lines.push("To improve:\n" + next.map(s => "• " + s).join("\n"));
+  if (!next.length && strengths.length) lines.push("Excellent work: you met the top level on every criterion.");
+  return lines.join("\n\n");
+}
+async function llmFeedback(rb, r, res, signal){
+  const summary = rb.criteria.map(c => { const s = res.scores[c.id]; if (!s || s.error) return null; const L = c.levels[s.level];
+    const nxt = c.type === "score" && s.level < c.levels.length - 1 ? ` | Next level: ${levelText(c.levels[s.level+1])}` : "";
+    return `- ${c.name}: ${levelText(L)}${nxt}`; }).filter(Boolean).join("\n");
+  const sys = "You are a supportive, specific workplace learning coach. You write feedback to a learner about their written response. The rubric scores have ALREADY been decided by the assessor; never change, dispute or re-grade them and do not mention numbers or the word 'score'. Ground every point in what the learner actually wrote, quoting short phrases where helpful. Structure: one sentence of overall impression, then 2 to 3 strengths, then 2 to 3 concrete next steps tied to the next rubric level. Use plain text with short bullet points. Maximum 180 words. Address the learner as 'you'.";
+  const user = `ASSIGNMENT:\n${rb.prompt || "(not provided)"}\n\nASSESSOR'S RUBRIC JUDGEMENTS:\n${summary}\n\nLEARNER'S RESPONSE:\n${r.text}\n\nWrite the feedback now.`;
+  const fbBody = { model: S.fbModel, stream: false, keep_alive: S.keepAlive || undefined, options: { temperature: 0.4 }, messages: [{ role: "system", content: sys }, { role: "user", content: user }] };
+  const cap = { endpoint: "/api/chat", request: fbBody, startedAt: new Date().toISOString() }; res.audit.feedback = cap;
+  const data = await ollamaFetch("/api/chat", { method: "POST", body: JSON.stringify(fbBody) }, signal, cap);
+  return (data.message?.content || "").replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+}
+
+/* ---------- running ---------- */
+let running = false, abortCtl = null, currentRun = null;
+function logLine(s){ const l = $("#runLog"); l.insertAdjacentHTML("beforeend", `<div>${esc(new Date().toLocaleTimeString())}  ${esc(s)}</div>`); l.scrollTop = l.scrollHeight; }
+async function evaluateOne(rb, r, opts, signal){
+  const body = buildRequest(rb, r, opts.relevance);
+  const t0 = performance.now();
+  const res = { id: r.id, name: r.name, text: r.text, words: words(r.text), scores: {}, raw: null, ms: 0,
+    audit: { endpoint: "/v1/systemone", request: body, startedAt: new Date().toISOString() } };
+  try {
+    const data = S.demo ? await simulate(body) : await ollamaFetch("/v1/systemone", { method: "POST", body: JSON.stringify(body) }, signal, res.audit);
+    if (S.demo) Object.assign(res.audit, { url: "demo-simulator", httpStatus: 200, responseText: JSON.stringify(data), finishedAt: new Date().toISOString() });
+    res.audit.responseSha256 = await sha256(res.audit.responseText || "");
+    res.ms = Math.round(performance.now() - t0);
+    res.raw = data; res.model = data.model; res.usage = data.usage;
+    const answers = data.answers || data.results || {};
+    rb.criteria.forEach((c, i) => { res.scores[c.id] = interpret(c, answers[qKey(c, i)]); });
+    if (answers._on_topic) { const a = interpret({ type: "noul", levels: [{},{}] }, answers._on_topic); res.onTopic = a.expected; }
+    scoreResult(rb, res);
+    res.feedback = templateFeedback(rb, res);
+    if (opts.llm && S.fbModel) {
+      try { res.llmFeedback = S.demo ? "(Demo mode: narrative feedback is written by your feedback model when connected to Ollama.)\n\n" + res.feedback : await llmFeedback(rb, r, res, signal); }
+      catch (e) { if (e.name === "AbortError") throw e; res.llmFeedbackError = e.message; }
+    }
+  } catch (e) {
+    if (e.name === "AbortError") throw e;
+    res.error = e.message; res.ms = Math.round(performance.now() - t0);
+    res.audit.finishedAt = res.audit.finishedAt || new Date().toISOString(); res.audit.error = e.message;
+    if (res.audit.responseText) res.audit.responseSha256 = await sha256(res.audit.responseText);
+  }
+  computeFlags(rb, res);
+  return res;
+}
+$("#runBtn").onclick = async () => {
+  if (!preflight() || !responses.length) return;
+  const rb = compiled(); rb.sourceRubricId = rubric.id;
+  const opts = { relevance: $("#optRelevance").checked, llm: $("#optFeedbackLLM").checked && !!S.fbModel };
+  if ($("#optFeedbackLLM").checked && !S.fbModel) { toast("Set a feedback model in Settings first"); return; }
+  const run = { id: uid(), name: $("#runName").value.trim() || `${rb.name || "Run"} · ${new Date().toLocaleString([], {dateStyle:"medium", timeStyle:"short"})}`,
+    created: new Date().toISOString(), model: S.demo ? "demo-simulator" : S.model, feedbackModel: opts.llm ? S.fbModel : null, demo: !!S.demo,
+    rubric: rb, options: opts, settings: { conf: S.conf, margin: S.margin, minWords: S.minWords, bands: S.bands }, results: [],
+    audit: { appVersion: APP_VERSION, ollamaUrl: S.demo ? "demo-simulator" : apiBase(), startedAt: new Date().toISOString(), browser: navigator.userAgent, keepAlive: S.keepAlive } };
+  if (!S.demo) { try {
+    const tags = await ollamaFetch("/api/tags"); const find = n => (tags.models || []).find(m => m.name === n || m.name === n + ":latest") || (tags.models || []).find(m => m.name.split(":")[0] === n.split(":")[0]);
+    const pick = m => m && { name: m.name, digest: m.digest, size: m.size, modified_at: m.modified_at, details: m.details };
+    run.audit.decisionModel = pick(find(S.model)); if (opts.llm) run.audit.feedbackModel = pick(find(S.fbModel));
+    run.audit.ollamaVersion = (await ollamaFetch("/api/version")).version;
+  } catch {} }
+  running = true; abortCtl = new AbortController();
+  $("#runBtn").disabled = true; $("#cancelBtn").hidden = false; $("#progressWrap").classList.add("show"); $("#runLog").innerHTML = "";
+  const queue = responses.slice(); let done = 0; const total = queue.length; const ordered = new Array(total);
+  const setProg = () => { $("#progressText").textContent = `Evaluated ${done} of ${total}`; $("#progressPct").textContent = Math.round(done/total*100) + "%"; $("#progressBar").style.width = (done/total*100) + "%"; };
+  setProg(); logLine(`Sending ${total} response(s) to ${run.model}${opts.llm ? " + feedback from " + S.fbModel : ""}`);
+  const worker = async () => {
+    while (queue.length && !abortCtl.signal.aborted) {
+      const idx = total - queue.length; const r = queue.shift();
+      $$(`#respList .resp-item[data-id="${r.id}"] .st`).forEach(e => e.innerHTML = `<span class="pill acc">scoring…</span>`);
+      try {
+        const res = await evaluateOne(rb, r, opts, abortCtl.signal);
+        ordered[idx] = res; done++; setProg();
+        logLine(res.error ? `✗ ${r.name}: ${res.error}` : `✓ ${r.name}: ${pct(res.overall)} ${res.band} (${res.ms} ms)`);
+        $$(`#respList .resp-item[data-id="${r.id}"] .st`).forEach(e => e.innerHTML = res.error ? `<span class="pill bad">error</span>` : `<span class="pill ${res.flags.length ? "warn" : "good"}">${pct(res.overall)}</span>`);
+        if (res.error && /reach Ollama|no \/v1\/systemone|pull/.test(res.error) && done === 1) { abortCtl.abort(); logLine("Stopping: fix the connection in Settings and try again."); }
+      } catch (e) { if (e.name !== "AbortError") throw e; }
+    }
+  };
+  try { await Promise.all(Array.from({ length: Math.max(1, Math.min(8, +S.conc || 1)) }, worker)); }
+  finally {
+    running = false; $("#cancelBtn").hidden = true; preflight();
+    run.results = ordered.filter(Boolean); run.audit.finishedAt = new Date().toISOString();
+    run.cancelled = abortCtl.signal.aborted && run.results.length < total;
+    if (run.results.length && run.results.every(r => r.error)) { toast("Nothing was scored: see the log below"); }
+    else if (run.results.length) { saveRun(run); openRun(run.id); switchTab("results"); toast(run.cancelled ? `Stopped after ${run.results.length} response(s)` : "Evaluation complete"); }
+  }
+};
+$("#cancelBtn").onclick = () => { if (abortCtl) abortCtl.abort(); logLine("Cancelling…"); };
+$("#previewBtn").onclick = () => {
+  if (!responses.length) return toast("Add at least one response first");
+  const body = buildRequest(compiled(), responses[0], $("#optRelevance").checked);
+  $("#previewPre").textContent = `POST ${apiBase()}/v1/systemone   (~${approxTokens(JSON.stringify(body)).toLocaleString()} tokens)\n\n` + JSON.stringify(body, null, 2);
+  $("#copyPreviewBtn").onclick = () => { navigator.clipboard?.writeText(`curl http://localhost:11434/v1/systemone -H 'Content-Type: application/json' -d '${JSON.stringify(body).replace(/'/g, "'\\''")}'`).then(() => toast("curl command copied")); };
+  $("#previewDlg").showModal();
+};
+
+/* ---------- audit trail ---------- */
+const APP_VERSION = "1.1.0";
+async function sha256(text){
+  try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); } catch { return null; }
+}
+function fmtJSON(raw){ if (raw == null) return ""; if (typeof raw !== "string") return JSON.stringify(raw, null, 2); try { return JSON.stringify(JSON.parse(raw), null, 2); } catch { return raw; } }
+function auditRows(run, r){
+  const rb = run.rubric; let tw = 0, acc = 0;
+  const rows = rb.criteria.map((c, i) => {
+    const s = r.scores?.[c.id] || { error: "no answer" };
+    const final = s.error ? null : (s.human != null ? s.human : s.level);
+    const p = final == null ? null : critPct(c, final), w = +c.weight || 0;
+    if (p != null) { tw += w; acc += w * p; }
+    return { c, i, key: qKey(c, i), s, final, p, w };
+  });
+  return { rows, tw, acc };
+}
+function auditHTML(run, r){
+  const a = r.audit || {}, ra = run.audit || {}, rb = run.rubric;
+  const { rows, tw, acc } = auditRows(run, r);
+  const lv = (c, li) => c.type === "noul" ? (li ? "Yes" : "No") : (c.levels[li]?.label || `Level ${li}`);
+  const kv = [
+    ["Response ID", r.id], ["Learner", r.name], ["Words", r.words],
+    ["Request sent", a.startedAt ? new Date(a.startedAt).toLocaleString() + ` (${a.startedAt})` : "—"],
+    ["Response received", a.finishedAt ? `${a.finishedAt} · ${r.ms} ms` : `${r.ms} ms`],
+    ["Endpoint", a.endpoint || "/v1/systemone"], ["HTTP status", a.httpStatus ?? (r.error ? "error" : "200")],
+    ["Decision model", `${run.model}${r.model && r.model !== run.model ? ` (reported: ${r.model})` : ""}`],
+    ["Model digest", ra.decisionModel?.digest || "—"], ["Ollama version", ra.ollamaVersion || (run.demo ? "demo mode" : "—")],
+    ["Token usage", r.usage ? JSON.stringify(r.usage) : "—"],
+    ["Raw response SHA-256", a.responseSha256 || "—"],
+    ["Rubric", `${rb.name || "Untitled"} (${rb.criteria.length} criteria)`],
+    ["Review rules", `confidence < ${run.settings?.conf}, top-two margin < ${run.settings?.margin}, under ${run.settings?.minWords} words`]
+  ];
+  const critRows = rows.map(({ c, key, s, final, p, w }) => {
+    if (s.error) return `<tr><td>${esc(c.name)}<div class="mono hint">${esc(key)}</div></td><td colspan="7"><span class="pill bad">${esc(s.error)}</span></td></tr>`;
+    const probs = c.levels.map((L, li) => `<div class="${li === s.level ? "pmax" : ""}">${li}. ${esc(lv(c, li))}: <b>${pct(s.probs[li])}</b></div>`).join("");
+    return `<tr><td><b>${esc(c.name)}</b><div class="mono hint">${esc(key)} · ${c.type === "noul" ? "yes/no" : "score"}</div></td>
+      <td class="plist">${probs}</td><td>${esc(lv(c, s.level))}</td>
+      <td class="num">${s.expected != null ? (+s.expected).toFixed(3) : "—"}<div class="hint">conf ${s.confidence != null ? (+s.confidence).toFixed(3) : "—"} · margin ${s.margin != null ? (+s.margin).toFixed(3) : "—"}</div></td>
+      <td>${s.human != null ? `<b>${esc(lv(c, s.human))}</b><div class="hint">${s.humanAt ? esc(new Date(s.humanAt).toLocaleString()) : ""}</div>` : "—"}</td>
+      <td>${esc(lv(c, final))}<div class="hint">${esc(c.levels[final]?.points ?? "")} pts</div></td>
+      <td class="num">${w}</td><td class="num">${p != null ? (w * p).toFixed(3) : "—"}</td></tr>`;
+  }).join("");
+  const raws = [
+    ["Raw request sent to Ollama", a.request ? JSON.stringify(a.request, null, 2) : ""],
+    ["Raw response from Ollama (verbatim)", a.responseText ?? (r.raw ? JSON.stringify(r.raw) : "")],
+    ...(a.feedback ? [["Raw feedback-model request", JSON.stringify(a.feedback.request, null, 2)], ["Raw feedback-model response (verbatim)", a.feedback.responseText || ""]] : [])
+  ].filter(x => x[1]);
+  return `<div class="audit">
+    <table class="kv">${kv.map(([k, v]) => `<tr><th>${esc(k)}</th><td class="${/SHA|digest|ID/.test(k) ? "mono" : ""}">${esc(v)}</td></tr>`).join("")}</table>
+    ${r.error ? `<p><b>Error:</b> ${esc(r.error)}</p>` : `
+    <h4>Parsed model output</h4>
+    <div class="tablewrap"><table class="data at"><thead><tr><th>Criterion / question key</th><th>Probability per level (sent order)</th><th>Model level</th><th>Expected · confidence</th><th>Human override</th><th>Final level</th><th>Weight</th><th>Weighted score</th></tr></thead><tbody>${critRows}</tbody></table></div>
+    <p class="calc"><b>Overall</b> = Σ(weight × normalised points) ÷ Σ weight = ${acc.toFixed(3)} ÷ ${tw} = <b>${pct(tw ? acc / tw : null)}</b> → band <b>${esc(r.band || "—")}</b>${r.onTopic != null ? ` · on-topic p(yes) = ${(+r.onTopic).toFixed(3)}` : ""}</p>
+    <p class="calc"><b>Review flags:</b> ${r.flags?.length ? r.flags.map(esc).join("; ") : "none"}</p>
+    <p class="calc"><b>Feedback source:</b> ${r.llmFeedback ? `generative model ${esc(run.feedbackModel)} (raw exchange below)` : "rubric level descriptions (deterministic template)"}${r.llmFeedbackError ? ` · feedback model error: ${esc(r.llmFeedbackError)}` : ""}</p>`}
+    ${raws.map(([t, v]) => `<details class="raw"><summary>${esc(t)}</summary><pre>${esc(fmtJSON(v))}</pre></details>`).join("")}
+  </div>`;
+}
+const AUDIT_CSS = `.audit table.kv{border-collapse:collapse;font-size:12.5px;margin:6px 0 10px}.audit table.kv th{text-align:left;color:#636b83;font-weight:600;padding:3px 14px 3px 0;white-space:nowrap;vertical-align:top}.audit table.kv td{padding:3px 0;word-break:break-all}.audit .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px}.audit .hint{color:#636b83;font-size:11.5px}.audit table.at{border-collapse:collapse;width:100%;font-size:12.5px}.audit table.at th,.audit table.at td{border:1px solid #e3e6ef;padding:5px 7px;vertical-align:top;text-align:left}.audit .plist div{white-space:nowrap}.audit .pmax{color:#4f46e5}.audit .num{text-align:right;font-variant-numeric:tabular-nums}.audit .calc{font-size:12.5px;margin:6px 0}.audit details{margin-top:6px}.audit details summary{cursor:pointer;color:#4f46e5;font-size:12.5px}.audit pre{white-space:pre-wrap;word-break:break-word;font:11.5px/1.4 ui-monospace,Menlo,Consolas,monospace;background:#f6f7fb;border:1px solid #e3e6ef;padding:8px;border-radius:6px;max-height:none}.pill{border-radius:99px;padding:1px 8px;font-size:11.5px;background:#fdecec;color:#b91c1c}`;
+function auditDoc(run, list){
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Audit · ${esc(run.name)}</title><style>body{font:14px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:1100px;margin:30px auto;padding:0 20px;color:#1b1f2e}h1{margin:0}h2{border-top:2px solid #e3e6ef;padding-top:14px;margin-top:26px}.m{color:#636b83}blockquote{white-space:pre-wrap;background:#f6f7fb;border-left:3px solid #4f46e5;margin:8px 0;padding:8px 12px}${AUDIT_CSS}</style></head><body>
+  <h1>Audit report: ${esc(run.name)}</h1>
+  <p class="m">Run ${esc(run.id)} · created ${esc(run.created)} · app ${esc(run.audit?.appVersion || "1.0")} · Ollama ${esc(run.audit?.ollamaVersion || "—")} at ${esc(run.audit?.ollamaUrl || "—")} · decision model ${esc(run.model)} ${run.audit?.decisionModel?.digest ? `(digest ${esc(run.audit.decisionModel.digest)})` : ""}${run.feedbackModel ? ` · feedback model ${esc(run.feedbackModel)}` : ""}${run.demo ? " · DEMO DATA, NOT REAL MODEL OUTPUT" : ""}</p>
+  <details><summary>Rubric snapshot used for this run (JSON)</summary><pre>${esc(JSON.stringify(run.rubric, null, 2))}</pre></details>
+  ${list.map(r => `<h2>${esc(r.name)} <span class="m" style="font-size:14px;font-weight:500">${r.error ? "error" : pct(r.overall) + " · " + esc(r.band)}</span></h2><blockquote>${esc(r.text)}</blockquote>${r.error ? "" : `<p><b>Feedback given</b></p><blockquote style="border-color:#22c55e">${esc(r.llmFeedback || r.feedback)}</blockquote>`}${auditHTML(run, r)}`).join("")}
+  <p class="m">Generated ${esc(new Date().toISOString())} by Nimble Rubric Evaluator ${APP_VERSION}.</p></body></html>`;
+}
+function rawPack(run, r){
+  return { run: { id: run.id, name: run.name, created: run.created, model: run.model, feedbackModel: run.feedbackModel, demo: run.demo, audit: run.audit, settings: run.settings, rubric: run.rubric },
+    response: { id: r.id, name: r.name, text: r.text, words: r.words },
+    model_exchange: r.audit || { response: r.raw },
+    parsed: { scores: r.scores, overall: r.overall, band: r.band, flags: r.flags, onTopic: r.onTopic, feedback: r.feedback, llmFeedback: r.llmFeedback } };
+}
+
+/* ---------- run storage (IndexedDB, so raw outputs are never dropped) ---------- */
+const runDB = {
+  db: null, cache: [],
+  async init(){
+    try {
+      this.db = await new Promise((res, rej) => { const q = indexedDB.open("nimble-rubric-evaluator", 1); q.onupgradeneeded = () => q.result.createObjectStore("runs", { keyPath: "id" }); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+      this.cache = await this.tx("readonly", s => s.getAll()) || [];
+      const legacy = store.get("runs", null);
+      if (legacy && legacy.length) { for (const r of legacy) if (!this.cache.some(x => x.id === r.id)) { this.cache.push(r); await this.tx("readwrite", s => s.put(r)); } try { localStorage.removeItem("nre.runs"); } catch {} }
+    } catch (e) { this.db = null; this.cache = store.get("runs", []); }
+    this.cache.sort((a, b) => String(b.created).localeCompare(String(a.created)));
+  },
+  tx(mode, fn){ return new Promise((res, rej) => { const t = this.db.transaction("runs", mode); const q = fn(t.objectStore("runs")); t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error); }); },
+  persist(op){ (this.db ? op() : Promise.resolve(store.set("runs", this.cache))).catch(e => toast("Could not save to browser storage: " + e.message + ". Export your runs.")); }
+};
+function runs(){ return runDB.cache; }
+function saveRun(run){
+  runDB.cache = [run, ...runDB.cache.filter(r => r.id !== run.id)].sort((a, b) => String(b.created).localeCompare(String(a.created)));
+  const copy = clone(run); runDB.persist(() => runDB.tx("readwrite", s => s.put(copy)));
+  renderHistory();
+}
+function deleteRun(id){
+  runDB.cache = runDB.cache.filter(r => r.id !== id); runDB.persist(() => runDB.tx("readwrite", s => s.delete(id)));
+  if (currentRun?.id === id) { currentRun = null; renderResults(); } renderHistory();
+}
+
+/* ---------- history ---------- */
+function runSummary(run){
+  const ok = run.results.filter(r => !r.error); const avg = ok.length ? ok.reduce((a,r)=>a+(r.overall||0),0)/ok.length : null;
+  return { n: run.results.length, avg, review: run.results.filter(r => r.flags?.length).length, errors: run.results.length - ok.length };
+}
+function renderHistory(){
+  const all = runs();
+  $("#histCount").hidden = !all.length; $("#histCount").textContent = all.length;
+  $("#histEmpty").hidden = !!all.length; $("#histTable").hidden = !all.length;
+  $("#histTable").innerHTML = `<thead><tr><th>Run</th><th>Date</th><th>Rubric</th><th>Model</th><th>Responses</th><th>Average</th><th>Needs review</th><th></th></tr></thead><tbody>` +
+    all.map(r => { const s = runSummary(r); return `<tr data-id="${r.id}">
+      <td><b>${esc(r.name)}</b>${r.demo ? ' <span class="pill warn">demo</span>' : ""}${r.cancelled ? ' <span class="pill">partial</span>' : ""}</td>
+      <td class="hint">${esc(new Date(r.created).toLocaleString([], {dateStyle:"medium", timeStyle:"short"}))}</td>
+      <td>${esc(r.rubric.name || "Untitled")}</td><td class="mono">${esc(r.model)}</td>
+      <td>${s.n}${s.errors ? ` <span class="pill bad">${s.errors} err</span>` : ""}</td>
+      <td class="score-big">${pct(s.avg)}</td>
+      <td>${s.review ? `<span class="pill warn">${s.review}</span>` : `<span class="pill good">0</span>`}</td>
+      <td style="white-space:nowrap"><button class="btn sm" data-act="open">Open</button> <button class="btn sm ghost" data-act="rubric" title="Load this run's rubric into the editor">Reuse rubric</button> <button class="btn sm ghost" data-act="rename">Rename</button> <button class="iconbtn" data-act="del" title="Delete">🗑</button></td></tr>`; }).join("") + "</tbody>";
+  const where = runDB.db ? "the browser's database (raw model outputs are kept in full)" : "browser storage (limited to about 5 MB)";
+  if (navigator.storage?.estimate) navigator.storage.estimate().then(e => { $("#storageHint").textContent = `${all.length} run(s) saved in ${where}. Using ${(e.usage/1048576).toFixed(1)} MB. Export anything you need to keep long-term.`; }).catch(() => {});
+  else $("#storageHint").textContent = `${all.length} run(s) saved in ${where}.`;
+}
+$("#histTable").onclick = e => {
+  const tr = e.target.closest("tr[data-id]"); if (!tr) return; const id = tr.dataset.id; const b = e.target.closest("[data-act]"); const act = b ? b.dataset.act : "open";
+  const run = runs().find(r => r.id === id); if (!run) return;
+  if (act === "open") { openRun(id); switchTab("results"); }
+  if (act === "del" && confirm(`Delete run "${run.name}"?`)) deleteRun(id);
+  if (act === "rename") { const n = prompt("Rename run:", run.name); if (n) { run.name = n; saveRun(run); if (currentRun?.id === id) { currentRun = run; renderResults(); } } }
+  if (act === "rubric") { const g = toGrid(clone(run.rubric)); g.id = uid(); g.name = (run.rubric.name || "Rubric") + " (from run)"; if (loadRubric(g)) { setDirty(true); renderRubric(); switchTab("rubrics"); setSub("edit"); toast("Rubric loaded into the editor. Save to keep it"); } }
+};
+$("#clearHistBtn").onclick = () => { if (confirm("Delete ALL saved runs from this browser? Export first if you need them.")) { runDB.cache = []; runDB.persist(() => runDB.tx("readwrite", s => s.clear())); currentRun = null; renderHistory(); renderResults(); } };
+$("#exportAllBtn").onclick = () => download(`nimble-eval-history-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(runs(), null, 2), "application/json");
+$("#importRunFile").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return; e.target.value = "";
+  try { let d = JSON.parse(await f.text()); d = Array.isArray(d) ? d : [d]; const ok = d.filter(r => r && r.id && r.rubric && Array.isArray(r.results)); ok.reverse().forEach(saveRun); toast(`Imported ${ok.length} run(s)`); }
+  catch (err) { toast("Not a valid run export: " + err.message); }
+};
+
+/* ---------- results ---------- */
+let sortKey = null, sortDir = 1, dlgIndex = 0, visibleRows = [];
+function openRun(id){ currentRun = runs().find(r => r.id === id) || null; sortKey = null; renderResults(); }
+function rescore(run){ run.results.forEach(res => { if (!res.error) { scoreResult(run.rubric, res); res.feedback = templateFeedback(run.rubric, res); } computeFlags(run.rubric, res); }); }
+function renderResults(){
+  const run = currentRun;
+  $("#resultsEmpty").hidden = !!run; $("#resultsBody").hidden = !run;
+  $("#resCount").hidden = !run; if (!run) return;
+  const rb = run.rubric, R = run.results, ok = R.filter(r => !r.error);
+  $("#resCount").textContent = R.length;
+  $("#runTitle").textContent = run.name;
+  $("#runMeta").innerHTML = `${esc(new Date(run.created).toLocaleString())} · rubric <b>${esc(rb.name || "Untitled")}</b> · model <span class="mono">${esc(run.model)}</span>${run.feedbackModel ? ` · feedback <span class="mono">${esc(run.feedbackModel)}</span>` : ""}${run.demo ? ' · <span class="pill warn">demo data, not real model output</span>' : ""}`;
+  const s = runSummary(run), avgMs = ok.length ? Math.round(ok.reduce((a,r)=>a+r.ms,0)/ok.length) : 0;
+  const humanN = R.filter(r => Object.values(r.scores||{}).some(x => x && x.human != null)).length;
+  $("#statCards").innerHTML = [
+    ["Responses", s.n, s.errors ? `${s.errors} failed` : "all scored"],
+    ["Average score", pct(s.avg), s.avg != null ? bandFor(s.avg) : ""],
+    ["Needs review", s.review, s.n ? `${Math.round(s.review/s.n*100)}% of responses` : ""],
+    ["Avg time / response", avgMs ? (avgMs < 1000 ? avgMs + " ms" : (avgMs/1000).toFixed(1) + " s") : "—", `${rb.criteria.length} criteria per call`],
+    ["Human-checked", humanN, humanN ? "see agreement below" : "click a row to add"]
+  ].map(([k,v,sub]) => `<div class="stat"><div class="k">${k}</div><div class="v">${esc(v)}</div><div class="s">${esc(sub)}</div></div>`).join("");
+  // criterion bars
+  $("#critBars").innerHTML = rb.criteria.map(c => {
+    const vals = ok.map(r => { const x = r.scores[c.id]; if (!x || x.error) return null; return critPct(c, x.human != null ? x.human : x.level); }).filter(v => v != null);
+    const m = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+    return `<div class="b"><span title="${esc(c.name)}" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.name)}${c.type === "noul" ? ' <span class="hint">(yes/no)</span>' : ""}</span><div class="track"><i style="width:${m*100}%"></i></div><b>${vals.length ? pct(m) : "—"}</b></div>`;
+  }).join("");
+  // bands
+  const bs = bands(); const counts = bs.map(b => ({ ...b, n: ok.filter(r => r.band === b.name).length }));
+  $("#bandDist").innerHTML = ok.length ? counts.filter(b => b.n).map(b => `<i title="${esc(b.name)}: ${b.n}" style="width:${b.n/ok.length*100}%;background:${bandColor(b.name)}"></i>`).join("") : "";
+  $("#bandLegend").innerHTML = counts.map(b => `<span><i style="background:${bandColor(b.name)}"></i>${esc(b.name)} <b>${b.n}</b></span>`).join("");
+  renderAgreement(run);
+  renderResTable();
+}
+function renderAgreement(run){
+  const rb = run.rubric; const rows = [];
+  rb.criteria.forEach(c => {
+    const pairs = run.results.filter(r => !r.error).map(r => r.scores[c.id]).filter(s => s && !s.error && s.human != null);
+    if (!pairs.length) return;
+    const exact = pairs.filter(s => s.human === s.level).length, adj = pairs.filter(s => Math.abs(s.human - s.level) <= 1).length;
+    const bias = pairs.reduce((a,s) => a + (s.level - s.human), 0) / pairs.length;
+    rows.push(`<tr><td>${esc(c.name)}</td><td>${pairs.length}</td><td><b>${pct(exact/pairs.length)}</b></td><td>${c.type === "score" ? pct(adj/pairs.length) : "—"}</td><td>${bias === 0 ? "even" : (bias > 0 ? "+" : "") + bias.toFixed(2) + (bias < 0 ? " (model lower)" : " (model higher)")}</td></tr>`);
+  });
+  $("#agreePanel").innerHTML = rows.length ? `<h2 style="font-size:14px;margin:0 0 6px">Model vs human agreement</h2><div class="tablewrap"><table class="data agree"><thead><tr><th>Criterion</th><th>n</th><th>Exact</th><th>Within 1 level</th><th>Model bias (levels)</th></tr></thead><tbody>${rows.join("")}</tbody></table></div><p class="hint">Use this to decide whether Nimble is accurate enough on your rubric before automating. Aim for 30+ human-scored responses per criterion.</p>` :
+    `<div class="alert info">To measure accuracy, open responses and record what a human assessor would score. Agreement statistics appear here.</div>`;
+}
+function resRowsData(){
+  const run = currentRun; const q = $("#resFilter").value.toLowerCase(), ff = $("#resFlagFilter").value;
+  let rows = run.results.map((r, i) => ({ r, i }));
+  if (q) rows = rows.filter(({r}) => (r.name + " " + r.text).toLowerCase().includes(q));
+  if (ff === "review") rows = rows.filter(({r}) => r.flags?.length && !r.error);
+  if (ff === "ok") rows = rows.filter(({r}) => !r.flags?.length);
+  if (ff === "error") rows = rows.filter(({r}) => r.error);
+  if (sortKey) rows.sort((a, b) => { const va = sortVal(a.r), vb = sortVal(b.r); return (va > vb ? 1 : va < vb ? -1 : 0) * sortDir; });
+  return rows;
+}
+function sortVal(r){
+  if (sortKey === "name") return r.name.toLowerCase();
+  if (sortKey === "overall") return r.overall ?? -1;
+  if (sortKey === "flags") return r.flags?.length || 0;
+  if (sortKey === "words") return r.words;
+  const s = r.scores?.[sortKey]; return s && !s.error ? (s.human ?? s.level) : -1;
+}
+function chip(c, s){
+  if (!s) return "—"; if (s.error) return `<span class="pill bad">no answer</span>`;
+  const lvl = s.human != null ? s.human : s.level, L = c.levels[lvl] || {}, n = c.levels.length;
+  const label = c.type === "noul" ? (lvl ? "Yes" : "No") : (L.label || `Level ${lvl}`);
+  const col = levelColor(lvl, n);
+  return `<span class="chip"><b style="color:${col}" title="${esc(levelText(L))}">${esc(label)}${s.human != null ? " ✎" : ""}</b><span class="bar"><i style="width:${n>1 ? (lvl/(n-1))*100 : 100}%;background:${col}"></i></span><small>${c.type === "noul" ? "p(yes) " + pct(s.expected) : "conf " + pct(s.confidence)}</small></span>`;
+}
+function renderResTable(){
+  const run = currentRun; if (!run) return; const rb = run.rubric;
+  visibleRows = resRowsData();
+  const th = (k, label) => `<th data-sort="${k}">${esc(label)}${sortKey === k ? (sortDir > 0 ? " ▲" : " ▼") : ""}</th>`;
+  $("#resTable").innerHTML = `<thead><tr>${th("name","Learner")}${th("overall","Overall")}${rb.criteria.map(c => th(c.id, c.name)).join("")}${th("flags","Flags")}${th("words","Words")}</tr></thead><tbody>` +
+    visibleRows.map(({r, i}) => `<tr data-i="${i}"><td><b>${esc(r.name)}</b></td>
+      <td>${r.error ? `<span class="pill bad" title="${esc(r.error)}">error</span>` : `<div class="score-big">${pct(r.overall)}</div><span class="pill" style="color:${bandColor(r.band)}">${esc(r.band)}</span>`}</td>
+      ${rb.criteria.map(c => `<td>${r.error ? "" : chip(c, r.scores[c.id])}</td>`).join("")}
+      <td>${r.error ? `<span class="hint">${esc(r.error.slice(0, 90))}</span>` : (r.flags.length ? r.flags.map(f => `<span class="pill warn" style="margin:1px">${esc(f)}</span>`).join(" ") : `<span class="pill good">OK</span>`)}</td>
+      <td class="hint">${r.words}</td></tr>`).join("") + "</tbody>";
+  if (!visibleRows.length) $("#resTable").insertAdjacentHTML("beforeend", `<tbody><tr><td colspan="99" class="empty">No responses match.</td></tr></tbody>`);
+}
+$("#resTable").onclick = e => {
+  const h = e.target.closest("th[data-sort]"); if (h) { const k = h.dataset.sort; if (sortKey === k) sortDir *= -1; else { sortKey = k; sortDir = k === "name" ? 1 : -1; } return renderResTable(); }
+  const tr = e.target.closest("tr[data-i]"); if (tr) openDetail(visibleRows.findIndex(v => v.i === +tr.dataset.i));
+};
+$("#resFilter").oninput = renderResTable; $("#resFlagFilter").onchange = renderResTable;
+
+function openDetail(vi){
+  dlgIndex = vi; const { r } = visibleRows[vi]; const run = currentRun, rb = run.rubric;
+  $("#dlgTitle").textContent = r.name;
+  $("#dlgPills").innerHTML = r.error ? `<span class="pill bad">error</span>` : `<span class="pill acc">${pct(r.overall)}</span><span class="pill" style="color:${bandColor(r.band)}">${esc(r.band)}</span>${r.flags.length ? `<span class="pill warn">needs review</span>` : `<span class="pill good">no flags</span>`}`;
+  const crit = r.error ? `<div class="alert bad">${esc(r.error)}</div>` : rb.criteria.map(c => {
+    const s = r.scores[c.id]; if (!s || s.error) return `<div class="cdetail"><b>${esc(c.name)}</b> <span class="pill bad">${esc(s?.error || "no answer")}</span></div>`;
+    const probs = c.levels.map((L, li) => `<div class="prob ${li === s.level ? "top" : ""} ${li === s.human ? "human" : ""}"><span title="${esc(L.desc)}">${esc(c.type === "noul" ? (li ? "Yes" : "No") : (L.label || "Level " + li))}</span><div class="track"><i style="width:${(s.probs[li]||0)*100}%;${li === s.level ? "background:" + levelColor(li, c.levels.length) : ""}"></i></div><span>${pct(s.probs[li])}</span></div>`).reverse().join("");
+    const L = c.levels[s.human ?? s.level] || {};
+    return `<div class="cdetail"><div class="row between"><div><b>${esc(c.name)}</b> <span class="hint">weight ${c.weight}${c.type === "score" ? ` · expected ${s.expected != null ? s.expected.toFixed(2) : "—"} of ${c.levels.length-1}` : ""} · confidence ${pct(s.confidence)}</span></div>
+      <label class="row hint" style="gap:6px">Human score <select data-cid="${c.id}" class="humanSel" style="width:auto"><option value="">— not checked —</option>${c.levels.map((L, li) => `<option value="${li}" ${s.human === li ? "selected" : ""}>${esc(c.type === "noul" ? (li ? "Yes" : "No") : (L.label || "Level " + li))}</option>`).join("")}</select></label></div>
+      <div class="hint" style="margin:4px 0 8px">${esc(L.desc || "")}</div>${probs}</div>`;
+  }).join("");
+  const fb = r.llmFeedback ? `<div class="row between"><b>Feedback for the learner</b><span class="hint">written by ${esc(run.feedbackModel)}</span></div><div class="feedback">${esc(r.llmFeedback)}</div><details class="raw"><summary>Rubric-based feedback</summary><div class="feedback" style="margin-top:6px">${esc(r.feedback)}</div></details>`
+    : `<div class="row between"><b>Feedback for the learner</b><span class="hint">built from the rubric level descriptions</span></div><div class="feedback">${esc(r.feedback || "—")}</div>${r.llmFeedbackError ? `<div class="alert warn">Feedback model failed: ${esc(r.llmFeedbackError)}</div>` : ""}`;
+  $("#dlgBody").innerHTML = `
+    ${r.flags?.length && !r.error ? `<div class="alert warn" style="margin:0 0 12px">${r.flags.map(esc).join(" · ")}</div>` : ""}
+    <b>Response</b> <span class="hint">${r.words} words${r.onTopic != null ? ` · on-topic p=${pct(r.onTopic)}` : ""} · ${r.ms} ms</span>
+    <div class="response-text" style="margin-top:6px">${esc(r.text)}</div>
+    <div style="margin-top:14px"><b>Criteria</b> <span class="hint">probability Nimble gave each level; highest level shown first</span></div>${crit}
+    <div style="margin-top:16px">${r.error ? "" : fb}</div>
+    <div class="row" style="margin-top:10px">${r.error ? "" : `<button class="btn sm" id="copyFbBtn">Copy feedback</button><button class="btn sm" id="agreeAllBtn" title="Record the model's level as the human score on every criterion you have not changed">✓ I agree with the model on the rest</button>`}</div>
+    <div class="row between" style="margin-top:20px;border-top:1px solid var(--border);padding-top:14px"><b style="font-size:15px">Audit trail</b><div class="row"><button class="btn sm" id="dlAuditBtn">⬇ Audit report (HTML)</button><button class="btn sm" id="dlRawBtn">⬇ Raw output (JSON)</button></div></div>
+    ${auditHTML(run, r)}`;
+  $("#dlAuditBtn").onclick = () => download(`audit-${slug(run.name)}-${slug(r.name)}.html`, auditDoc(run, [r]), "text/html");
+  $("#dlRawBtn").onclick = () => download(`raw-${slug(run.name)}-${slug(r.name)}.json`, JSON.stringify(rawPack(run, r), null, 2), "application/json");
+  $$(".humanSel", $("#dlgBody")).forEach(sel => sel.onchange = () => {
+    const s = r.scores[sel.dataset.cid]; s.human = sel.value === "" ? null : +sel.value; s.humanAt = s.human == null ? null : new Date().toISOString();
+    scoreResult(rb, r); r.feedback = templateFeedback(rb, r); computeFlags(rb, r);
+    saveRun(run); renderResults(); const nv = visibleRows.findIndex(v => v.r === r); if (nv >= 0) openDetail(nv); toast("Human score saved");
+  });
+  const ab = $("#agreeAllBtn"); if (ab) ab.onclick = () => {
+    rb.criteria.forEach(c => { const s = r.scores[c.id]; if (s && !s.error && s.human == null) { s.human = s.level; s.humanAt = new Date().toISOString(); } });
+    scoreResult(rb, r); r.feedback = templateFeedback(rb, r); computeFlags(rb, r);
+    saveRun(run); renderResults(); const nv = visibleRows.findIndex(v => v.r === r); if (nv >= 0) openDetail(nv); toast("Marked as human-checked");
+  };
+  const cb = $("#copyFbBtn"); if (cb) cb.onclick = () => navigator.clipboard?.writeText(r.llmFeedback || r.feedback).then(() => toast("Feedback copied"));
+  $("#dlgPrev").disabled = vi <= 0; $("#dlgNext").disabled = vi >= visibleRows.length - 1;
+  if (!$("#detailDlg").open) $("#detailDlg").showModal();
+}
+$("#dlgClose").onclick = () => $("#detailDlg").close();
+$("#dlgPrev").onclick = () => dlgIndex > 0 && openDetail(dlgIndex - 1);
+$("#dlgNext").onclick = () => dlgIndex < visibleRows.length - 1 && openDetail(dlgIndex + 1);
+$("#detailDlg").addEventListener("keydown", e => { if (e.key === "ArrowRight" && e.target.tagName !== "SELECT") $("#dlgNext").click(); if (e.key === "ArrowLeft" && e.target.tagName !== "SELECT") $("#dlgPrev").click(); });
+$("#detailDlg").addEventListener("click", e => { if (e.target === $("#detailDlg")) $("#detailDlg").close(); });
+
+/* ---------- exports ---------- */
+function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "export"; }
+function download(name, content, type){ const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([content], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+const csvCell = v => { const s = v == null ? "" : String(v); return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+function runToCSV(run){
+  const rb = run.rubric;
+  const head = ["run","learner","overall_pct","band","flags","words","error"];
+  rb.criteria.forEach(c => head.push(`${c.name} | level`, `${c.name} | level_index`, `${c.name} | expected`, `${c.name} | confidence`, `${c.name} | human_level`));
+  head.push("feedback", "evaluated_at", "duration_ms", "model_reported", "http_status", "raw_response_sha256", "raw_request_json", "raw_response_text", "feedback_model_raw_response");
+  const rows = run.results.map(r => {
+    const row = [run.name, r.name, r.overall != null ? Math.round(r.overall*1000)/10 : "", r.band || "", (r.flags||[]).join("; "), r.words, r.error || ""];
+    rb.criteria.forEach(c => { const s = r.scores?.[c.id];
+      if (!s || s.error) row.push("", "", "", "", "");
+      else row.push(c.type === "noul" ? (s.level ? "Yes" : "No") : (c.levels[s.level]?.label || s.level), s.level, s.expected != null ? +s.expected.toFixed(3) : "", s.confidence != null ? +s.confidence.toFixed(3) : "", s.human != null ? (c.levels[s.human]?.label || s.human) : ""); });
+    const cap = v => { v = v || ""; return v.length > 32000 ? v.slice(0, 32000) + " …[truncated for Excel; full text in JSON export]" : v; };
+    const a = r.audit || {};
+    row.push(r.llmFeedback || r.feedback || "", a.startedAt || "", r.ms, r.model || "", a.httpStatus ?? "", a.responseSha256 || "", cap(a.request ? JSON.stringify(a.request) : ""), cap(a.responseText ?? (r.raw ? JSON.stringify(r.raw) : "")), cap(a.feedback?.responseText));
+    return row;
+  });
+  return "﻿" + [head, ...rows].map(r => r.map(csvCell).join(",")).join("\r\n");
+}
+function runToHTML(run){
+  const rb = run.rubric, s = runSummary(run);
+  const rows = run.results.map(r => `<tr><td><b>${esc(r.name)}</b></td><td>${r.error ? "error" : pct(r.overall)}</td><td>${esc(r.band || "")}</td>${rb.criteria.map(c => { const x = r.scores?.[c.id]; if (!x || x.error) return "<td>—</td>"; const l = x.human ?? x.level; return `<td>${esc(c.type === "noul" ? (l ? "Yes" : "No") : (c.levels[l]?.label || l))}${x.human != null ? " ✎" : ""}</td>`; }).join("")}<td>${esc((r.flags||[]).join("; "))}</td></tr>`).join("");
+  const details = run.results.map(r => `<section><h3>${esc(r.name)} <small>${r.error ? "error" : pct(r.overall) + " · " + esc(r.band)}</small></h3><blockquote>${esc(r.text)}</blockquote>${r.error ? `<p>${esc(r.error)}</p>` : `<pre>${esc(r.llmFeedback || r.feedback)}</pre>`}<details><summary><b>Audit trail and raw model output</b></summary>${auditHTML(run, r)}</details></section>`).join("");
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(run.name)}</title><style>body{font:14px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:1000px;margin:30px auto;padding:0 20px;color:#1b1f2e}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #e3e6ef;padding:6px 8px;text-align:left}th{background:#f1f3f9}h1{margin-bottom:0}.m{color:#636b83}blockquote{white-space:pre-wrap;background:#f6f7fb;border-left:3px solid #4f46e5;margin:8px 0;padding:8px 12px}pre{white-space:pre-wrap;font:inherit;background:#eef0ff;padding:10px;border-radius:8px}section{border-top:1px solid #e3e6ef;margin-top:18px}${AUDIT_CSS}</style></head><body>
+  <h1>${esc(run.name)}</h1><p class="m">${esc(new Date(run.created).toLocaleString())} · Rubric: ${esc(rb.name || "Untitled")} · Model: ${esc(run.model)}${run.demo ? " · DEMO DATA" : ""}</p>
+  <p><b>${s.n}</b> responses · average <b>${pct(s.avg)}</b> · <b>${s.review}</b> flagged for human review</p>
+  ${rb.prompt ? `<p><b>Assignment:</b> ${esc(rb.prompt)}</p>` : ""}
+  <table><thead><tr><th>Learner</th><th>Overall</th><th>Band</th>${rb.criteria.map(c => `<th>${esc(c.name)}</th>`).join("")}<th>Flags</th></tr></thead><tbody>${rows}</tbody></table>
+  <h2>Individual feedback</h2>${details}<p class="m">✎ = human-adjusted score. Generated by Nimble Rubric Evaluator (local Ollama).</p></body></html>`;
+}
+$("#exportCsvBtn").onclick = () => currentRun && download(`${slug(currentRun.name)}.csv`, runToCSV(currentRun), "text/csv");
+$("#exportJsonBtn").onclick = () => currentRun && download(`${slug(currentRun.name)}.json`, JSON.stringify(currentRun, null, 2), "application/json");
+$("#exportHtmlBtn").onclick = () => currentRun && download(`${slug(currentRun.name)}.html`, runToHTML(currentRun), "text/html");
+$("#printBtn").onclick = () => window.print();
+$("#exportAuditBtn").onclick = () => currentRun && download(`audit-${slug(currentRun.name)}.html`, auditDoc(currentRun, currentRun.results), "text/html");
+
+/* ---------- settings UI ---------- */
+function renderSettings(){
+  $("#setUrl").value = S.url; $("#setModel").value = S.model; $("#setFbModel").value = S.fbModel; $("#setKeep").value = S.keepAlive;
+  $("#setDemo").checked = S.demo; $("#setConf").value = S.conf; $("#setMargin").value = S.margin; $("#setMinWords").value = S.minWords; $("#setConc").value = S.conc; $("#setBands").value = S.bands;
+  $("#fbModelHint").textContent = S.fbModel ? `(${S.fbModel})` : "(set a model in Settings)";
+  applyTheme();
+}
+const bindSetting = (sel, key, num) => $(sel).addEventListener("change", e => { S[key] = e.target.type === "checkbox" ? e.target.checked : (num ? +e.target.value : e.target.value.trim()); saveSettings(); renderSettings(); if (["url","model","demo"].includes(key)) checkConnection(false); if (currentRun && ["conf","margin","minWords","bands"].includes(key)) { rescore(currentRun); renderResults(); } preflight(); });
+bindSetting("#setUrl","url"); bindSetting("#setModel","model"); bindSetting("#setFbModel","fbModel"); bindSetting("#setKeep","keepAlive"); bindSetting("#setDemo","demo");
+bindSetting("#setConf","conf",1); bindSetting("#setMargin","margin",1); bindSetting("#setMinWords","minWords",1); bindSetting("#setConc","conc",1); bindSetting("#setBands","bands");
+$("#testConnBtn").onclick = () => checkConnection(true);
+$("#connBadge").onclick = () => { switchTab("settings"); checkConnection(true); };
+$("#themeSeg").onclick = e => { const b = e.target.closest("button"); if (!b) return; S.theme = b.dataset.theme; saveSettings(); applyTheme(); };
+$("#resetSettingsBtn").onclick = () => { if (confirm("Reset all settings to defaults?")) { S = Object.assign({}, DEFAULTS); saveSettings(); renderSettings(); checkConnection(true); } };
+$("#optRelevance").onchange = preflight;
+
+/* ---------- tabs ---------- */
+function switchTab(t){ setTimeout(regrow); $$("#tabs button").forEach(b => b.classList.toggle("active", b.dataset.tab === t)); $$(".tab").forEach(s => s.classList.toggle("active", s.id === "tab-" + t)); try { sessionStorage.setItem("nre.tab", t); } catch {} window.scrollTo({ top: 0 }); }
+$("#tabs").onclick = e => { const b = e.target.closest("button"); if (b) switchTab(b.dataset.tab); };
+
+/* ---------- init ---------- */
+$("#loadSampleRespBtn").onclick = () => {
+  const lib = library(); const smp = lib.find(r => r.id === "sample-reflective-diary") || SAMPLE_GRID();
+  if (rubric.id !== smp.id && !loadRubric(smp)) return;
+  if ($("#responsesText").value.trim() && !confirm("Replace the responses box with the sample responses?")) return;
+  $("#responsesText").value = SAMPLE_RESPONSES; onResponsesChanged(); toast("Sample rubric and responses loaded");
+};
+renderSettings(); renderRubric(); setSub("edit");
+$("#responsesText").value = store.get("draftResponses", ""); onResponsesChanged();
+try { const t = sessionStorage.getItem("nre.tab"); if (t) switchTab(t); } catch {}
+checkConnection(false);
+runDB.init().then(() => { renderHistory(); const last = runs()[0]; if (last) openRun(last.id); else renderResults(); });
+</script>
+</body>
+</html>

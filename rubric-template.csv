@@ -1,0 +1,16 @@
+﻿# RUBRIC TEMPLATE for Nimble Rubric Evaluator. Lines starting with # are instructions and are ignored on import. You can delete them.
+"# One row per criterion. Level columns go LOWEST first (left) to HIGHEST (right). Write each level header as Label (points), e.g. Developing (1). Use 2 to 10 level columns."
+"# Type: score (default) or yes/no. For yes/no rows, put what NO looks like in the FIRST level column and what YES looks like in the LAST level column."
+# Weight (default 1) sets how much a criterion counts toward the overall %. Question for the model is optional; if blank it is written from the criterion name.
+"# Describe what you would SEE in the writing at each level, one idea per criterion. Leave a cell blank if a criterion uses fewer levels."
+# Save as CSV (UTF-8) and import it in the app under Rubrics > Import & template.
+Rubric name,
+Assignment,
+
+Criterion,Type,Weight,Question for the model,Beginning (0),Developing (1),Proficient (2),Exemplary (3)
+,score,1,,,,,
+,score,1,,,,,
+,score,1,,,,,
+,score,1,,,,,
+,score,1,,,,,
+,score,1,,,,,

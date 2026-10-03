@@ -1,0 +1,21 @@
+Name: Alex
+Last Tuesday I was responsible for sending the quarterly report to our client, Brightwell, by 5pm. At 3pm I discovered that the sales figures from the regional team were missing, and I spent two hours chasing them instead of telling my manager. The report went out at 7pm and the client complained to our account director.
+
+I felt panicked and embarrassed. Looking back, I think I avoided escalating because I didn't want to look like I couldn't cope, and that pride made the delay worse. My manager told me afterwards she could have called the regional lead directly and fixed it in ten minutes.
+
+The real cause was not the missing data but that I had no checkpoint: I only checked inputs on the deadline day. I also assumed asking for help was a weakness, when in our team escalation is expected. This links to what we covered on "managing up" - surfacing risks early is part of the job.
+
+Next quarter I will set a data-collection deadline three days before the report is due, put it in the shared calendar, and if anything is missing 24 hours before I will message my manager straight away. I'll judge success by whether the report goes out on time with no last-minute chasing.
+---
+Name: Priya
+I had a meeting with a customer and it did not go well. They were unhappy. I think communication is important and I will try to communicate better next time. Overall it was a good learning experience.
+---
+Name: Sam
+The project kickoff was a disaster because Dave from IT is useless and never reads his emails. Honestly the guy should be fired. I did everything right and sent the invite on time. Next time I'll just do it myself.
+---
+Name: Jordan
+During our team retrospective I was asked to facilitate for the first time. Halfway through, two senior colleagues started arguing about the release process and I froze. I let the argument run for fifteen minutes and we ran out of time for the other agenda items.
+
+I felt anxious and out of my depth, partly because they are more senior than me. I realise I assumed I had no authority to interrupt them, but as facilitator that was exactly my role.
+
+I think it happened because I had not agreed ground rules or a timebox at the start. Next time I will open the retro by agreeing a timebox for each item, and I will practise a phrase for parking a debate ("let's take this offline and capture it as an action").
