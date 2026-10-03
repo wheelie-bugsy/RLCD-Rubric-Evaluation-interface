@@ -2,6 +2,9 @@
 
 A local web app that scores learners' written responses against your rubric using the
 **nimble** decision model running in **Ollama** on your own machine. Nothing leaves your computer.
+Cloud models (TypeSafe Jev, OpenAI, Anthropic, Gemini, OpenRouter, Groq, Mistral) can be used instead.
+
+**New to it?** Read `help/quick-start-guide.pdf` (13 pages, no install needed to read), or open the **? Help** tab in the app.
 
 ## Start it (2 minutes)
 
@@ -10,7 +13,7 @@ A local web app that scores learners' written responses against your rubric usin
 2. Get the model (about 9.5 GB): `ollama pull nimble`
 3. Optional, for written narrative feedback: `ollama pull qwen3:8b` (or any chat model)
 4. In this folder: `python3 serve.py` (on Windows: `py serve.py`)
-   Your browser opens at http://localhost:8787. The green dot top right means nimble is ready.
+   Your browser opens at http://localhost:8787. The blue dot top right means nimble is ready.
 
 `serve.py` serves the page and forwards requests to Ollama, so no CORS setup is needed.
 If you'd rather open `index.html` directly, set Settings → Ollama URL to `http://localhost:11434`
@@ -39,6 +42,15 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
 - **Exports**: CSV (includes raw request/response columns), JSON (everything), HTML report,
   Audit report (parsed + raw for every response), print. Runs are stored in the browser's database,
   so raw outputs are never trimmed.
+- **Connecting other models** (Settings → Connect to): Ollama nimble / tev1 / remote Ollama; TypeSafe Jev cloud
+  (API key); or a general LLM as judge via OpenAI, Anthropic, Gemini, OpenRouter, Groq, Mistral or any
+  OpenAI-compatible API, plus local Ollama chat models or LM Studio. Cloud calls go through `serve.py`, which only
+  forwards to known AI provider hosts (add more with `EXTRA_HOSTS=host python3 serve.py`). API keys stay in the browser.
+- **Blind grading**: tick it on Evaluate (or the switch on Results) to hide the model's scores, flags and feedback
+  while you grade. Click **Reveal model results** when done.
+- **Model vs human alignment**: under the results table. Exact match, within one level, model higher/lower,
+  kappa, a model-vs-human grid per criterion, per-response comparison, and a full change history of every
+  grade given, changed, cleared or undone. Download it for the whole run or per learner.
 - **No confirm popups**: every action (delete, clear, rename, review changes) shows a toast in the
   bottom-left with **Undo** for 10 seconds (hover to pause, or press Ctrl/Cmd+Z).
 - **Colours**: colour-blind-safe Okabe-Ito scale (vermillion → orange → sky → blue, low to high);
@@ -64,3 +76,5 @@ The rubric is the same CSV template the app uses. Alongside `results.csv` it wri
 | `rubric-template.csv` | Blank rubric template to fill in Excel (also downloadable in the app) |
 | `sample-rubric.csv`, `sample-responses.txt` | Reflective-diary example (rubric in template format) |
 | `REPORT.md` | Research findings and recommendations |
+| `help/quick-start-guide.pdf` | Printable scenario-based quick start guide |
+| `help/*.png` | Annotated screenshots used by the Help tab |
