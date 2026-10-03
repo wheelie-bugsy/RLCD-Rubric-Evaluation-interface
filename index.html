@@ -5,36 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nimble Rubric Evaluator</title>
 <style>
+/* Palette: ink-on-paper neutrals; colour is reserved for data and status, using
+   Okabe-Ito hues (vermillion / orange / sky / blue), which stay distinct for the common
+   types of colour blindness. Status always pairs colour with an icon or text. */
 :root{
-  --bg:#f6f7fb; --surface:#ffffff; --surface-2:#f1f3f9; --border:#e3e6ef; --text:#1b1f2e; --muted:#636b83;
-  --accent:#4f46e5; --accent-2:#eef0ff; --accent-text:#ffffff;
-  --good:#15803d; --good-bg:#e8f6ed; --warn:#b45309; --warn-bg:#fdf3e2; --bad:#b91c1c; --bad-bg:#fdecec;
-  --l0:#ef4444; --l1:#f59e0b; --l2:#eab308; --l3:#22c55e; --l4:#0ea5e9;
-  --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 16px rgba(16,24,40,.06); --radius:14px;
+  --bg:#f6f6f3; --surface:#ffffff; --surface-2:#f0efeb; --border:#e3e2dc; --text:#1d1d1b; --muted:#66655e;
+  --accent:#1d1d1b; --accent-2:#ecebe6; --accent-text:#ffffff; --link:#0b6aa2; --focus:#0072b2;
+  --data:#0072b2; --data-soft:#d7e8f4;
+  --good:#0b6aa2; --good-bg:#e1eef8; --warn:#8a5600; --warn-bg:#fbefd6; --bad:#b4470a; --bad-bg:#fbe5d8;
+  --shadow:0 1px 2px rgba(20,20,15,.05),0 4px 16px rgba(20,20,15,.06); --radius:14px;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1220; --surface:#171b2e; --surface-2:#1e2338; --border:#2a3050; --text:#e7e9f3; --muted:#9aa2bf;
-    --accent:#818cf8; --accent-2:#252a4a; --accent-text:#0f1220;
-    --good:#4ade80; --good-bg:#14301f; --warn:#fbbf24; --warn-bg:#33270f; --bad:#f87171; --bad-bg:#3a1717;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+    --bg:#131315; --surface:#1b1b1e; --surface-2:#242428; --border:#34343a; --text:#ececea; --muted:#a3a29b;
+    --accent:#ececea; --accent-2:#2c2c31; --accent-text:#131315; --link:#7cc4ee; --focus:#56b4e9;
+    --data:#56b4e9; --data-soft:#1d3546;
+    --good:#7cc4ee; --good-bg:#16303f; --warn:#f0b43c; --warn-bg:#352a12; --bad:#ff8a4c; --bad-bg:#3a2014;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25); color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f1220; --surface:#171b2e; --surface-2:#1e2338; --border:#2a3050; --text:#e7e9f3; --muted:#9aa2bf;
-  --accent:#818cf8; --accent-2:#252a4a; --accent-text:#0f1220;
-  --good:#4ade80; --good-bg:#14301f; --warn:#fbbf24; --warn-bg:#33270f; --bad:#f87171; --bad-bg:#3a1717;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  --bg:#131315; --surface:#1b1b1e; --surface-2:#242428; --border:#34343a; --text:#ececea; --muted:#a3a29b;
+  --accent:#ececea; --accent-2:#2c2c31; --accent-text:#131315; --link:#7cc4ee; --focus:#56b4e9;
+  --data:#56b4e9; --data-soft:#1d3546;
+  --good:#7cc4ee; --good-bg:#16303f; --warn:#f0b43c; --warn-bg:#352a12; --bad:#ff8a4c; --bad-bg:#3a2014;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25); color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--text);font:14.5px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-a{color:var(--accent)}
+a{color:var(--link)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
 .top-inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.01em}
-.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
+.logo{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center;color:var(--accent-text);font-weight:800;font-size:15px}
 nav.tabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:11px;border:1px solid var(--border)}
 nav.tabs button{border:0;background:transparent;color:var(--muted);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer;display:flex;gap:7px;align-items:center}
 nav.tabs button.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
@@ -54,7 +60,7 @@ main{max-width:1280px;margin:0 auto;padding:22px 20px 80px}
 label.f{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:10px 0 5px}
 input[type=text],input[type=number],input[type=url],select,textarea{width:100%;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 10px;outline:none;transition:border-color .15s,box-shadow .15s}
 textarea{resize:vertical;min-height:80px;line-height:1.45}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-2)}
+input:focus,select:focus,textarea:focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--data-soft)}
 .mono{font-family:var(--mono);font-size:12.5px}
 .btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-weight:600;font-size:13.5px;padding:7px 13px;border-radius:9px;cursor:pointer;white-space:nowrap}
 .btn:hover{background:var(--surface-2)}
@@ -77,6 +83,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 .pill.warn{background:var(--warn-bg);color:var(--warn);border-color:transparent}
 .pill.bad{background:var(--bad-bg);color:var(--bad);border-color:transparent}
 .pill.acc{background:var(--accent-2);color:var(--accent);border-color:transparent}
+.pill.good::before{content:"✓"}
+.pill.warn::before{content:"!";font-weight:800}
+.pill.bad::before{content:"✕"}
 .crit{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface-2);margin-bottom:10px}
 .crit-head{display:grid;grid-template-columns:1fr 130px 80px auto;gap:8px;align-items:end}
 @media (max-width:600px){.crit-head{grid-template-columns:1fr 1fr}}
@@ -88,7 +97,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 .iconbtn{border:0;background:transparent;color:var(--muted);cursor:pointer;width:28px;height:30px;border-radius:7px;font-size:16px;line-height:1}
 .iconbtn:hover{background:var(--surface);color:var(--bad)}
 .meter{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)}
-.meter > i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.meter > i{display:block;height:100%;background:var(--data);transition:width .25s}
 .meter.warn > i{background:var(--warn)} .meter.bad > i{background:var(--bad)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
@@ -115,7 +124,7 @@ table.data tbody tr:hover td{background:var(--surface-2)}
 .log{font-family:var(--mono);font-size:12px;color:var(--muted);max-height:120px;overflow:auto;margin-top:8px}
 .bars .b{display:grid;grid-template-columns:minmax(100px,220px) 1fr 54px;gap:10px;align-items:center;margin:7px 0;font-size:13px}
 .bars .b .track{height:12px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)}
-.bars .b .track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),#06b6d4)}
+.bars .b .track i{display:block;height:100%;border-radius:99px;background:var(--data)}
 .dist{display:flex;height:22px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
 .dist i{display:block;height:100%}
 .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
@@ -130,14 +139,28 @@ dialog::backdrop{background:rgba(10,12,25,.55);backdrop-filter:blur(2px)}
 .prob{display:grid;grid-template-columns:minmax(120px,240px) 1fr 46px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}
 .prob .track{height:9px;border-radius:9px;background:var(--surface-2);overflow:hidden}
 .prob .track i{display:block;height:100%;background:var(--muted)}
-.prob.top .track i{background:var(--accent)}
+.prob.top .track i{background:var(--data)}
 .prob.top{font-weight:650}
 .prob.human span:first-child::after{content:" ✎ human";color:var(--good);font-weight:700}
 .feedback{white-space:pre-wrap;background:var(--accent-2);border-radius:10px;padding:12px 14px;font-size:13.5px}
 details.raw summary{cursor:pointer;color:var(--muted);font-size:12.5px;margin-top:12px}
 details.raw pre{font-family:var(--mono);font-size:11.5px;background:var(--surface-2);padding:10px;border-radius:9px;overflow:auto;max-height:280px}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;opacity:0;transition:.2s;z-index:100;pointer-events:none;max-width:90vw}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toasts{position:fixed;left:16px;bottom:16px;z-index:200;display:flex;flex-direction:column;gap:8px;max-width:min(440px,calc(100vw - 32px));pointer-events:none}
+.toast{position:relative;overflow:hidden;pointer-events:auto;display:flex;align-items:center;gap:10px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-left:4px solid var(--muted);border-radius:12px;padding:10px 10px 12px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:13.5px;transform:translateX(-24px);opacity:0;transition:transform .2s,opacity .2s}
+.toast.in{transform:none;opacity:1} .toast.out{transform:translateX(-24px);opacity:0}
+.toast .ti{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--surface-2);color:var(--muted)}
+.toast.ok{border-left-color:var(--good)} .toast.ok .ti{background:var(--good-bg);color:var(--good)}
+.toast.warn{border-left-color:var(--warn)} .toast.warn .ti{background:var(--warn-bg);color:var(--warn)}
+.toast.bad{border-left-color:var(--bad)} .toast.bad .ti{background:var(--bad-bg);color:var(--bad)}
+.toast .tm{flex:1;line-height:1.35}
+.toast .tu{border:1px solid var(--border);background:var(--accent);color:var(--accent-text);font:inherit;font-weight:700;font-size:12.5px;padding:4px 10px;border-radius:7px;cursor:pointer}
+.toast .tx{border:0;background:transparent;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:2px 4px;border-radius:6px}
+.toast .tx:hover{background:var(--surface-2)}
+.toast .tp{position:absolute;left:0;bottom:0;height:3px;background:var(--muted);opacity:.35;animation:tp linear forwards}
+.toast.ok .tp{background:var(--good);opacity:.6}
+.toast.paused .tp{animation-play-state:paused}
+@keyframes tp{from{width:100%}to{width:0}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}.toast .tp{animation:none;width:100%}}
 .alert{border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px}
 .alert.warn{background:var(--warn-bg);color:var(--warn)} .alert.bad{background:var(--bad-bg);color:var(--bad)} .alert.info{background:var(--accent-2);color:var(--accent)}
 .settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:4px 18px}
@@ -253,6 +276,61 @@ details.guide table.data tbody tr{cursor:default}
 .audit .num{text-align:right;font-variant-numeric:tabular-nums}
 .audit .calc{margin:8px 0;font-size:12.5px}
 .audit details.raw pre{white-space:pre-wrap;word-break:break-word;max-height:420px}
+/* ---- review UI ---- */
+.bulkbar{position:sticky;top:70px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;background:var(--accent);color:var(--accent-text);border-radius:12px;padding:8px 12px;margin-bottom:10px;box-shadow:var(--shadow)}
+.bulkbar .grp{display:flex;align-items:center;gap:6px;font-size:13px}
+.bulkbar select{width:auto;padding:4px 8px;font-size:12.5px;background:var(--surface);color:var(--text)}
+.bulkbar .btn{background:var(--surface);color:var(--text);border-color:transparent}
+.bulkbar .btn.primary{background:var(--data);color:#fff}
+.bulkbar .btn.ghost{background:transparent;color:var(--accent-text);opacity:.8}
+table.data th.selcol,table.data td.selcol{width:38px;text-align:center;padding-left:12px;padding-right:4px}
+.selcol input{width:16px;height:16px;accent-color:var(--data);cursor:pointer}
+table.data tbody tr.sel td{background:var(--data-soft)}
+.ccell{min-width:150px}
+.chip{display:flex;flex-direction:row;align-items:center;gap:6px;min-width:0}
+.chipbtn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:3px 6px 3px 3px;border-radius:8px;max-width:170px}
+.chipbtn:hover{background:var(--surface)}
+.chipbtn:focus-visible{outline:2px solid var(--focus)}
+.chipbtn b{font-size:12.5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chipbtn .caret{color:var(--muted);font-size:10px}
+.lvb{flex:none;min-width:20px;height:20px;padding:0 4px;border-radius:6px;display:inline-grid;place-items:center;color:#fff;font-size:11.5px;font-weight:800;text-shadow:0 1px 1px rgba(0,0,0,.35)}
+.rv{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;font-size:13px;font-weight:800;padding:0}
+.rv:hover{border-color:var(--data)}
+.rv.agree{background:var(--data);border-color:var(--data);color:#fff}
+.rv.over{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.chipbar{height:4px;width:110px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin:4px 0 2px 3px}
+.chipbar i{display:block;height:100%}
+.ccell small{font-size:11px;color:var(--muted);margin-left:3px}
+.band{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.band i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.revcol{white-space:nowrap}
+.revprog{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:650;font-variant-numeric:tabular-nums}
+.rbar{width:46px;height:6px;border-radius:9px;background:var(--surface-2);overflow:hidden;display:inline-block}
+.rbar i{display:block;height:100%;background:var(--data)}
+.dist i{display:grid !important;place-items:center;color:#fff;font-size:11px;font-weight:800;font-style:normal;text-shadow:0 1px 1px rgba(0,0,0,.35)}
+.lvpop{position:fixed;z-index:150;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.2);padding:6px;max-height:70vh;overflow:auto}
+.lvp-h{font-size:11.5px;font-weight:700;color:var(--muted);padding:6px 8px;text-transform:uppercase;letter-spacing:.04em}
+.lvp-o{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;gap:9px;align-items:flex-start;padding:7px 8px;border-radius:8px;font-size:13px}
+.lvp-o:hover,.lvp-o:focus-visible{background:var(--surface-2)}
+.lvp-o.on{background:var(--data-soft)}
+.lvp-o.clear{color:var(--muted);justify-content:center;border-top:1px solid var(--border);border-radius:0 0 8px 8px;margin-top:4px}
+.lvp-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.lvp-t small{color:var(--muted);font-size:11.5px;line-height:1.35}
+.tag{font-size:10.5px;font-weight:750;background:var(--accent);color:var(--accent-text);border-radius:5px;padding:1px 5px;vertical-align:1px}
+.lvsegs{display:grid;gap:6px}
+.lvseg{all:unset;box-sizing:border-box;cursor:pointer;border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:5px;background:var(--surface);min-width:0}
+.lvseg:hover{border-color:var(--muted)}
+.lvseg:focus-visible{outline:2px solid var(--focus)}
+.lvseg.on{border:2px solid var(--accent);padding:7px;background:var(--surface-2)}
+.lvseg-top{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:650;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.lvseg-p{height:5px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.lvseg-p i{display:block;height:100%;background:var(--muted)}
+.lvseg.model .lvseg-p i{background:var(--data)}
+.lvseg-m{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.lvseg.model .lvseg-m{color:var(--text);font-weight:650}
+.rvstate{font-size:12px;font-weight:650;color:var(--muted)}
+.rvstate.agree{color:var(--good)} .rvstate.over{color:var(--warn)}
+.renameInput{max-width:320px}
 @media (max-width:640px){
   .top-inner{gap:10px;padding:10px 16px}
   nav.tabs{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}
@@ -452,8 +530,9 @@ I was asked to lead the weekly stand-up…"></textarea>
         <input type="text" id="resFilter" placeholder="Search learner or text…">
         <select id="resFlagFilter" style="width:auto"><option value="">All</option><option value="review">Needs review</option><option value="ok">No flags</option><option value="error">Errors</option></select>
       </div>
+      <div class="bulkbar no-print" id="bulkBar" hidden></div>
       <div class="tablewrap"><table class="data" id="resTable"></table></div>
-      <p class="hint no-print" style="margin-top:8px">Click a row for the full breakdown, probabilities, feedback and to record a human score.</p>
+      <p class="hint no-print" style="margin-top:8px">Tick the circle on a score to agree with the model, click the level name to pick a different one, or select rows to review in bulk. Click a learner for the full breakdown and audit trail. Every change can be undone for 10 seconds (or Ctrl+Z).</p>
     </div>
   </div>
 </section>
@@ -519,7 +598,8 @@ I was asked to lead the weekly stand-up…"></textarea>
 <dialog id="detailDlg"><div class="dlg-head"><b id="dlgTitle" style="font-size:16px"></b><span id="dlgPills" class="row"></span><span class="spacer"></span><button class="btn sm" id="dlgPrev">‹</button><button class="btn sm" id="dlgNext">›</button><button class="btn sm" id="dlgClose">Close</button></div><div class="dlg-body" id="dlgBody"></div></dialog>
 <dialog id="previewDlg"><div class="dlg-head"><b>Request sent to Ollama (first response)</b><span class="spacer"></span><button class="btn sm" id="copyPreviewBtn">Copy curl</button><button class="btn sm" onclick="this.closest('dialog').close()">Close</button></div><div class="dlg-body"><pre class="mono" id="previewPre" style="white-space:pre-wrap"></pre></div></dialog>
 <dialog id="viewDlg"><div class="dlg-head"><b id="viewTitle" style="font-size:16px"></b><span class="spacer"></span><button class="btn sm" onclick="this.closest('dialog').close()">Close</button></div><div class="dlg-body" id="viewBody"></div></dialog>
-<div class="toast" id="toast"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="lvpop" id="lvPop" hidden role="menu"></div>
 
 <script>
 "use strict";
@@ -532,14 +612,42 @@ const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const uid = () => Math.random().toString(36).slice(2, 10);
 const pct = x => (x == null || isNaN(x)) ? "—" : Math.round(x * 100) + "%";
-const LEVEL_COLORS = ["#ef4444","#f97316","#f59e0b","#eab308","#84cc16","#22c55e","#10b981","#14b8a6","#0ea5e9","#6366f1"];
-function levelColor(i, n){ if (n <= 1) return LEVEL_COLORS[5]; return LEVEL_COLORS[Math.round(i/(n-1)*(LEVEL_COLORS.length-1))]; }
-function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+const LEVEL_STOPS = ["#d55e00", "#e69f00", "#56b4e9", "#0072b2"];
+function levelColor(i, n){
+  if (n <= 1) return LEVEL_STOPS[3];
+  const t = i / (n - 1) * (LEVEL_STOPS.length - 1), k = Math.min(LEVEL_STOPS.length - 2, Math.floor(t)), f = t - k;
+  const a = LEVEL_STOPS[k].match(/\w\w/g).map(h => parseInt(h, 16)), b = LEVEL_STOPS[k + 1].match(/\w\w/g).map(h => parseInt(h, 16));
+  return "#" + a.map((v, j) => Math.round(v + (b[j] - v) * f).toString(16).padStart(2, "0")).join("");
+}
+const TOAST_ICON = { info: "i", ok: "✓", warn: "!", bad: "✕" };
+let lastUndo = null;
+function toast(msg, opts = {}){
+  const { undo = null, kind = undo ? "ok" : "info", ms = undo ? 10000 : 4500 } = opts;
+  const box = $("#toasts"), t = document.createElement("div");
+  t.className = `toast ${kind}`; t.setAttribute("role", kind === "bad" ? "alert" : "status");
+  t.innerHTML = `<span class="ti" aria-hidden="true">${TOAST_ICON[kind] || "i"}</span><span class="tm">${esc(msg)}</span>${undo ? `<button class="tu">Undo</button>` : ""}<button class="tx" aria-label="Dismiss">×</button><i class="tp" style="animation-duration:${ms}ms"></i>`;
+  box.appendChild(t); while (box.children.length > 5) box.firstElementChild.remove();
+  let timer = null, left = ms, start = 0;
+  const close = () => { clearTimeout(timer); if (lastUndo && lastUndo.el === t) lastUndo = null; t.classList.add("out"); setTimeout(() => t.remove(), 220); };
+  const arm = () => { start = Date.now(); timer = setTimeout(close, left); };
+  t.addEventListener("mouseenter", () => { clearTimeout(timer); left -= Date.now() - start; t.classList.add("paused"); });
+  t.addEventListener("mouseleave", () => { t.classList.remove("paused"); arm(); });
+  t.querySelector(".tx").onclick = close;
+  if (undo) {
+    const run = () => { close(); try { undo(); toast("Undone", { kind: "info", ms: 3000 }); } catch (e) { toast("Couldn't undo: " + e.message, { kind: "bad" }); } };
+    t.querySelector(".tu").onclick = run; lastUndo = { el: t, run };
+  }
+  requestAnimationFrame(() => t.classList.add("in")); arm();
+}
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "z" && lastUndo && !e.target.closest("input, textarea, [contenteditable]")) { e.preventDefault(); lastUndo.run(); }
+});
+
 
 /* ---------- storage (always guarded) ---------- */
 const store = {
   get(k, d){ try { const v = localStorage.getItem("nre."+k); return v ? JSON.parse(v) : d; } catch { return d; } },
-  set(k, v){ try { localStorage.setItem("nre."+k, JSON.stringify(v)); return true; } catch(e){ toast("Browser storage is full or blocked; export your runs."); return false; } }
+  set(k, v){ try { localStorage.setItem("nre."+k, JSON.stringify(v)); return true; } catch(e){ toast("Browser storage is full or blocked; export your runs.", { kind: "bad" }); return false; } }
 };
 
 /* ---------- settings ---------- */
@@ -672,9 +780,13 @@ function renderLibrary(){
   renderEvalStrip();
 }
 function setDirty(d){ rubricDirty = d; store.set("draftDirty", d); $("#dirtyPill").hidden = !d; }
+function snapRubric(){ return { rubric: clone(rubric), dirty: rubricDirty, lib: clone(library()) }; }
+function restoreRubric(sn){ rubric = sn.rubric; saveLibrary(sn.lib); setDirty(sn.dirty); saveDraft(); renderRubric(); }
 function loadRubric(r){
-  if (rubricDirty && r.id !== rubric.id && !confirm(`"${rubric.name || "This rubric"}" has unsaved changes. Discard them?`)) { renderLibrary(); return false; }
-  rubric = clone(toGrid(r)); setDirty(false); saveDraft(); renderRubric(); return true;
+  const sn = rubricDirty && r.id !== rubric.id ? snapRubric() : null;
+  rubric = clone(toGrid(r)); setDirty(false); saveDraft(); renderRubric();
+  if (sn) toast(`Switched rubric and discarded unsaved edits to "${sn.rubric.name || "Untitled"}"`, { kind: "warn", undo: () => restoreRubric(sn) });
+  return true;
 }
 $("#libList").onclick = e => { const b = e.target.closest("[data-id]"); if (!b) return; const r = library().find(x => x.id === b.dataset.id); if (r) { loadRubric(r); setSub("edit"); } };
 $("#evalRubricSel").onchange = e => { const r = library().find(x => x.id === e.target.value); if (r && !loadRubric(r)) e.target.value = rubric.id; };
@@ -682,15 +794,17 @@ $("#newRubricBtn").onclick = () => { if (loadRubric(blankRubric())) { setSub("ed
 $("#saveRubricBtn").onclick = () => {
   if (!rubric.name.trim()) { toast("Give the rubric a name first"); $("#rubricName").focus(); return; }
   const lib = library(); const i = lib.findIndex(r => r.id === rubric.id);
+  const sn = snapRubric();
   if (i >= 0) lib[i] = clone(rubric); else lib.unshift(clone(rubric));
-  saveLibrary(lib); setDirty(false); toast(i >= 0 ? "Rubric saved" : "Rubric added to library");
+  saveLibrary(lib); setDirty(false); toast(i >= 0 ? `Saved "${rubric.name}"` : `Added "${rubric.name}" to the library`, { undo: () => restoreRubric(sn) });
 };
-$("#dupRubricBtn").onclick = () => { const c = clone(rubric); c.id = uid(); c.name = (rubric.name || "Rubric") + " (copy)"; c.criteria.forEach(x => x.id = uid()); rubric = c; setDirty(true); saveDraft(); renderRubric(); toast("Duplicated: edit and Save"); };
+$("#dupRubricBtn").onclick = () => { const sn = snapRubric(); const c = clone(rubric); c.id = uid(); c.name = (rubric.name || "Rubric") + " (copy)"; c.criteria.forEach(x => x.id = uid()); rubric = c; setDirty(true); saveDraft(); renderRubric(); toast(`Made a copy: "${c.name}". Edit it, then Save`, { undo: () => restoreRubric(sn) }); };
 $("#deleteRubricBtn").onclick = () => {
   const lib = library(); const i = lib.findIndex(r => r.id === rubric.id);
-  if (i < 0) { if (confirm("Discard this unsaved rubric?")) { setDirty(false); loadRubric(lib[0] || blankRubric()); } return; }
-  if (!confirm(`Delete "${lib[i].name}" from the library? Past runs keep their own copy.`)) return;
-  lib.splice(i, 1); saveLibrary(lib); setDirty(false); loadRubric(lib[0] || blankRubric()); toast("Deleted");
+  const sn = snapRubric(), nm = rubric.name || "Untitled rubric";
+  if (i >= 0) { lib.splice(i, 1); saveLibrary(lib); }
+  setDirty(false); loadRubric(lib[0] || blankRubric());
+  toast(i >= 0 ? `Deleted "${nm}" from the library. Past runs keep their own copy` : `Discarded unsaved rubric "${nm}"`, { undo: () => restoreRubric(sn) });
 };
 function saveDraft(){ store.set("draftRubric", rubric); }
 
@@ -773,22 +887,22 @@ $("#rubricGrid").addEventListener("click", e => {
   const act = b.dataset.act;
   if (act === "dellv") {
     const i = +b.dataset.lv; if (rubric.levels.length <= 2) return toast("A rubric needs at least 2 level columns");
-    const used = rubric.criteria.filter(c => c.type !== "noul" && (c.cells[i] || "").trim()).length;
-    if (used && !confirm(`Remove the "${rubric.levels[i].label}" column? ${used} description(s) in it will be deleted.`)) return;
-    rubric.levels.splice(i, 1); rubric.criteria.forEach(c => c.cells.splice(i, 1)); touched(); return renderRubric();
+    const sn = snapRubric(), used = rubric.criteria.filter(c => c.type !== "noul" && (c.cells[i] || "").trim()).length, nm = rubric.levels[i].label || `Level ${i}`;
+    rubric.levels.splice(i, 1); rubric.criteria.forEach(c => c.cells.splice(i, 1)); touched(); renderRubric();
+    return toast(`Removed the "${nm}" column${used ? ` and ${used} description${used > 1 ? "s" : ""} in it` : ""}`, { undo: () => restoreRubric(sn) });
   }
   const id = b.closest("tr[data-cid]")?.dataset.cid; if (!id) return;
   const C = rubric.criteria, i = C.findIndex(c => c.id === id), c = C[i];
   const same = C.map((x, k) => k).filter(k => C[k].type === c.type); const pos = same.indexOf(i);
-  if (act === "del") { if ((c.name || c.cells.some(Boolean) || c.yes || c.no) && !confirm(`Delete "${c.name || "this row"}"?`)) return; C.splice(i, 1); }
+  if (act === "del") { const sn = snapRubric(); C.splice(i, 1); touched(); renderRubric(); return toast(`Deleted "${c.name || "untitled row"}"`, { undo: () => restoreRubric(sn) }); }
   if (act === "up" && pos > 0) { const j = same[pos-1]; [C[j], C[i]] = [C[i], C[j]]; }
   if (act === "down" && pos < same.length - 1) { const j = same[pos+1]; [C[j], C[i]] = [C[i], C[j]]; }
   touched(); renderRubric();
 });
 $("#rubricName").addEventListener("input", e => { rubric.name = e.target.value; touched(); renderLibrary(); });
 $("#rubricPrompt").addEventListener("input", e => { rubric.prompt = e.target.value; autoGrow(e.target); touched(); });
-$("#addCritBtn").onclick = () => { const c = newScoreCrit(rubric.levels.length); const lastScore = rubric.criteria.map(x => x.type).lastIndexOf("score"); rubric.criteria.splice(lastScore + 1, 0, c); touched(); renderRubric(); $(`#rubricGrid tr[data-cid="${c.id}"] .cn`).focus(); };
-$("#addCheckBtn").onclick = () => { const c = newCheckCrit(rubric.levels.length); rubric.criteria.push(c); touched(); renderRubric(); $(`#rubricGrid tr[data-cid="${c.id}"] .cn`).focus(); };
+$("#addCritBtn").onclick = () => { toast("Added a criterion row", { kind: "ok", ms: 2500 }); const c = newScoreCrit(rubric.levels.length); const lastScore = rubric.criteria.map(x => x.type).lastIndexOf("score"); rubric.criteria.splice(lastScore + 1, 0, c); touched(); renderRubric(); $(`#rubricGrid tr[data-cid="${c.id}"] .cn`).focus(); };
+$("#addCheckBtn").onclick = () => { toast("Added a Yes/No check", { kind: "ok", ms: 2500 }); const c = newCheckCrit(rubric.levels.length); rubric.criteria.push(c); touched(); renderRubric(); $(`#rubricGrid tr[data-cid="${c.id}"] .cn`).focus(); };
 $("#addLevelBtn").onclick = () => {
   if (rubric.levels.length >= 10) return toast("Nimble accepts at most 10 levels");
   const last = rubric.levels[rubric.levels.length - 1]; rubric.levels.push({ label: "", points: last ? (+last.points || 0) + 1 : 0 });
@@ -1004,7 +1118,7 @@ function showImportPreview(text, source){
       <button class="btn" id="impEdit">Open in editor${p.errors ? " to fix" : ""}</button>
       <button class="btn primary" id="impSave" ${p.ready ? "" : "disabled"}>Save to library${p.errors ? ` (skip ${p.errors} row${p.errors>1?"s":""} with errors)` : ""}</button></div>`;
   $("#impName").oninput = e => g.name = e.target.value;
-  $("#impCancel").onclick = () => { pendingImport = null; $("#importPreview").innerHTML = ""; };
+  $("#impCancel").onclick = () => { pendingImport = null; $("#importPreview").innerHTML = ""; toast("Import cancelled"); };
   $("#impEdit").onclick = () => { if (loadRubric(g)) { setDirty(true); saveDraft(); renderRubric(); setSub("edit"); $("#importPreview").innerHTML = ""; toast("Imported into the editor. Fix any rows, then Save"); } };
   $("#impSave").onclick = () => {
     const keep = clone(g); keep.criteria = keep.criteria.filter(c => p.rowInfo[c.id]?.level !== "bad");
@@ -1057,7 +1171,7 @@ function onResponsesChanged(){
   preflight();
 }
 $("#responsesText").addEventListener("input", onResponsesChanged);
-$("#clearRespBtn").onclick = () => { $("#responsesText").value = ""; onResponsesChanged(); };
+$("#clearRespBtn").onclick = () => { const prev = $("#responsesText").value; if (!prev.trim()) return; $("#responsesText").value = ""; onResponsesChanged(); toast("Cleared the responses box", { undo: () => { $("#responsesText").value = prev; onResponsesChanged(); } }); };
 $("#respTemplateBtn").onclick = () => download("responses-template.csv", toCSV([
   ["# RESPONSES TEMPLATE. One row per learner. Lines starting with # are ignored. Keep each response in one cell (line breaks inside the cell are fine)."],
   ["Name", "Response"], ["Alex", "Last Tuesday I was responsible for sending the quarterly report…"], ["Priya", "I had a meeting with a customer and it did not go well…"]]), "text/csv");
@@ -1367,7 +1481,7 @@ $("#previewBtn").onclick = () => {
 };
 
 /* ---------- audit trail ---------- */
-const APP_VERSION = "1.1.0";
+const APP_VERSION = "1.2.0";
 async function sha256(text){
   try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); } catch { return null; }
 }
@@ -1490,14 +1604,22 @@ function renderHistory(){
   else $("#storageHint").textContent = `${all.length} run(s) saved in ${where}.`;
 }
 $("#histTable").onclick = e => {
-  const tr = e.target.closest("tr[data-id]"); if (!tr) return; const id = tr.dataset.id; const b = e.target.closest("[data-act]"); const act = b ? b.dataset.act : "open";
+  const tr = e.target.closest("tr[data-id]"); if (!tr || e.target.closest(".renameInput")) return; const id = tr.dataset.id; const b = e.target.closest("[data-act]"); const act = b ? b.dataset.act : "open";
   const run = runs().find(r => r.id === id); if (!run) return;
   if (act === "open") { openRun(id); switchTab("results"); }
-  if (act === "del" && confirm(`Delete run "${run.name}"?`)) deleteRun(id);
-  if (act === "rename") { const n = prompt("Rename run:", run.name); if (n) { run.name = n; saveRun(run); if (currentRun?.id === id) { currentRun = run; renderResults(); } } }
+  if (act === "del") { const wasOpen = currentRun?.id === id; deleteRun(id); toast(`Deleted run "${run.name}"`, { undo: () => { saveRun(run); if (wasOpen) openRun(run.id); } }); }
+  if (act === "rename") {
+    const cell = tr.querySelector("td"); const old = run.name;
+    cell.innerHTML = `<input type="text" class="renameInput" value="${esc(old)}" aria-label="Run name">`; const inp = cell.querySelector("input"); inp.focus(); inp.select();
+    let done = false; const finish = save => { if (done) return; done = true; const n = inp.value.trim();
+      if (save && n && n !== old) { run.name = n; saveRun(run); if (currentRun?.id === id) renderResults(); toast(`Renamed to "${n}"`, { undo: () => { run.name = old; saveRun(run); if (currentRun?.id === id) renderResults(); } }); }
+      else renderHistory(); };
+    inp.onkeydown = ev => { if (ev.key === "Enter") finish(true); if (ev.key === "Escape") finish(false); }; inp.onblur = () => finish(true);
+  }
   if (act === "rubric") { const g = toGrid(clone(run.rubric)); g.id = uid(); g.name = (run.rubric.name || "Rubric") + " (from run)"; if (loadRubric(g)) { setDirty(true); renderRubric(); switchTab("rubrics"); setSub("edit"); toast("Rubric loaded into the editor. Save to keep it"); } }
 };
-$("#clearHistBtn").onclick = () => { if (confirm("Delete ALL saved runs from this browser? Export first if you need them.")) { runDB.cache = []; runDB.persist(() => runDB.tx("readwrite", s => s.clear())); currentRun = null; renderHistory(); renderResults(); } };
+$("#clearHistBtn").onclick = () => { const all = runs().slice(), open = currentRun?.id; if (!all.length) return toast("History is already empty"); { runDB.cache = []; runDB.persist(() => runDB.tx("readwrite", s => s.clear()));
+    toast(`Deleted ${all.length} run${all.length > 1 ? "s" : ""} from history`, { kind: "warn", undo: () => { all.forEach(saveRun); if (open) openRun(open); } }); currentRun = null; renderHistory(); renderResults(); } };
 $("#exportAllBtn").onclick = () => download(`nimble-eval-history-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(runs(), null, 2), "application/json");
 $("#importRunFile").onchange = async e => {
   const f = e.target.files[0]; if (!f) return; e.target.value = "";
@@ -1507,7 +1629,7 @@ $("#importRunFile").onchange = async e => {
 
 /* ---------- results ---------- */
 let sortKey = null, sortDir = 1, dlgIndex = 0, visibleRows = [];
-function openRun(id){ currentRun = runs().find(r => r.id === id) || null; sortKey = null; renderResults(); }
+function openRun(id){ if (currentRun?.id !== id) selected = new Set(); currentRun = runs().find(r => r.id === id) || null; sortKey = null; renderResults(); }
 function rescore(run){ run.results.forEach(res => { if (!res.error) { scoreResult(run.rubric, res); res.feedback = templateFeedback(run.rubric, res); } computeFlags(run.rubric, res); }); }
 function renderResults(){
   const run = currentRun;
@@ -1518,13 +1640,14 @@ function renderResults(){
   $("#runTitle").textContent = run.name;
   $("#runMeta").innerHTML = `${esc(new Date(run.created).toLocaleString())} · rubric <b>${esc(rb.name || "Untitled")}</b> · model <span class="mono">${esc(run.model)}</span>${run.feedbackModel ? ` · feedback <span class="mono">${esc(run.feedbackModel)}</span>` : ""}${run.demo ? ' · <span class="pill warn">demo data, not real model output</span>' : ""}`;
   const s = runSummary(run), avgMs = ok.length ? Math.round(ok.reduce((a,r)=>a+r.ms,0)/ok.length) : 0;
-  const humanN = R.filter(r => Object.values(r.scores||{}).some(x => x && x.human != null)).length;
+  const humanN = ok.filter(r => { const [a, b] = reviewedCount(run, r); return b && a === b; }).length;
+  const changedN = ok.reduce((a, r) => a + Object.values(r.scores || {}).filter(x => x && !x.error && x.human != null && x.human !== x.level).length, 0);
   $("#statCards").innerHTML = [
     ["Responses", s.n, s.errors ? `${s.errors} failed` : "all scored"],
     ["Average score", pct(s.avg), s.avg != null ? bandFor(s.avg) : ""],
     ["Needs review", s.review, s.n ? `${Math.round(s.review/s.n*100)}% of responses` : ""],
     ["Avg time / response", avgMs ? (avgMs < 1000 ? avgMs + " ms" : (avgMs/1000).toFixed(1) + " s") : "—", `${rb.criteria.length} criteria per call`],
-    ["Human-checked", humanN, humanN ? "see agreement below" : "click a row to add"]
+    ["Fully reviewed", `${humanN}/${ok.length}`, changedN ? `${changedN} score${changedN > 1 ? "s" : ""} changed by you` : "tick ✓ to agree with a score"]
   ].map(([k,v,sub]) => `<div class="stat"><div class="k">${k}</div><div class="v">${esc(v)}</div><div class="s">${esc(sub)}</div></div>`).join("");
   // criterion bars
   $("#critBars").innerHTML = rb.criteria.map(c => {
@@ -1536,6 +1659,7 @@ function renderResults(){
   const bs = bands(); const counts = bs.map(b => ({ ...b, n: ok.filter(r => r.band === b.name).length }));
   $("#bandDist").innerHTML = ok.length ? counts.filter(b => b.n).map(b => `<i title="${esc(b.name)}: ${b.n}" style="width:${b.n/ok.length*100}%;background:${bandColor(b.name)}"></i>`).join("") : "";
   $("#bandLegend").innerHTML = counts.map(b => `<span><i style="background:${bandColor(b.name)}"></i>${esc(b.name)} <b>${b.n}</b></span>`).join("");
+  $("#bandDist").innerHTML = ok.length ? counts.filter(b => b.n).map(b => `<i title="${esc(b.name)}: ${b.n}" style="width:${b.n/ok.length*100}%;background:${bandColor(b.name)}">${b.n}</i>`).join("") : "";
   renderAgreement(run);
   renderResTable();
 }
@@ -1549,7 +1673,7 @@ function renderAgreement(run){
     rows.push(`<tr><td>${esc(c.name)}</td><td>${pairs.length}</td><td><b>${pct(exact/pairs.length)}</b></td><td>${c.type === "score" ? pct(adj/pairs.length) : "—"}</td><td>${bias === 0 ? "even" : (bias > 0 ? "+" : "") + bias.toFixed(2) + (bias < 0 ? " (model lower)" : " (model higher)")}</td></tr>`);
   });
   $("#agreePanel").innerHTML = rows.length ? `<h2 style="font-size:14px;margin:0 0 6px">Model vs human agreement</h2><div class="tablewrap"><table class="data agree"><thead><tr><th>Criterion</th><th>n</th><th>Exact</th><th>Within 1 level</th><th>Model bias (levels)</th></tr></thead><tbody>${rows.join("")}</tbody></table></div><p class="hint">Use this to decide whether Nimble is accurate enough on your rubric before automating. Aim for 30+ human-scored responses per criterion.</p>` :
-    `<div class="alert info">To measure accuracy, open responses and record what a human assessor would score. Agreement statistics appear here.</div>`;
+    `<div class="alert info">To measure accuracy, review scores in the table below: tick ✓ where you agree with the model, or pick a different level where you don't. Agreement statistics appear here.</div>`;
 }
 function resRowsData(){
   const run = currentRun; const q = $("#resFilter").value.toLowerCase(), ff = $("#resFlagFilter").value;
@@ -1566,44 +1690,141 @@ function sortVal(r){
   if (sortKey === "overall") return r.overall ?? -1;
   if (sortKey === "flags") return r.flags?.length || 0;
   if (sortKey === "words") return r.words;
+  if (sortKey === "review") { const [a, b] = reviewedCount(currentRun, r); return b ? a / b : -1; }
   const s = r.scores?.[sortKey]; return s && !s.error ? (s.human ?? s.level) : -1;
 }
+/* ---------- review controls (agree / override, single and bulk) ---------- */
+let selected = new Set(), dlgResultId = null;
+const lvName = (c, li) => c.type === "noul" ? (li ? "Yes" : "No") : (c.levels[li]?.label || `Level ${li}`);
+function refreshResult(rb, r){ scoreResult(rb, r); r.feedback = templateFeedback(rb, r); computeFlags(rb, r); }
+function refreshDetail(){ if (!$("#detailDlg").open || !dlgResultId) return; const vi = visibleRows.findIndex(v => v.r.id === dlgResultId); if (vi >= 0) openDetail(vi); }
+function reviewChange(label, results, mutate){
+  const run = currentRun; if (!run) return;
+  results = results.filter(r => !r.error);
+  if (!results.length) return toast("Nothing to change: the selected responses have no scores", { kind: "warn" });
+  const before = results.map(r => [r, clone(r.scores)]);
+  let changed = 0; results.forEach(r => { changed += mutate(r) || 0; refreshResult(run.rubric, r); });
+  if (!changed) { before.forEach(([r, sc]) => { r.scores = sc; refreshResult(run.rubric, r); }); return toast("No changes: those scores were already set that way", { kind: "info" }); }
+  saveRun(run); renderResults(); refreshDetail();
+  toast(label.replace("{n}", changed).replace("{s}", changed === 1 ? "" : "s"), { undo: () => {
+    before.forEach(([r, sc]) => { r.scores = sc; refreshResult(run.rubric, r); });
+    saveRun(run); renderResults(); refreshDetail();
+  } });
+}
+const now = () => new Date().toISOString();
+function agreeOn(cids){ return r => { let n = 0; currentRun.rubric.criteria.forEach(c => { if (cids && !cids.includes(c.id)) return; const s = r.scores[c.id]; if (s && !s.error && s.human == null) { s.human = s.level; s.humanAt = now(); n++; } }); return n; }; }
+function setLevel(cid, lv){ return r => { const s = r.scores[cid]; if (!s || s.error || s.human === lv) return 0; s.human = lv; s.humanAt = lv == null ? null : now(); return 1; }; }
+function clearReview(cids){ return r => { let n = 0; Object.entries(r.scores).forEach(([cid, s]) => { if ((!cids || cids.includes(cid)) && s && s.human != null) { s.human = null; s.humanAt = null; n++; } }); return n; }; }
+function reviewState(s){ return s.human == null ? "none" : s.human === s.level ? "agree" : "over"; }
+function reviewedCount(run, r){ const sc = run.rubric.criteria.map(c => r.scores?.[c.id]).filter(s => s && !s.error); return [sc.filter(s => s.human != null).length, sc.length]; }
+
 function chip(c, s){
   if (!s) return "—"; if (s.error) return `<span class="pill bad">no answer</span>`;
-  const lvl = s.human != null ? s.human : s.level, L = c.levels[lvl] || {}, n = c.levels.length;
-  const label = c.type === "noul" ? (lvl ? "Yes" : "No") : (L.label || `Level ${lvl}`);
-  const col = levelColor(lvl, n);
-  return `<span class="chip"><b style="color:${col}" title="${esc(levelText(L))}">${esc(label)}${s.human != null ? " ✎" : ""}</b><span class="bar"><i style="width:${n>1 ? (lvl/(n-1))*100 : 100}%;background:${col}"></i></span><small>${c.type === "noul" ? "p(yes) " + pct(s.expected) : "conf " + pct(s.confidence)}</small></span>`;
+  const lvl = s.human != null ? s.human : s.level, n = c.levels.length, col = levelColor(lvl, n), st = reviewState(s);
+  const tip = { none: "Not reviewed. Click to agree with the model", agree: "You agreed with the model. Click to clear", over: `You changed this from "${lvName(c, s.level)}". Click to clear` }[st];
+  return `<div class="chip">
+      <button class="chipbtn" data-act="pick" title="${esc(levelText(c.levels[lvl] || {}))}\n\nClick to choose a different level"><span class="lvb" style="background:${col}">${c.type === "noul" ? (lvl ? "✓" : "✕") : lvl}</span><b>${esc(lvName(c, lvl))}</b><span class="caret">▾</span></button>
+      <button class="rv ${st}" data-act="toggle" title="${esc(tip)}" aria-label="${esc(tip)}">${st === "agree" ? "✓" : st === "over" ? "✎" : ""}</button>
+    </div>
+    <div class="chipbar"><i style="width:${n > 1 ? (lvl / (n - 1)) * 100 : 100}%;background:${col}"></i></div>
+    <small>${st === "over" ? `model said ${esc(lvName(c, s.level))}` : c.type === "noul" ? "p(yes) " + pct(s.expected) : "conf " + pct(s.confidence)}</small>`;
 }
 function renderResTable(){
   const run = currentRun; if (!run) return; const rb = run.rubric;
   visibleRows = resRowsData();
-  const th = (k, label) => `<th data-sort="${k}">${esc(label)}${sortKey === k ? (sortDir > 0 ? " ▲" : " ▼") : ""}</th>`;
-  $("#resTable").innerHTML = `<thead><tr>${th("name","Learner")}${th("overall","Overall")}${rb.criteria.map(c => th(c.id, c.name)).join("")}${th("flags","Flags")}${th("words","Words")}</tr></thead><tbody>` +
-    visibleRows.map(({r, i}) => `<tr data-i="${i}"><td><b>${esc(r.name)}</b></td>
-      <td>${r.error ? `<span class="pill bad" title="${esc(r.error)}">error</span>` : `<div class="score-big">${pct(r.overall)}</div><span class="pill" style="color:${bandColor(r.band)}">${esc(r.band)}</span>`}</td>
-      ${rb.criteria.map(c => `<td>${r.error ? "" : chip(c, r.scores[c.id])}</td>`).join("")}
+  const ids = new Set(run.results.map(r => r.id)); selected.forEach(id => { if (!ids.has(id)) selected.delete(id); });
+  const th = (k, label, cls = "") => `<th data-sort="${k}" class="${cls}">${esc(label)}${sortKey === k ? (sortDir > 0 ? " ▲" : " ▼") : ""}</th>`;
+  const allSel = visibleRows.length && visibleRows.every(({ r }) => selected.has(r.id)), someSel = visibleRows.some(({ r }) => selected.has(r.id));
+  $("#resTable").innerHTML = `<thead><tr><th class="selcol"><input type="checkbox" id="selAll" aria-label="Select all shown" ${allSel ? "checked" : ""}></th>${th("name","Learner")}${th("overall","Overall")}${rb.criteria.map(c => th(c.id, c.name)).join("")}${th("review","Reviewed")}${th("flags","Flags")}${th("words","Words")}</tr></thead><tbody>` +
+    visibleRows.map(({ r, i }) => { const [rv, tot] = reviewedCount(run, r);
+      return `<tr data-i="${i}" class="${selected.has(r.id) ? "sel" : ""}"><td class="selcol"><input type="checkbox" class="rowSel" aria-label="Select ${esc(r.name)}" ${selected.has(r.id) ? "checked" : ""}></td><td><b>${esc(r.name)}</b></td>
+      <td>${r.error ? `<span class="pill bad" title="${esc(r.error)}">error</span>` : `<div class="score-big">${pct(r.overall)}</div><span class="band"><i style="background:${bandColor(r.band)}"></i>${esc(r.band)}</span>`}</td>
+      ${rb.criteria.map(c => `<td class="ccell" data-cid="${esc(c.id)}">${r.error ? "" : chip(c, r.scores[c.id])}</td>`).join("")}
+      <td class="revcol">${r.error ? "" : `<div class="revprog"><span class="rbar"><i style="width:${tot ? rv / tot * 100 : 0}%"></i></span>${rv}/${tot}</div>${rv < tot ? `<button class="btn sm ghost" data-act="rowagree" title="Agree with the model on every score you haven't reviewed">✓ Agree rest</button>` : `<button class="btn sm ghost" data-act="rowclear" title="Clear all review marks on this response">Clear</button>`}`}</td>
       <td>${r.error ? `<span class="hint">${esc(r.error.slice(0, 90))}</span>` : (r.flags.length ? r.flags.map(f => `<span class="pill warn" style="margin:1px">${esc(f)}</span>`).join(" ") : `<span class="pill good">OK</span>`)}</td>
-      <td class="hint">${r.words}</td></tr>`).join("") + "</tbody>";
+      <td class="hint">${r.words}</td></tr>`; }).join("") + "</tbody>";
   if (!visibleRows.length) $("#resTable").insertAdjacentHTML("beforeend", `<tbody><tr><td colspan="99" class="empty">No responses match.</td></tr></tbody>`);
+  const sa = $("#selAll"); if (sa) sa.indeterminate = someSel && !allSel;
+  renderBulkBar();
 }
+function selectedResults(){ return currentRun ? currentRun.results.filter(r => selected.has(r.id)) : []; }
+function renderBulkBar(){
+  const run = currentRun, bar = $("#bulkBar"); const n = selected.size;
+  bar.hidden = !run || !n; if (bar.hidden) return;
+  const crits = run.rubric.criteria; const prevSetC = $("#bulkSetCrit")?.value, prevAgree = $("#bulkAgreeCrit")?.value;
+  bar.innerHTML = `<b>${n} selected</b>
+    <span class="grp">Agree with model on <select id="bulkAgreeCrit"><option value="">all criteria</option>${crits.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("")}</select><button class="btn sm primary" data-bulk="agree">✓ Agree</button></span>
+    <span class="grp">Set <select id="bulkSetCrit">${crits.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("")}</select> to <select id="bulkSetLevel"></select><button class="btn sm" data-bulk="set">Apply</button></span>
+    <span class="grp"><button class="btn sm" data-bulk="clear">Clear review</button><button class="btn sm ghost" data-bulk="none">Deselect</button></span>`;
+  if (prevSetC && crits.some(c => c.id === prevSetC)) $("#bulkSetCrit").value = prevSetC;
+  if (prevAgree != null) $("#bulkAgreeCrit").value = prevAgree;
+  const fillLv = () => { const c = crits.find(x => x.id === $("#bulkSetCrit").value); $("#bulkSetLevel").innerHTML = c.levels.map((L, li) => `<option value="${li}">${esc(lvName(c, li))}</option>`).reverse().join(""); };
+  fillLv(); $("#bulkSetCrit").onchange = fillLv;
+}
+$("#bulkBar").addEventListener("click", e => {
+  const b = e.target.closest("[data-bulk]"); if (!b) return; const rs = selectedResults(); const crits = currentRun.rubric.criteria;
+  if (b.dataset.bulk === "none") { selected.clear(); return renderResTable(); }
+  if (b.dataset.bulk === "agree") { const cid = $("#bulkAgreeCrit").value; const nm = cid ? crits.find(c => c.id === cid).name : null;
+    return reviewChange(`Agreed with the model on {n} score{s}${nm ? ` for "${nm}"` : ""} across ${rs.length} response${rs.length === 1 ? "" : "s"}`, rs, agreeOn(cid ? [cid] : null)); }
+  if (b.dataset.bulk === "set") { const cid = $("#bulkSetCrit").value, lv = +$("#bulkSetLevel").value, c = crits.find(x => x.id === cid);
+    return reviewChange(`Set "${c.name}" to ${lvName(c, lv)} on {n} response{s}`, rs, setLevel(cid, lv)); }
+  if (b.dataset.bulk === "clear") return reviewChange(`Cleared {n} review mark{s}`, rs, clearReview(null));
+});
+$("#resTable").addEventListener("change", e => {
+  if (e.target.id === "selAll") { visibleRows.forEach(({ r }) => e.target.checked ? selected.add(r.id) : selected.delete(r.id)); return renderResTable(); }
+  if (e.target.classList.contains("rowSel")) { const r = currentRun.results[+e.target.closest("tr").dataset.i]; e.target.checked ? selected.add(r.id) : selected.delete(r.id); e.target.closest("tr").classList.toggle("sel", e.target.checked); const sa = $("#selAll"); const all = visibleRows.every(({ r }) => selected.has(r.id)); sa.checked = all; sa.indeterminate = !all && selected.size > 0; renderBulkBar(); }
+});
 $("#resTable").onclick = e => {
   const h = e.target.closest("th[data-sort]"); if (h) { const k = h.dataset.sort; if (sortKey === k) sortDir *= -1; else { sortKey = k; sortDir = k === "name" ? 1 : -1; } return renderResTable(); }
-  const tr = e.target.closest("tr[data-i]"); if (tr) openDetail(visibleRows.findIndex(v => v.i === +tr.dataset.i));
+  const tr = e.target.closest("tr[data-i]"); if (!tr) return;
+  if (e.target.closest(".selcol")) { if (e.target.tagName !== "INPUT") { const cb = tr.querySelector(".rowSel"); cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", { bubbles: true })); } return; }
+  const r = currentRun.results[+tr.dataset.i], act = e.target.closest("[data-act]")?.dataset.act;
+  const cell = e.target.closest(".ccell"), c = cell && currentRun.rubric.criteria.find(x => x.id === cell.dataset.cid);
+  if (act === "toggle" && c) { const s = r.scores[c.id]; return s.human == null ? reviewChange(`Agreed with the model on "${c.name}" for ${r.name}`, [r], setLevel(c.id, s.level)) : reviewChange(`Cleared your review of "${c.name}" for ${r.name}`, [r], setLevel(c.id, null)); }
+  if (act === "pick" && c) return openLevelPicker(e.target.closest(".chipbtn"), r, c);
+  if (act === "rowagree") return reviewChange(`Agreed with the model on {n} score{s} for ${r.name}`, [r], agreeOn(null));
+  if (act === "rowclear") return reviewChange(`Cleared {n} review mark{s} for ${r.name}`, [r], clearReview(null));
+  if (e.target.closest("button, input, select")) return;
+  openDetail(visibleRows.findIndex(v => v.i === +tr.dataset.i));
 };
 $("#resFilter").oninput = renderResTable; $("#resFlagFilter").onchange = renderResTable;
 
+/* level picker popover */
+function openLevelPicker(anchor, r, c){
+  const pop = $("#lvPop"), s = r.scores[c.id], n = c.levels.length;
+  pop.innerHTML = `<div class="lvp-h">${esc(c.name)} · ${esc(r.name)}</div>` + c.levels.map((L, li) => ({ L, li })).reverse().map(({ L, li }) => `
+    <button class="lvp-o ${(s.human ?? -1) === li ? "on" : ""}" data-lv="${li}"><span class="lvb" style="background:${levelColor(li, n)}">${c.type === "noul" ? (li ? "✓" : "✕") : li}</span>
+      <span class="lvp-t"><b>${esc(lvName(c, li))}</b>${li === s.level ? ' <span class="tag">model · ' + pct(s.probs[li]) + "</span>" : ` <span class="hint">${pct(s.probs[li])}</span>`}<small>${esc(L.desc || "")}</small></span></button>`).join("")
+    + `<button class="lvp-o clear" data-lv="">Not reviewed</button>`;
+  pop.hidden = false;
+  const a = anchor.getBoundingClientRect(), w = Math.min(340, innerWidth - 24); pop.style.width = w + "px";
+  const left = Math.min(Math.max(12, a.left), innerWidth - w - 12), top = a.bottom + 6;
+  pop.style.left = left + "px"; pop.style.top = top + "px";
+  const ph = pop.offsetHeight; if (top + ph > innerHeight - 12) pop.style.top = Math.max(12, a.top - ph - 6) + "px";
+  pop.onclick = e => { const b = e.target.closest("[data-lv]"); if (!b) return; pop.hidden = true; const lv = b.dataset.lv === "" ? null : +b.dataset.lv;
+    reviewChange(lv == null ? `Cleared your review of "${c.name}" for ${r.name}` : lv === s.level ? `Agreed with the model on "${c.name}" for ${r.name}` : `Changed "${c.name}" to ${lvName(c, lv)} for ${r.name}`, [r], setLevel(c.id, lv)); };
+  (pop.querySelector(".lvp-o.on") || pop.querySelector(".lvp-o")).focus({ preventScroll: true });
+}
+document.addEventListener("mousedown", e => { const pop = $("#lvPop"); if (!pop.hidden && !pop.contains(e.target) && !e.target.closest(".chipbtn")) pop.hidden = true; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("#lvPop").hidden = true; });
+window.addEventListener("scroll", e => { if (!$("#lvPop").contains(e.target)) $("#lvPop").hidden = true; }, true);
+
 function openDetail(vi){
-  dlgIndex = vi; const { r } = visibleRows[vi]; const run = currentRun, rb = run.rubric;
+  dlgIndex = vi; const { r } = visibleRows[vi]; const run = currentRun, rb = run.rubric; dlgResultId = r.id;
+  const [rv, tot] = reviewedCount(run, r);
   $("#dlgTitle").textContent = r.name;
-  $("#dlgPills").innerHTML = r.error ? `<span class="pill bad">error</span>` : `<span class="pill acc">${pct(r.overall)}</span><span class="pill" style="color:${bandColor(r.band)}">${esc(r.band)}</span>${r.flags.length ? `<span class="pill warn">needs review</span>` : `<span class="pill good">no flags</span>`}`;
+  $("#dlgPills").innerHTML = r.error ? `<span class="pill bad">error</span>` : `<span class="pill acc">${pct(r.overall)}</span><span class="band"><i style="background:${bandColor(r.band)}"></i>${esc(r.band)}</span>${r.flags.length ? `<span class="pill warn">needs review</span>` : `<span class="pill good">no flags</span>`}<span class="pill">${rv}/${tot} reviewed</span>`;
   const crit = r.error ? `<div class="alert bad">${esc(r.error)}</div>` : rb.criteria.map(c => {
     const s = r.scores[c.id]; if (!s || s.error) return `<div class="cdetail"><b>${esc(c.name)}</b> <span class="pill bad">${esc(s?.error || "no answer")}</span></div>`;
-    const probs = c.levels.map((L, li) => `<div class="prob ${li === s.level ? "top" : ""} ${li === s.human ? "human" : ""}"><span title="${esc(L.desc)}">${esc(c.type === "noul" ? (li ? "Yes" : "No") : (L.label || "Level " + li))}</span><div class="track"><i style="width:${(s.probs[li]||0)*100}%;${li === s.level ? "background:" + levelColor(li, c.levels.length) : ""}"></i></div><span>${pct(s.probs[li])}</span></div>`).reverse().join("");
-    const L = c.levels[s.human ?? s.level] || {};
-    return `<div class="cdetail"><div class="row between"><div><b>${esc(c.name)}</b> <span class="hint">weight ${c.weight}${c.type === "score" ? ` · expected ${s.expected != null ? s.expected.toFixed(2) : "—"} of ${c.levels.length-1}` : ""} · confidence ${pct(s.confidence)}</span></div>
-      <label class="row hint" style="gap:6px">Human score <select data-cid="${c.id}" class="humanSel" style="width:auto"><option value="">— not checked —</option>${c.levels.map((L, li) => `<option value="${li}" ${s.human === li ? "selected" : ""}>${esc(c.type === "noul" ? (li ? "Yes" : "No") : (L.label || "Level " + li))}</option>`).join("")}</select></label></div>
-      <div class="hint" style="margin:4px 0 8px">${esc(L.desc || "")}</div>${probs}</div>`;
+    const n = c.levels.length, st = reviewState(s), fin = s.human ?? s.level;
+    const opts = c.levels.map((L, li) => `<button class="lvseg ${li === fin ? "on" : ""} ${li === s.level ? "model" : ""}" data-cid="${esc(c.id)}" data-lv="${li}" title="${esc(L.desc || "")}">
+        <span class="lvseg-top"><span class="lvb" style="background:${levelColor(li, n)}">${c.type === "noul" ? (li ? "✓" : "✕") : li}</span>${esc(lvName(c, li))}</span>
+        <span class="lvseg-p"><i style="width:${(s.probs[li] || 0) * 100}%"></i></span><span class="lvseg-m">${pct(s.probs[li])}${li === s.level ? " · model" : ""}</span></button>`).join("");
+    return `<div class="cdetail"><div class="row between"><div><b>${esc(c.name)}</b> <span class="hint">weight ${c.weight}${c.type === "score" ? ` · expected ${s.expected != null ? s.expected.toFixed(2) : "—"} of ${n - 1}` : ""} · confidence ${pct(s.confidence)}</span></div>
+        <div class="row" style="gap:6px"><span class="rvstate ${st}">${st === "none" ? "Not reviewed" : st === "agree" ? "✓ You agreed" : `✎ You changed it from ${esc(lvName(c, s.level))}`}</span>
+        ${st === "none" ? `<button class="btn sm primary" data-agree="${esc(c.id)}">✓ Agree</button>` : `<button class="btn sm ghost" data-unrev="${esc(c.id)}">Clear</button>`}</div></div>
+      <div class="hint" style="margin:4px 0 8px">${esc(c.levels[fin]?.desc || "")}</div>
+      <div class="lvsegs" style="grid-template-columns:repeat(${n},minmax(0,1fr))">${opts}</div></div>`;
   }).join("");
   const fb = r.llmFeedback ? `<div class="row between"><b>Feedback for the learner</b><span class="hint">written by ${esc(run.feedbackModel)}</span></div><div class="feedback">${esc(r.llmFeedback)}</div><details class="raw"><summary>Rubric-based feedback</summary><div class="feedback" style="margin-top:6px">${esc(r.feedback)}</div></details>`
     : `<div class="row between"><b>Feedback for the learner</b><span class="hint">built from the rubric level descriptions</span></div><div class="feedback">${esc(r.feedback || "—")}</div>${r.llmFeedbackError ? `<div class="alert warn">Feedback model failed: ${esc(r.llmFeedbackError)}</div>` : ""}`;
@@ -1611,32 +1832,34 @@ function openDetail(vi){
     ${r.flags?.length && !r.error ? `<div class="alert warn" style="margin:0 0 12px">${r.flags.map(esc).join(" · ")}</div>` : ""}
     <b>Response</b> <span class="hint">${r.words} words${r.onTopic != null ? ` · on-topic p=${pct(r.onTopic)}` : ""} · ${r.ms} ms</span>
     <div class="response-text" style="margin-top:6px">${esc(r.text)}</div>
-    <div style="margin-top:14px"><b>Criteria</b> <span class="hint">probability Nimble gave each level; highest level shown first</span></div>${crit}
+    <div class="row between" style="margin-top:16px"><div><b>Scores</b> <span class="hint">Bars show the probability Nimble gave each level. Click a level to change it.</span></div>
+      ${r.error ? "" : `<div class="row">${rv < tot ? `<button class="btn sm primary" id="agreeAllBtn">✓ Agree with the rest (${tot - rv})</button>` : ""}${rv ? `<button class="btn sm ghost" id="clearAllBtn">Clear all</button>` : ""}</div>`}</div>${crit}
     <div style="margin-top:16px">${r.error ? "" : fb}</div>
-    <div class="row" style="margin-top:10px">${r.error ? "" : `<button class="btn sm" id="copyFbBtn">Copy feedback</button><button class="btn sm" id="agreeAllBtn" title="Record the model's level as the human score on every criterion you have not changed">✓ I agree with the model on the rest</button>`}</div>
+    <div class="row" style="margin-top:10px">${r.error ? "" : `<button class="btn sm" id="copyFbBtn">Copy feedback</button>`}</div>
     <div class="row between" style="margin-top:20px;border-top:1px solid var(--border);padding-top:14px"><b style="font-size:15px">Audit trail</b><div class="row"><button class="btn sm" id="dlAuditBtn">⬇ Audit report (HTML)</button><button class="btn sm" id="dlRawBtn">⬇ Raw output (JSON)</button></div></div>
     ${auditHTML(run, r)}`;
   $("#dlAuditBtn").onclick = () => download(`audit-${slug(run.name)}-${slug(r.name)}.html`, auditDoc(run, [r]), "text/html");
   $("#dlRawBtn").onclick = () => download(`raw-${slug(run.name)}-${slug(r.name)}.json`, JSON.stringify(rawPack(run, r), null, 2), "application/json");
-  $$(".humanSel", $("#dlgBody")).forEach(sel => sel.onchange = () => {
-    const s = r.scores[sel.dataset.cid]; s.human = sel.value === "" ? null : +sel.value; s.humanAt = s.human == null ? null : new Date().toISOString();
-    scoreResult(rb, r); r.feedback = templateFeedback(rb, r); computeFlags(rb, r);
-    saveRun(run); renderResults(); const nv = visibleRows.findIndex(v => v.r === r); if (nv >= 0) openDetail(nv); toast("Human score saved");
-  });
-  const ab = $("#agreeAllBtn"); if (ab) ab.onclick = () => {
-    rb.criteria.forEach(c => { const s = r.scores[c.id]; if (s && !s.error && s.human == null) { s.human = s.level; s.humanAt = new Date().toISOString(); } });
-    scoreResult(rb, r); r.feedback = templateFeedback(rb, r); computeFlags(rb, r);
-    saveRun(run); renderResults(); const nv = visibleRows.findIndex(v => v.r === r); if (nv >= 0) openDetail(nv); toast("Marked as human-checked");
+  $("#dlgBody").onclick = e => {
+    const seg = e.target.closest(".lvseg"), ag = e.target.closest("[data-agree]"), un = e.target.closest("[data-unrev]");
+    const cid = seg?.dataset.cid || ag?.dataset.agree || un?.dataset.unrev; if (!cid) return; const c = rb.criteria.find(x => x.id === cid), s = r.scores[cid];
+    if (ag) return reviewChange(`Agreed with the model on "${c.name}"`, [r], setLevel(cid, s.level));
+    if (un) return reviewChange(`Cleared your review of "${c.name}"`, [r], setLevel(cid, null));
+    const lv = +seg.dataset.lv; reviewChange(lv === s.level ? `Agreed with the model on "${c.name}"` : `Changed "${c.name}" to ${lvName(c, lv)}`, [r], setLevel(cid, lv));
   };
-  const cb = $("#copyFbBtn"); if (cb) cb.onclick = () => navigator.clipboard?.writeText(r.llmFeedback || r.feedback).then(() => toast("Feedback copied"));
+  const ab = $("#agreeAllBtn"); if (ab) ab.onclick = () => reviewChange(`Agreed with the model on {n} score{s} for ${r.name}`, [r], agreeOn(null));
+  const ca = $("#clearAllBtn"); if (ca) ca.onclick = () => reviewChange(`Cleared {n} review mark{s} for ${r.name}`, [r], clearReview(null));
+  const cb = $("#copyFbBtn"); if (cb) cb.onclick = () => navigator.clipboard?.writeText(r.llmFeedback || r.feedback).then(() => toast("Feedback copied", { kind: "ok" }));
   $("#dlgPrev").disabled = vi <= 0; $("#dlgNext").disabled = vi >= visibleRows.length - 1;
   if (!$("#detailDlg").open) $("#detailDlg").showModal();
 }
 $("#dlgClose").onclick = () => $("#detailDlg").close();
+$("#detailDlg").addEventListener("close", () => { dlgResultId = null; });
 $("#dlgPrev").onclick = () => dlgIndex > 0 && openDetail(dlgIndex - 1);
 $("#dlgNext").onclick = () => dlgIndex < visibleRows.length - 1 && openDetail(dlgIndex + 1);
 $("#detailDlg").addEventListener("keydown", e => { if (e.key === "ArrowRight" && e.target.tagName !== "SELECT") $("#dlgNext").click(); if (e.key === "ArrowLeft" && e.target.tagName !== "SELECT") $("#dlgPrev").click(); });
 $("#detailDlg").addEventListener("click", e => { if (e.target === $("#detailDlg")) $("#detailDlg").close(); });
+
 
 /* ---------- exports ---------- */
 function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "export"; }
@@ -1689,7 +1912,8 @@ bindSetting("#setConf","conf",1); bindSetting("#setMargin","margin",1); bindSett
 $("#testConnBtn").onclick = () => checkConnection(true);
 $("#connBadge").onclick = () => { switchTab("settings"); checkConnection(true); };
 $("#themeSeg").onclick = e => { const b = e.target.closest("button"); if (!b) return; S.theme = b.dataset.theme; saveSettings(); applyTheme(); };
-$("#resetSettingsBtn").onclick = () => { if (confirm("Reset all settings to defaults?")) { S = Object.assign({}, DEFAULTS); saveSettings(); renderSettings(); checkConnection(true); } };
+$("#resetSettingsBtn").onclick = () => { const prev = clone(S); S = Object.assign({}, DEFAULTS); saveSettings(); renderSettings(); checkConnection(true);
+  toast("Settings reset to defaults", { undo: () => { S = prev; saveSettings(); renderSettings(); checkConnection(true); } }); };
 $("#optRelevance").onchange = preflight;
 
 /* ---------- tabs ---------- */
@@ -1700,8 +1924,9 @@ $("#tabs").onclick = e => { const b = e.target.closest("button"); if (b) switchT
 $("#loadSampleRespBtn").onclick = () => {
   const lib = library(); const smp = lib.find(r => r.id === "sample-reflective-diary") || SAMPLE_GRID();
   if (rubric.id !== smp.id && !loadRubric(smp)) return;
-  if ($("#responsesText").value.trim() && !confirm("Replace the responses box with the sample responses?")) return;
-  $("#responsesText").value = SAMPLE_RESPONSES; onResponsesChanged(); toast("Sample rubric and responses loaded");
+  const prevText = $("#responsesText").value;
+  $("#responsesText").value = SAMPLE_RESPONSES; onResponsesChanged();
+  toast("Sample rubric and responses loaded", prevText.trim() && prevText !== SAMPLE_RESPONSES ? { undo: () => { $("#responsesText").value = prevText; onResponsesChanged(); } } : { kind: "ok" });
 };
 renderSettings(); renderRubric(); setSub("edit");
 $("#responsesText").value = store.get("draftResponses", ""); onResponsesChanged();

@@ -27,7 +27,10 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
   or import a CSV (there's a responses template too), then run. "Try sample" loads a worked example.
 - **Results**: summary cards, average per criterion, outcome bands, and a sortable table.
   Click any row for the probability Nimble gave each level, feedback text, and the raw output.
-  Record a **human score** there; agreement between model and human appears on the Results tab.
+- **Reviewing scores**: every score in the table has a ✓ circle (tick = agree with the model) and a
+  dropdown on the level name (pick a different level = override). Each row has **✓ Agree rest**.
+  Tick rows on the left for the bulk bar: agree on all or one criterion, set a criterion to a level,
+  or clear. The detail view has a level button strip per criterion. Agreement stats update live.
 - **History**: every run is kept in this browser; reopen, rename, reuse its rubric, or export.
 - **Audit trail**: every response keeps the exact request sent to Ollama, the raw response text
   (with a SHA-256 fingerprint), timings, model version/digest, the parsed probabilities per level,
@@ -36,6 +39,10 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
 - **Exports**: CSV (includes raw request/response columns), JSON (everything), HTML report,
   Audit report (parsed + raw for every response), print. Runs are stored in the browser's database,
   so raw outputs are never trimmed.
+- **No confirm popups**: every action (delete, clear, rename, review changes) shows a toast in the
+  bottom-left with **Undo** for 10 seconds (hover to pause, or press Ctrl/Cmd+Z).
+- **Colours**: colour-blind-safe Okabe-Ito scale (vermillion → orange → sky → blue, low to high);
+  the rest of the UI is neutral ink, and status pills also carry ✓ / ! / ✕ icons.
 - **Settings**: model names, review thresholds, outcome bands, demo mode (simulated scores to try the UI without Ollama).
 
 ## Batch / automation
