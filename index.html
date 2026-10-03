@@ -146,20 +146,23 @@ dialog::backdrop{background:rgba(10,12,25,.55);backdrop-filter:blur(2px)}
 .feedback{white-space:pre-wrap;background:var(--accent-2);border-radius:10px;padding:12px 14px;font-size:13.5px}
 details.raw summary{cursor:pointer;color:var(--muted);font-size:12.5px;margin-top:12px}
 details.raw pre{font-family:var(--mono);font-size:11.5px;background:var(--surface-2);padding:10px;border-radius:9px;overflow:auto;max-height:280px}
-.toasts{position:fixed;left:16px;bottom:16px;z-index:200;display:flex;flex-direction:column;gap:8px;max-width:min(440px,calc(100vw - 32px));pointer-events:none}
-.toast{position:relative;overflow:hidden;pointer-events:auto;display:flex;align-items:center;gap:10px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-left:4px solid var(--muted);border-radius:12px;padding:10px 10px 12px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:13.5px;transform:translateX(-24px);opacity:0;transition:transform .2s,opacity .2s}
-.toast.in{transform:none;opacity:1} .toast.out{transform:translateX(-24px);opacity:0}
-.toast .ti{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--surface-2);color:var(--muted)}
-.toast.ok{border-left-color:var(--good)} .toast.ok .ti{background:var(--good-bg);color:var(--good)}
-.toast.warn{border-left-color:var(--warn)} .toast.warn .ti{background:var(--warn-bg);color:var(--warn)}
-.toast.bad{border-left-color:var(--bad)} .toast.bad .ti{background:var(--bad-bg);color:var(--bad)}
-.toast .tm{flex:1;line-height:1.35}
-.toast .tu{border:1px solid var(--border);background:var(--accent);color:var(--accent-text);font:inherit;font-weight:700;font-size:12.5px;padding:4px 10px;border-radius:7px;cursor:pointer}
-.toast .tx{border:0;background:transparent;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:2px 4px;border-radius:6px}
-.toast .tx:hover{background:var(--surface-2)}
-.toast .tp{position:absolute;left:0;bottom:0;height:3px;background:var(--muted);opacity:.35;animation:tp linear forwards}
-.toast.ok .tp{background:var(--good);opacity:.6}
-.toast.paused .tp{animation-play-state:paused}
+.toasts{position:fixed;left:16px;bottom:16px;z-index:200;max-width:min(400px,calc(100vw - 32px));pointer-events:none}
+.toast{pointer-events:auto;display:flex;align-items:center;gap:8px;height:38px;background:var(--accent);color:var(--accent-text);border-radius:99px;padding:0 6px 0 8px;box-shadow:0 6px 20px rgba(0,0,0,.2);font-size:13px;transform:translateY(12px);opacity:0;transition:transform .18s,opacity .18s}
+.toast.in{transform:none;opacity:1} .toast.out{transform:translateY(12px);opacity:0}
+.toast.bump{animation:tbump .25s}
+@keyframes tbump{0%{transform:scale(.97)}60%{transform:scale(1.02)}100%{transform:none}}
+.toast .ti{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;background:rgba(255,255,255,.16)}
+.toast.ok .ti{background:var(--data);color:#fff} .toast.warn .ti{background:#e69f00;color:#1d1d1b} .toast.bad .ti{background:#d55e00;color:#fff}
+.toast .tm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast .tc{flex:none;background:var(--data);color:#fff;border-radius:99px;padding:0 7px;font-size:11.5px;font-weight:800;line-height:18px}
+.toast .tu{flex:none;border:0;background:var(--accent-text);color:var(--accent);font:inherit;font-weight:700;font-size:12px;padding:4px 11px;border-radius:99px;cursor:pointer}
+.toast .tx{flex:none;border:0;background:transparent;color:inherit;opacity:.6;font-size:17px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:99px}
+.toast .tx:hover{opacity:1;background:rgba(255,255,255,.12)}
+.flash{animation:flash 1.4s ease-out}
+@keyframes flash{0%{box-shadow:inset 0 0 0 2px var(--data);background:var(--data-soft)}100%{box-shadow:inset 0 0 0 2px transparent}}
+.cellsaved{position:absolute;right:8px;bottom:6px;font-size:10.5px;font-weight:700;color:var(--link);opacity:0;animation:saved 1.6s ease-out}
+@keyframes saved{0%,70%{opacity:1}100%{opacity:0}}
+td.ccell{position:relative}
 @keyframes tp{from{width:100%}to{width:0}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}.toast .tp{animation:none;width:100%}}
 .alert{border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px}
@@ -593,7 +596,7 @@ I was asked to lead the weekly stand-up…"></textarea>
       </div>
       <div class="bulkbar no-print" id="bulkBar" hidden></div>
       <div class="tablewrap"><table class="data" id="resTable"></table></div>
-      <p class="hint no-print" style="margin-top:8px">Tick the circle on a score to agree with the model, click the level name to pick a different one, or select rows to review in bulk. Click a learner for the full breakdown and audit trail. Every change can be undone for 10 seconds (or Ctrl+Z).</p>
+      <p class="hint no-print" style="margin-top:8px">Tick the circle on a score to agree with the model, click the level name to pick a different one, or select rows to review in bulk. Click a learner for the full breakdown and audit trail. Single edits are confirmed in the cell; press Ctrl+Z (⌘Z) to step back through recent changes.</p>
     </div>
     <div class="card" id="alignCard" hidden>
       <div class="row between" style="align-items:flex-start">
@@ -767,7 +770,7 @@ python3 serve.py</pre>
     <li><span class="n">4</span> Tick rows on the left to work on several at once. <span class="n">5</span> The <b>bulk bar</b> appears: agree, set a criterion to a level, or clear.</li>
     <li><span class="n">6</span> Click any column heading to sort. Click a learner's name for the full breakdown.</li>
   </ol>
-  <p><b>That's it: you've run your first evaluation.</b> Every change shows a message in the bottom-left corner with <b>Undo</b> for 10 seconds (or press Ctrl+Z / ⌘Z).</p>
+  <p><b>That's it: you've run your first evaluation.</b> Single grading edits are confirmed right in the cell. Bigger actions (deletes, imports, bulk changes) show one small message in the bottom-left corner with <b>Undo</b> for 10 seconds. Ctrl+Z / ⌘Z steps back through your recent actions at any time.</p>
 
   <h3>Next steps</h3>
   <ul>
@@ -1030,7 +1033,7 @@ ollama pull tev1:0.8b     # tiny, for quick tests (experimental)</pre></li>
     <dt>The request is too long</dt><dd>nimble reads about 8,000 tokens. Shorten level descriptions or split long responses into sections.</dd>
     <dt>Scores look too harsh</dt><dd>Common with automated judges. Add your graders' expectations to the level descriptions, and check the "model lower" count in the alignment report.</dd>
     <dt>Everything is slow</dt><dd>The first request loads the model into memory (up to a minute). After that, nimble takes about a second per response. Set keep_alive to keep it loaded.</dd>
-    <dt>I deleted something by mistake</dt><dd>Click <b>Undo</b> in the bottom-left message within 10 seconds, or press Ctrl+Z / ⌘Z.</dd>
+    <dt>I deleted something by mistake</dt><dd>Click <b>Undo</b> in the bottom-left message within 10 seconds, or press Ctrl+Z / ⌘Z (repeat it to step further back).</dd>
   </dl>
 </article>
 
@@ -1086,27 +1089,38 @@ function levelColor(i, n){
   return "#" + a.map((v, j) => Math.round(v + (b[j] - v) * f).toString(16).padStart(2, "0")).join("");
 }
 const TOAST_ICON = { info: "i", ok: "✓", warn: "!", bad: "✕" };
-let lastUndo = null;
+/* One compact toast that replaces itself (never stacks). Repeats of the same message show a count.
+   Every undoable action also goes on undoStack, so Ctrl/Cmd+Z steps back through recent actions. */
+const undoStack = [];
+let toastState = null;
+function pushUndo(label, run){ undoStack.push({ label, run }); if (undoStack.length > 30) undoStack.shift(); }
+function runUndo(entry){
+  const i = undoStack.indexOf(entry); if (i < 0) return; undoStack.splice(i, 1);
+  try { entry.run(); toast(`Undone: ${entry.label}`, { kind: "info", ms: 3000 }); } catch (e) { toast("Couldn't undo: " + e.message, { kind: "bad" }); }
+}
 function toast(msg, opts = {}){
-  const { undo = null, kind = undo ? "ok" : "info", ms = undo ? 10000 : 4500 } = opts;
-  const box = $("#toasts"), t = document.createElement("div");
-  t.className = `toast ${kind}`; t.setAttribute("role", kind === "bad" ? "alert" : "status");
-  t.innerHTML = `<span class="ti" aria-hidden="true">${TOAST_ICON[kind] || "i"}</span><span class="tm">${esc(msg)}</span>${undo ? `<button class="tu">Undo</button>` : ""}<button class="tx" aria-label="Dismiss">×</button><i class="tp" style="animation-duration:${ms}ms"></i>`;
-  box.appendChild(t); while (box.children.length > 5) box.firstElementChild.remove();
-  let timer = null, left = ms, start = 0;
-  const close = () => { clearTimeout(timer); if (lastUndo && lastUndo.el === t) lastUndo = null; t.classList.add("out"); setTimeout(() => t.remove(), 220); };
-  const arm = () => { start = Date.now(); timer = setTimeout(close, left); };
-  t.addEventListener("mouseenter", () => { clearTimeout(timer); left -= Date.now() - start; t.classList.add("paused"); });
-  t.addEventListener("mouseleave", () => { t.classList.remove("paused"); arm(); });
+  const { undo = null, kind = undo ? "ok" : "info", ms = undo ? 10000 : (kind === "bad" ? 6000 : 3500) } = opts;
+  const box = $("#toasts"); let entry = null;
+  if (undo) { pushUndo(msg, undo); entry = undoStack[undoStack.length - 1]; }
+  let t = box.firstElementChild;
+  const same = toastState && t && toastState.msg === msg && !t.classList.contains("out");
+  if (!t || t.classList.contains("out")) { box.innerHTML = ""; t = document.createElement("div"); box.appendChild(t); requestAnimationFrame(() => t.classList.add("in")); }
+  else if (!same) { t.classList.remove("bump"); void t.offsetWidth; t.classList.add("bump"); }
+  const count = same ? toastState.count + 1 : 1;
+  clearTimeout(toastState?.timer);
+  t.className = `toast ${kind} in`; t.setAttribute("role", kind === "bad" ? "alert" : "status"); t.title = msg;
+  t.innerHTML = `<span class="ti" aria-hidden="true">${TOAST_ICON[kind] || "i"}</span><span class="tm">${esc(msg)}</span>${count > 1 ? `<span class="tc">×${count}</span>` : ""}${entry ? `<button class="tu">Undo</button>` : ""}<button class="tx" aria-label="Dismiss">×</button>`;
+  const st = toastState = { msg, count, timer: null, left: ms, start: 0 };
+  const close = () => { clearTimeout(st.timer); if (toastState !== st) return; t.classList.add("out"); setTimeout(() => { if (toastState === st) { t.remove(); toastState = null; } }, 200); };
+  const arm = () => { st.start = Date.now(); st.timer = setTimeout(close, st.left); };
+  t.onmouseenter = () => { clearTimeout(st.timer); st.left -= Date.now() - st.start; };
+  t.onmouseleave = arm;
   t.querySelector(".tx").onclick = close;
-  if (undo) {
-    const run = () => { close(); try { undo(); toast("Undone", { kind: "info", ms: 3000 }); } catch (e) { toast("Couldn't undo: " + e.message, { kind: "bad" }); } };
-    t.querySelector(".tu").onclick = run; lastUndo = { el: t, run };
-  }
-  requestAnimationFrame(() => t.classList.add("in")); arm();
+  if (entry) t.querySelector(".tu").onclick = () => { close(); runUndo(entry); };
+  arm();
 }
 document.addEventListener("keydown", e => {
-  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "z" && lastUndo && !e.target.closest("input, textarea, [contenteditable]")) { e.preventDefault(); lastUndo.run(); }
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "z" && undoStack.length && !e.target.closest("input, textarea, [contenteditable]")) { e.preventDefault(); runUndo(undoStack[undoStack.length - 1]); }
 });
 
 
@@ -2105,7 +2119,7 @@ $("#previewBtn").onclick = () => {
 };
 
 /* ---------- audit trail ---------- */
-const APP_VERSION = "1.3.0";
+const APP_VERSION = "1.3.1";
 async function sha256(text){
   try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); } catch { return null; }
 }
@@ -2319,7 +2333,7 @@ let selected = new Set(), dlgResultId = null;
 const lvName = (c, li) => c.type === "noul" ? (li ? "Yes" : "No") : (c.levels[li]?.label || `Level ${li}`);
 function refreshResult(rb, r){ scoreResult(rb, r); r.feedback = templateFeedback(rb, r); computeFlags(rb, r); }
 function refreshDetail(){ if (!$("#detailDlg").open || !dlgResultId) return; const vi = visibleRows.findIndex(v => v.r.id === dlgResultId); if (vi >= 0) openDetail(vi); }
-function reviewChange(label, results, mutate){
+function reviewChange(label, results, mutate, quiet){
   const run = currentRun; if (!run) return;
   results = results.filter(r => !r.error);
   if (!results.length) return toast("Nothing to change: the selected responses have no scores", { kind: "warn" });
@@ -2328,14 +2342,26 @@ function reviewChange(label, results, mutate){
   if (!changed) { before.forEach(([r, sc]) => { r.scores = sc; refreshResult(run.rubric, r); }); return toast("No changes: those scores were already set that way", { kind: "info" }); }
   logReview(run, new Map(before.map(([r, sc]) => [r.id, sc])), results, "change");
   saveRun(run); renderResults(); refreshDetail();
-  toast(label.replace("{n}", changed).replace("{s}", changed === 1 ? "" : "s"), { undo: () => {
+  const msg = label.replace("{n}", changed).replace("{s}", changed === 1 ? "" : "s");
+  const undoFn = () => {
     const cur = new Map(results.map(r => [r.id, clone(r.scores)]));
     before.forEach(([r, sc]) => { r.scores = sc; refreshResult(run.rubric, r); });
     logReview(run, cur, results, "undo");
     saveRun(run); renderResults(); refreshDetail();
-  } });
+    if (quiet) flashCell(results[0].id, quiet);
+  };
+  if (quiet) { pushUndo(msg, undoFn); flashCell(results[0].id, quiet, true); }
+  else toast(msg, { undo: undoFn });
 }
 const now = () => new Date().toISOString();
+/* In-place confirmation for single-score edits: highlight the cell (table and detail view) instead of a message. */
+function flashCell(rid, cid, saved){
+  const i = currentRun?.results.findIndex(r => r.id === rid); if (i == null || i < 0) return;
+  const td = $(`#resTable tr[data-i="${i}"] td.ccell[data-cid="${CSS.escape(cid)}"]`);
+  if (td) { td.classList.remove("flash"); void td.offsetWidth; td.classList.add("flash"); if (saved) td.insertAdjacentHTML("beforeend", `<span class="cellsaved">✓ saved</span>`); }
+  const cd = $(`#dlgBody .lvseg[data-cid="${CSS.escape(cid)}"]`)?.closest(".cdetail");
+  if (cd) { cd.classList.remove("flash"); void cd.offsetWidth; cd.classList.add("flash"); }
+}
 function agreeOn(cids){ return r => { let n = 0; currentRun.rubric.criteria.forEach(c => { if (cids && !cids.includes(c.id)) return; const s = r.scores[c.id]; if (s && !s.error && s.human == null) { s.human = s.level; s.humanAt = now(); n++; } }); return n; }; }
 function setLevel(cid, lv){ return r => { const s = r.scores[cid]; if (!s || s.error || s.human === lv) return 0; s.human = lv; s.humanAt = lv == null ? null : now(); return 1; }; }
 function clearReview(cids){ return r => { let n = 0; Object.entries(r.scores).forEach(([cid, s]) => { if ((!cids || cids.includes(cid)) && s && s.human != null) { s.human = null; s.humanAt = null; n++; } }); return n; }; }
@@ -2410,7 +2436,7 @@ $("#resTable").onclick = e => {
   if (e.target.closest(".selcol")) { if (e.target.tagName !== "INPUT") { const cb = tr.querySelector(".rowSel"); cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", { bubbles: true })); } return; }
   const r = currentRun.results[+tr.dataset.i], act = e.target.closest("[data-act]")?.dataset.act;
   const cell = e.target.closest(".ccell"), c = cell && currentRun.rubric.criteria.find(x => x.id === cell.dataset.cid);
-  if (act === "toggle" && c) { const s = r.scores[c.id]; return s.human == null ? reviewChange(`Agreed with the model on "${c.name}" for ${r.name}`, [r], setLevel(c.id, s.level)) : reviewChange(`Cleared your review of "${c.name}" for ${r.name}`, [r], setLevel(c.id, null)); }
+  if (act === "toggle" && c) { const s = r.scores[c.id]; return s.human == null ? reviewChange(`Agreed with the model on "${c.name}" for ${r.name}`, [r], setLevel(c.id, s.level), c.id) : reviewChange(`Cleared your review of "${c.name}" for ${r.name}`, [r], setLevel(c.id, null), c.id); }
   if (act === "pick" && c) return openLevelPicker(e.target.closest(".chipbtn"), r, c);
   if (act === "rowagree") return reviewChange(`Agreed with the model on {n} score{s} for ${r.name}`, [r], agreeOn(null));
   if (act === "rowclear") return reviewChange(`Cleared {n} review mark{s} for ${r.name}`, [r], clearReview(null));
@@ -2432,7 +2458,7 @@ function openLevelPicker(anchor, r, c){
   pop.style.left = left + "px"; pop.style.top = top + "px";
   const ph = pop.offsetHeight; if (top + ph > innerHeight - 12) pop.style.top = Math.max(12, a.top - ph - 6) + "px";
   pop.onclick = e => { const b = e.target.closest("[data-lv]"); if (!b) return; pop.hidden = true; const lv = b.dataset.lv === "" ? null : +b.dataset.lv;
-    reviewChange(lv == null ? `Cleared your review of "${c.name}" for ${r.name}` : isBlind() ? `Graded "${c.name}" as ${lvName(c, lv)} for ${r.name}` : lv === s.level ? `Agreed with the model on "${c.name}" for ${r.name}` : `Changed "${c.name}" to ${lvName(c, lv)} for ${r.name}`, [r], setLevel(c.id, lv)); };
+    reviewChange(lv == null ? `Cleared your review of "${c.name}" for ${r.name}` : isBlind() ? `Graded "${c.name}" as ${lvName(c, lv)} for ${r.name}` : lv === s.level ? `Agreed with the model on "${c.name}" for ${r.name}` : `Changed "${c.name}" to ${lvName(c, lv)} for ${r.name}`, [r], setLevel(c.id, lv), c.id); };
   (pop.querySelector(".lvp-o.on") || pop.querySelector(".lvp-o")).focus({ preventScroll: true });
 }
 document.addEventListener("mousedown", e => { const pop = $("#lvPop"); if (!pop.hidden && !pop.contains(e.target) && !e.target.closest(".chipbtn")) pop.hidden = true; });
@@ -2484,9 +2510,9 @@ function openDetail(vi){
   $("#dlgBody").onclick = e => {
     const seg = e.target.closest(".lvseg"), ag = e.target.closest("[data-agree]"), un = e.target.closest("[data-unrev]");
     const cid = seg?.dataset.cid || ag?.dataset.agree || un?.dataset.unrev; if (!cid) return; const c = rb.criteria.find(x => x.id === cid), s = r.scores[cid];
-    if (ag) return reviewChange(`Agreed with the model on "${c.name}"`, [r], setLevel(cid, s.level));
-    if (un) return reviewChange(`Cleared your review of "${c.name}"`, [r], setLevel(cid, null));
-    const lv = +seg.dataset.lv; reviewChange(blind ? `Graded "${c.name}" as ${lvName(c, lv)}` : lv === s.level ? `Agreed with the model on "${c.name}"` : `Changed "${c.name}" to ${lvName(c, lv)}`, [r], setLevel(cid, lv));
+    if (ag) return reviewChange(`Agreed with the model on "${c.name}"`, [r], setLevel(cid, s.level), cid);
+    if (un) return reviewChange(`Cleared your review of "${c.name}"`, [r], setLevel(cid, null), cid);
+    const lv = +seg.dataset.lv; reviewChange(blind ? `Graded "${c.name}" as ${lvName(c, lv)}` : lv === s.level ? `Agreed with the model on "${c.name}"` : `Changed "${c.name}" to ${lvName(c, lv)}`, [r], setLevel(cid, lv), cid);
   };
   const ab = $("#agreeAllBtn"); if (ab) ab.onclick = () => reviewChange(`Agreed with the model on {n} score{s} for ${r.name}`, [r], agreeOn(null));
   const ca = $("#clearAllBtn"); if (ca) ca.onclick = () => reviewChange(`Cleared {n} review mark{s} for ${r.name}`, [r], clearReview(null));

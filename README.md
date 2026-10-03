@@ -51,7 +51,7 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
 - **Model vs human alignment**: under the results table. Exact match, within one level, model higher/lower,
   kappa, a model-vs-human grid per criterion, per-response comparison, and a full change history of every
   grade given, changed, cleared or undone. Download it for the whole run or per learner.
-- **No confirm popups**: every action (delete, clear, rename, review changes) shows a toast in the
+- **No confirm popups**: single grading edits are confirmed in the cell itself; other actions (delete, clear, rename, bulk review) show ONE compact message in the
   bottom-left with **Undo** for 10 seconds (hover to pause, or press Ctrl/Cmd+Z).
 - **Colours**: colour-blind-safe Okabe-Ito scale (vermillion → orange → sky → blue, low to high);
   the rest of the UI is neutral ink, and status pills also carry ✓ / ! / ✕ icons.
