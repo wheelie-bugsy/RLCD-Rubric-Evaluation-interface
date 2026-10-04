@@ -103,6 +103,6 @@ PERSUADE and ELLIPSE are CC BY-NC-SA 4.0: internal benchmarking with attribution
 | `help/*.png` | Annotated screenshots used by the Help tab |
 | `benchmark.py` | Command-line benchmark runner (standard library only) |
 | `tools/build_rubrics.py` | Rebuilds the benchmark rubrics from the official rubric files and checks they're word for word |
-| `datasets/bench/` | Prepared benchmark data (one CSV per prompt) and `manifest.json` the app loads. In the zip; in git only `rubrics.json` (run `python3 benchmark.py prepare`) |
+| `datasets/bench/` | Prepared benchmark data (one CSV per prompt) and `manifest.json` the app loads |
 | `datasets/rubrics/` | Benchmark rubrics as importable CSVs, plus `VERIFY.md` |
 | `datasets/asap7/`, `persuade/`, `ellipse/` | Original downloads (not in the zip; see above for where to get them) |

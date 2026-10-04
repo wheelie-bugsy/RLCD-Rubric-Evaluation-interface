@@ -1,7 +1,6 @@
 __pycache__/
-# Benchmark data: download the originals and run `python3 benchmark.py prepare` (see README)
-datasets/*
-!datasets/rubrics/
-!datasets/bench/
-datasets/bench/*
-!datasets/bench/rubrics.json
+# Original downloads: see README for where to get them
+datasets/asap7/
+datasets/persuade/
+datasets/ellipse/
+datasets/kaggle-essay-grading/
