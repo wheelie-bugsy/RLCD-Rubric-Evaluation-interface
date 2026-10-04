@@ -85,16 +85,17 @@ def load_rubric(path):
                 else:
                     out.append({"name": c["name"], "type": "score", "weight": c.get("weight", 1), "instructions": c.get("instructions", ""),
                                 "levels": [{"label": L["label"], "desc": d, "points": L["points"]} for L, d in zip(rb["levels"], c["cells"]) if d.strip()]})
-            rb = {"name": rb.get("name"), "prompt": rb.get("prompt"), "criteria": out}
+            rb = {"name": rb.get("name"), "prompt": rb.get("prompt"), "context": rb.get("context", ""), "criteria": out}
         return rb
     rows = list(csv.reader(open(path, encoding="utf-8-sig"), delimiter="\t" if path.lower().endswith(".tsv") else ","))
     rows = [[x.strip() for x in r] for r in rows]
-    name = prompt = ""; hi = None
+    name = prompt = context = ""; hi = None
     for i, r in enumerate(rows):
         a = (r[0] if r else "").lower()
         if not any(r) or a.startswith("#"): continue
         if a in ("rubric name", "rubric", "name", "title") and not any(r[2:]): name = r[1] if len(r) > 1 else ""; continue
         if a in ("assignment", "prompt", "task") and not any(r[2:]): prompt = r[1] if len(r) > 1 else ""; continue
+        if a in ("context", "context for the model", "about the learners", "about the writers") and not any(r[2:]): context = r[1] if len(r) > 1 else ""; continue
         hi = i; break
     if hi is None: sys.exit("No header row found in %s" % path)
     H = [h.lower() for h in rows[hi]]
@@ -128,7 +129,7 @@ def load_rubric(path):
         crits.append({"name": g(col("name")), "type": typ, "weight": w, "instructions": g(col("q")), "levels": levs})
     # same order as the app: score criteria first, then yes/no checks
     crits = [c for c in crits if c["type"] != "noul"] + [c for c in crits if c["type"] == "noul"]
-    return {"name": name, "prompt": prompt, "criteria": crits}
+    return {"name": name, "prompt": prompt, "context": context, "criteria": crits}
 
 def load_responses(path):
     text = open(path, encoding="utf-8-sig").read()
@@ -177,7 +178,9 @@ def main():
     with open(a.out, "w", newline="", encoding="utf-8-sig") as f, open(audit_path, "w", encoding="utf-8") as audit:
         w = csv.writer(f); w.writerow(head)
         for i, r in enumerate(resps, 1):
-            state = ("ASSIGNMENT GIVEN TO THE LEARNER:\n%s\n\n" % rb["prompt"] if rb.get("prompt") else "") + "LEARNER'S WRITTEN RESPONSE:\n" + r["text"]
+            state = (("ASSIGNMENT GIVEN TO THE LEARNER:\n%s\n\n" % rb["prompt"] if rb.get("prompt") else "")
+                     + ("CONTEXT FOR SCORING:\n%s\n\n" % rb["context"].strip() if (rb.get("context") or "").strip() else "")
+                     + "LEARNER'S WRITTEN RESPONSE:\n" + r["text"])
             t0 = time.time(); started = datetime.datetime.now(datetime.timezone.utc).isoformat()
             body = {"model": a.model, "state": state, "questions": qs}
             try:

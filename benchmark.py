@@ -13,13 +13,18 @@ unattended runs. Python 3.8+, standard library only.
   3. Run a benchmark (resumes automatically if the output file already exists):
        python3 benchmark.py run --dataset ellipse --prompt "Distance learning" --sample 200 -o ellipse-dl-nimble.csv
        python3 benchmark.py run --dataset asap7 --sample all --model tev1
+       python3 benchmark.py run --dataset asap7 --rubric adjusted          # the "Adjusted" rubric
        python3 benchmark.py run --dataset persuade --prompt "Car-free cities" --provider openai \\
            --url https://api.openai.com/v1 --model gpt-4.1-mini        # key from OPENAI_API_KEY
 
   Open the results CSV in the app: Benchmark tab > Explore > Open results CSV.
 
 Rubrics come from datasets/bench/rubrics.json, built word for word from each dataset's
-official rubric by tools/build_rubrics.py (see datasets/rubrics/VERIFY.md).
+official rubric by tools/build_rubrics.py (see datasets/rubrics/VERIFY.md). With
+--rubric adjusted, the "Adjusted" version from datasets/bench/rubrics_adjusted.json is used
+instead: the same level text plus a context block sent with every essay and a plain question
+per criterion (tools/build_adjusted_rubrics.py, datasets/rubrics/ADJUSTED.md). --context
+replaces the context block with your own text.
 Every exchange with the model is written verbatim to <out>.audit.jsonl.
 """
 import argparse, csv, datetime, hashlib, json, math, os, re, sys, time, urllib.error, urllib.request
@@ -133,6 +138,8 @@ def build_request(rb, row, prompt_info, model, keep_alive=None):
         parts.append("ASSIGNMENT GIVEN TO THE WRITER:\n" + prompt_info["assignment"])
     if prompt_info.get("source_text"):
         parts.append("SOURCE TEXT GIVEN TO THE WRITER:\n" + prompt_info["source_text"])
+    if rb.get("context"):
+        parts.append("CONTEXT FOR SCORING:\n" + rb["context"])
     if row.get("context"):
         parts.append("FULL ESSAY (context only):\n" + row["context"])
     label = "ARGUMENT ELEMENT TO SCORE (%s)" % row["element_type"] if row.get("element_type") else "ESSAY"
@@ -428,6 +435,15 @@ def run(args):
     pinfo = find_prompt(ds, args.prompt)
     rid = pinfo.get("rubric") or ds["rubric"]
     rb = m["rubrics"][rid]
+    if args.rubric == "adjusted":
+        f = os.path.join(BENCH, "rubrics_adjusted.json")
+        adj = json.load(open(f, encoding="utf-8")) if os.path.exists(f) else {}
+        if rid + "_adjusted" not in adj:
+            sys.exit("No Adjusted rubric for %s. Run: python3 tools/build_adjusted_rubrics.py" % rid)
+        rid = rid + "_adjusted"
+        rb = adj[rid]
+    if args.context is not None:
+        rb = dict(rb, context=args.context.strip())
     keys = [c["key"] for c in rb["criteria"]]
     rows = list(csv.DictReader(open(os.path.join(BENCH, pinfo["file"]), encoding="utf-8")))
     n = len(rows) if args.sample == "all" else int(args.sample)
@@ -438,7 +454,8 @@ def run(args):
         full = {r["essay_id"]: r["text"] for r in csv.DictReader(open(os.path.join(BENCH, sp["file"]), encoding="utf-8"))} if sp else {}
         for r in picked:
             r["context"] = full.get(r["essay"], "")
-    out = args.output or "%s-%s-%s.csv" % (ds["id"], slug(pinfo["name"]), slug(args.model))
+    tag = " · Adjusted" if rid.endswith("_adjusted") else ""
+    out = args.output or "%s-%s%s-%s.csv" % (ds["id"], slug(pinfo["name"]), "-adjusted" if tag else "", slug(args.model))
     done = set()
     if os.path.exists(out):
         for r in csv.DictReader(open(out, encoding="utf-8")):
@@ -451,14 +468,14 @@ def run(args):
     if new_file:
         w.writeheader()
     faud = open(re.sub(r"\.csv$", "", out) + ".audit.jsonl", "a", encoding="utf-8")
-    run_id = args.run_id or slug("%s-%s-%s-%s" % (ds["id"], pinfo["name"], args.model, args.seed))
+    run_id = args.run_id or slug("%s-%s-%s%s-%s" % (ds["id"], pinfo["name"], args.model, "-adjusted" if tag else "", args.seed))
     todo = [r for r in picked if r["essay_id"] not in done]
     print("%s / %s: %d picked (%s, seed %d), %d already scored, %d to go -> %s" % (ds["name"], pinfo["name"], len(picked), args.sampling, args.seed, len(picked) - len(todo), len(todo), out))
     t_all = time.time()
     for i, row in enumerate(todo, 1):
         body = build_request(rb, row, pinfo, args.model, args.keep_alive)
         audit = {"essay_id": row["essay_id"], "provider": args.provider, "startedAt": datetime.datetime.now().isoformat()}
-        res = {"run_id": run_id, "run_name": args.name or "%s · %s · %s" % (ds["name"], pinfo["name"], args.model), "dataset": ds["id"], "rubric_id": rid,
+        res = {"run_id": run_id, "run_name": args.name or "%s · %s%s · %s" % (ds["name"], pinfo["name"], tag, args.model), "dataset": ds["id"], "rubric_id": rid,
                "prompt": pinfo["name"], "model": args.model, "provider": args.provider, "scored_at": audit["startedAt"]}
         for k in RESULT_BASE[7:] + ds["segments"] + ["text"]:
             if k in row:
@@ -541,6 +558,8 @@ def main():
     rp.add_argument("--sample", default="200", help="number of essays, or 'all' (default 200)")
     rp.add_argument("--sampling", default="stratified", choices=["stratified", "random", "first"])
     rp.add_argument("--seed", type=int, default=42)
+    rp.add_argument("--rubric", default="official", choices=["official", "adjusted"], help="official (word for word, default) or adjusted")
+    rp.add_argument("--context", help="text sent with every essay under CONTEXT FOR SCORING (replaces the rubric's own; '' sends none)")
     rp.add_argument("--provider", default="ollama", choices=["ollama", "jev", "openai", "anthropic"])
     rp.add_argument("--url", default=os.environ.get("OLLAMA_URL", "http://localhost:11434"), help="API base URL")
     rp.add_argument("--model", default="nimble")
