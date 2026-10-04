@@ -23,6 +23,9 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
 
 - **Rubrics**: your rubric library on the left. The **Edit** view shows the rubric as a grid
   (criteria as rows, levels as columns, lowest to highest). Click any cell to edit it.
+  **Context for the model** (optional) is sent with every response, next to the assignment: say who the
+  learners are and which standard to judge against, so the model doesn't judge them as expert writers.
+  The benchmark rubrics (official and Adjusted) are listed under **Dataset rubrics**; Save keeps your own copy.
   **Import & template**: download the blank or sample CSV template, fill it in Excel, then drop,
   upload or paste it. You get a row-by-row preview (ready / warning / error) before anything is saved.
   **Export CSV** turns any rubric back into the same template layout.
@@ -58,7 +61,9 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
 - **Benchmark** (◎ tab): checks the model against people before you trust it. Pick a public human-graded
   dataset (ASAP-AES set 7, PERSUADE 2.0 holistic or argument elements, ELLIPSE) and one prompt, choose a sample
   (stratified by human score, seeded so it's repeatable), and run. Each essay is scored with the dataset's own
-  rubric, word for word (`datasets/rubrics/VERIFY.md` records the check). Progress is saved after every essay;
+  rubric, word for word (`datasets/rubrics/VERIFY.md` records the check), or its **Adjusted** version: the same
+  level text plus a context block sent with every essay (who the writers are, which standard to apply) and a plain
+  question per criterion (`datasets/rubrics/ADJUSTED.md`). Progress is saved after every essay;
   pause and resume any time. **Explore results** compares model and humans: QWK, exact / within one, bias,
   rater-vs-rater ceiling, filters by grade, gender, ELL status and so on, charts, and every essay with both
   scores and the exact request and reply. **⬇ Full report** saves all of it as one HTML file (analysis, charts per criterion,
@@ -105,6 +110,7 @@ PERSUADE and ELLIPSE are CC BY-NC-SA 4.0: internal benchmarking with attribution
 | `help/*.png` | Annotated screenshots used by the Help tab |
 | `benchmark.py` | Command-line benchmark runner (standard library only) |
 | `tools/build_rubrics.py` | Rebuilds the benchmark rubrics from the official rubric files and checks they're word for word |
+| `tools/build_adjusted_rubrics.py` | Builds the "Adjusted" rubrics (same levels, plus context and questions) and checks the levels are unchanged |
 | `datasets/bench/` | Prepared benchmark data (one CSV per prompt) and `manifest.json` the app loads |
-| `datasets/rubrics/` | Benchmark rubrics as importable CSVs, plus `VERIFY.md` |
+| `datasets/rubrics/` | Benchmark rubrics (official and Adjusted) as importable CSVs, plus `VERIFY.md` and `ADJUSTED.md` |
 | `datasets/asap7/`, `persuade/`, `ellipse/` | Original downloads (not in the zip; see above for where to get them) |
