@@ -61,7 +61,9 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
   rubric, word for word (`datasets/rubrics/VERIFY.md` records the check). Progress is saved after every essay;
   pause and resume any time. **Explore results** compares model and humans: QWK, exact / within one, bias,
   rater-vs-rater ceiling, filters by grade, gender, ELL status and so on, charts, and every essay with both
-  scores and the exact request and reply. You can also upload your own graded CSV and benchmark your own rubric.
+  scores and the exact request and reply. **⬇ Full report** saves all of it as one HTML file (analysis, charts per criterion,
+  rubric, every essay with human and model scores, request and raw reply, plus the results CSV and audit file inside).
+  You can also upload your own graded CSV and benchmark your own rubric.
 - **Settings**: model names, review thresholds, outcome bands, demo mode (simulated scores to try the UI without Ollama).
 
 ## Batch / automation

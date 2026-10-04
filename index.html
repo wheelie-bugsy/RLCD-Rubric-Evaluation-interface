@@ -458,6 +458,8 @@ table.xcrit tr.focus td{background:var(--data-soft)}
 .mapgrid select{padding:5px 6px;font-size:12.5px}
 #tab-bench .grid2 > .card + .card, #tab-bench .grid2 > div > .card:first-child{margin-top:0}
 .brun > *{min-width:0} .bstrat{overflow:hidden} #bLog{overflow-wrap:anywhere}
+.brun .row{flex-wrap:wrap}
+#tab-bench .grid2 > *{min-width:0} #tab-bench .card .row{flex-wrap:wrap}
 
 @media print{
   header.top,.no-print,nav{display:none!important}
@@ -752,11 +754,11 @@ I was asked to lead the weekly stand-up…"></textarea>
       <div class="row between">
         <div class="row">
           <label class="btn primary" for="xFile">📂 Open results CSV…</label>
-          <input type="file" id="xFile" accept=".csv" multiple hidden>
-          <span class="hint">From this tab or <span class="mono">benchmark.py</span>. Open several to compare models.</span>
+          <input type="file" id="xFile" accept=".csv,.jsonl" multiple hidden>
+          <span class="hint">From this tab or <span class="mono">benchmark.py</span>. Open several to compare models. Add the matching <span class="mono">.audit.jsonl</span> to include requests and replies.</span>
         </div>
         <div class="row" id="xExports" hidden>
-          <button class="btn sm" id="xCsv">⬇ Filtered CSV</button>
+          <button class="btn sm primary" id="xFull" title="Analysis, charts, rubric, every essay with both scores, the exact request and raw reply, plus the data files">⬇ Full report</button><button class="btn sm" id="xCsv">⬇ Filtered CSV</button>
           <button class="btn sm" id="xReport">⬇ HTML report</button>
         </div>
       </div>
@@ -1216,7 +1218,7 @@ ollama pull tev1:0.8b     # tiny, for quick tests (experimental)</pre></li>
     <tr><td>Exact / within 1</td><td>Share of identical scores, and of scores no more than one level apart. When the human score is an average such as 2.5, matching either rater counts as exact.</td></tr>
     <tr><td>Bias</td><td>Average model score minus human score, in levels. Negative means the model is harsher.</td></tr>
   </tbody></table></div>
-  <p><b>Downloads.</b> <b>Filtered CSV</b> saves the rows you're looking at. <b>HTML report</b> saves the headline numbers, the criterion table, the grid and the filtered essays as a page you can share.</p>
+  <p><b>Downloads.</b> <b>Full report</b> (also on each run in the Run view) saves one HTML file with everything: the headline numbers, the criterion table, every chart for every criterion, the rubric, the assignment, and every essay with rater 1, rater 2, human and model scores, the gap, the model's probabilities, the rubric level each side chose, the full text, the exact request and the raw reply. The complete results CSV and audit file are inside it too, with buttons to save them. It follows the filters you have set. For results from <span class="mono">benchmark.py</span>, open the CSV and its <span class="mono">.audit.jsonl</span> together so the requests and replies are included. <b>Filtered CSV</b> saves the rows you're looking at. <b>HTML report</b> saves the headline numbers, the criterion table, the grid and the filtered essays as a page you can share.</p>
 
   <h3>Long runs from the terminal</h3>
   <pre class="cmd">python3 benchmark.py list
@@ -3419,7 +3421,7 @@ async function renderBenchRuns(){
   list.sort((a, b) => String(b.created).localeCompare(String(a.created)));
   $("#bRuns").innerHTML = list.length ? `<div class="bruns">${list.map(r => `<div class="brun" data-id="${esc(r.id)}"><div><b>${esc(r.name)}</b><div class="hint">${esc(r.model)}${r.demo ? " (simulated)" : ""} · ${esc(r.sampling.mode)} sample of ${nfmt(r.total)} (seed ${r.sampling.seed}) · ${new Date(r.created).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}</div>
       <div class="meter"><i style="width:${r.done / r.total * 100}%"></i></div><div class="hint">${r.status === "done" ? "✓ Finished" : B.run?.id === r.id ? "Running…" : "⏸ Paused"} · ${nfmt(r.done)} of ${nfmt(r.total)}${r.errors ? ` · ${r.errors} errors` : ""}</div></div>
-      <div class="row">${r.status !== "done" && B.run?.id !== r.id ? `<button class="btn sm" data-act="resume">▶ Resume</button>` : ""}<button class="btn sm primary" data-act="explore">Explore</button><button class="btn sm" data-act="csv">⬇ CSV</button><button class="btn sm" data-act="audit" title="Every request and raw reply, one JSON line per essay">⬇ Audit</button><button class="btn sm ghost danger" data-act="del">Delete</button></div></div>`).join("")}</div>`
+      <div class="row">${r.status !== "done" && B.run?.id !== r.id ? `<button class="btn sm" data-act="resume">▶ Resume</button>` : ""}<button class="btn sm primary" data-act="explore">Explore</button><button class="btn sm" data-act="csv">⬇ CSV</button><button class="btn sm" data-act="full" title="One HTML file: analysis, charts, rubric, every essay with both scores, the exact request and raw reply, plus the CSV and audit data">⬇ Full report</button><button class="btn sm" data-act="audit" title="Every request and raw reply, one JSON line per essay">⬇ Audit</button><button class="btn sm ghost danger" data-act="del">Delete</button></div></div>`).join("")}</div>`
     : `<div class="hint">No benchmark runs yet.</div>`;
 }
 $("#bRuns").onclick = async e => {
@@ -3430,6 +3432,7 @@ $("#bRuns").onclick = async e => {
   const items = await benchDB.items(id);
   if (act === "csv") return download(`${slug(run.name)}.csv`, resultsCSV(run, items), "text/csv");
   if (act === "audit") return download(`${slug(run.name)}.audit.jsonl`, items.map(i => JSON.stringify(Object.assign({ essay_id: i.itemId }, i.audit))).join("\n") + "\n", "application/x-ndjson");
+  if (act === "full") { const er = runToExplore(run, items); addExploreRun(er); download(`${slug(run.name)}-full-report.html`, fullReportHTML(er), "text/html"); return toast("Full report saved"); }
   if (act === "explore") { addExploreRun(runToExplore(run, items)); return setBenchSub("explore"); }
   if (act === "del") { if (B.run?.id === id) return toast("Pause the run first", { kind: "warn" }); const its = await benchDB.delRun(id); renderBenchRuns(); toast(`Deleted "${run.name}"`, { undo: async () => { await benchDB.restore(run, its); renderBenchRuns(); } }); }
 };
@@ -3442,8 +3445,9 @@ function resultsCSV(run, items){
 /* ======================= EXPLORER ======================= */
 const X = { runs: [], active: null, f: { crit: "all", prompt: "", segs: {}, human: "", gap: "", disagree: false, errors: false, q: "", cell: null }, focus: null, page: 0, sort: "gap" };
 function runToExplore(run, items){
-  const rows = items.map(i => Object.assign({}, i.row, { context: run.rows.find(r => r.essay_id === i.itemId)?.context || "" }));
-  return makeExploreRun({ id: run.id, name: run.name, rows, rubric: run.rubric, audits: Object.fromEntries(items.map(i => [i.itemId, i.audit])), pinfo: run.pinfo, raters: run.raters, humanIs: run.humanIs });
+  const ord = new Map(run.rows.map((r, i) => [r.essay_id, i]));
+  const rows = items.map(i => Object.assign({}, i.row, { context: run.rows[ord.get(i.itemId)]?.context || "" })).sort((a, b) => (ord.get(a.essay_id) ?? 0) - (ord.get(b.essay_id) ?? 0));
+  return makeExploreRun({ id: run.id, cols: resultColumns(run.rubric, run.segments), name: run.name, rows, rubric: run.rubric, audits: Object.fromEntries(items.map(i => [i.itemId, i.audit])), pinfo: run.pinfo, raters: run.raters, humanIs: run.humanIs });
 }
 function makeExploreRun(o){
   const r0 = o.rows[0] || {}, cols = Object.keys(r0);
@@ -3462,9 +3466,18 @@ function addExploreRun(er){
 }
 $("#xFile").onchange = async e => {
   const files = [...e.target.files]; e.target.value = "";
-  for (const f of files) {
+  const audits = files.filter(f => /\.jsonl$/i.test(f.name));
+  for (const f of files.filter(f => !audits.includes(f))) {
     try { const rows = csvObjects(await readFileText(f)); if (!rows.length || !Object.keys(rows[0]).some(c => c.endsWith("_model"))) throw new Error("this isn't a benchmark results CSV (no *_model columns)");
       addExploreRun(makeExploreRun({ id: "f-" + slug(f.name) + "-" + uid(), name: rows[0].run_name || f.name.replace(/\.csv$/i, ""), rows, file: f.name })); }
+    catch (err) { toast(`${f.name}: ${err.message}`, { kind: "bad" }); }
+  }
+  for (const f of audits) {
+    try { const lines = (await readFileText(f)).split(/\r?\n/).filter(l => l.trim()).map(l => JSON.parse(l));
+      const ids = new Set(lines.map(l => String(l.essay_id))), run = X.runs.slice().reverse().find(r => r.rows.some(x => ids.has(String(x.essay_id))));
+      if (!run) throw new Error("open the matching results CSV first (or together with it)");
+      run.audits = Object.assign(run.audits || {}, Object.fromEntries(lines.map(l => [String(l.essay_id), l])));
+      toast(`Added requests and replies for ${nfmt(lines.length)} items to "${run.name}"`); renderExplore(); }
     catch (err) { toast(`${f.name}: ${err.message}`, { kind: "bad" }); }
   }
 };
@@ -3667,7 +3680,7 @@ function openXDetail(i){
 }
 document.addEventListener("keydown", e => { if (!$("#viewDlg").open || X.dlgIndex == null || !$("#xdNext")) return; if (e.key === "ArrowRight" && !$("#xdNext").disabled) openXDetail(X.dlgIndex + 1); if (e.key === "ArrowLeft" && !$("#xdPrev").disabled) openXDetail(X.dlgIndex - 1); });
 $("#viewDlg").addEventListener("close", () => { X.dlgIndex = null; });
-$("#xCsv").onclick = () => { const run = xr(); if (!run) return; const rows = X.visible || xRows(run); const cols = Object.keys(run.rows[0]).filter(c => !c.startsWith("_") && c !== "context");
+$("#xCsv").onclick = () => { const run = xr(); if (!run) return; const rows = X.visible || xRows(run); const cols = run.cols || Object.keys(run.rows[0]).filter(c => !c.startsWith("_") && c !== "context");
   download(`${slug(run.name)}-filtered.csv`, toCSV([cols, ...rows.map(r => cols.map(c => r[c] ?? ""))]), "text/csv"); };
 $("#xReport").onclick = () => {
   const run = xr(); if (!run) return;
@@ -3681,6 +3694,71 @@ $("#xReport").onclick = () => {
   <h2 style="font-size:16px">Items (${rows.length}${(X.visible || []).length > 500 ? " of " + X.visible.length : ""}, sorted by ${esc($("#xSort").selectedOptions[0].textContent.toLowerCase())})</h2><table>${$("#xRows").querySelector("thead").outerHTML}<tbody>${(() => { const keep = X.page; let out = ""; for (let p = 0; p * XPAGE < rows.length; p++) { X.page = p; renderXRows(run, X.visible); out += $("#xRows tbody").innerHTML; } X.page = keep; renderXRows(run, X.visible); return out; })()}</tbody></table></body></html>`;
   download(`${slug(run.name)}-report.html`, html, "text/html");
 };
+/* --- full report: analysis + every item with request, raw reply and comparison, plus the data files --- */
+function fullReportHTML(run){
+  const rows = xRows(run, true), all = run.rows, el = run.unit === "element", keep = { focus: X.focus, page: X.page };
+  const css = `:root{--bg:#fff;--surface:#fff;--surface-2:#f0efeb;--border:#e3e2dc;--text:#1d1d1b;--muted:#66655e;--data:#0072b2;--data-soft:#d7e8f4;--good:#0b6aa2;--good-bg:#e1eef8;--warn:#8a5600;--warn-bg:#fbefd6;--bad:#b4470a;--bad-bg:#fbe5d8}
+  *{box-sizing:border-box}body{font:14px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#fff;max-width:1180px;margin:24px auto;padding:0 16px}
+  h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:30px 0 6px;padding-top:12px;border-top:2px solid var(--text)}h3{font-size:15px;margin:18px 0 6px}
+  nav.toc{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;margin:12px 0}nav.toc a{color:var(--data)}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0 14px}th,td{border:1px solid var(--border);padding:5px 7px;vertical-align:top}th{background:var(--surface-2);text-align:left}
+  .num td,.num th{text-align:right;font-variant-numeric:tabular-nums}.num td:first-child,.num th:first-child{text-align:left}
+  .wrap{overflow-x:auto}.stats{display:flex;flex-wrap:wrap;gap:10px}.stat{border:1px solid var(--border);border-radius:10px;padding:8px 12px;min-width:160px;flex:1}.k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.v{font-size:22px;font-weight:700}.s{font-size:12px;color:var(--muted)}
+  .hint{color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:16px}.grid2>*,.box{min-width:0}.wrap{max-width:100%}summary{min-width:0}.box{border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+  .ceilbar{position:relative;height:12px;width:90px;background:var(--surface-2);border-radius:4px;display:inline-block;vertical-align:middle}.ceilbar i{position:absolute;left:0;top:2px;bottom:2px;border-radius:3px;background:var(--data)}.ceilbar em{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--text)}
+  .cm{border-collapse:collapse;font-size:12px;width:auto}.cm th,.cm td{border:1px solid var(--border);padding:4px 7px;text-align:center;min-width:34px}.cm td{font-weight:650}.cm td.d{outline:2px solid var(--text);outline-offset:-2px}
+  .hbars{display:grid;gap:5px;font-size:12.5px}.hbars .r{display:grid;grid-template-columns:80px 1fr 70px;gap:8px;align-items:center}.hbars .t{position:relative;height:14px;background:var(--surface-2);border-radius:4px}.hbars .t i{position:absolute;top:0;bottom:0;border-radius:4px}.hbars .t .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}.hbars .v{text-align:right;color:var(--muted)}
+  .distc{display:flex;gap:6px;align-items:flex-end;height:140px}.distc .g{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}.distc .bars2{display:flex;gap:2px;align-items:flex-end;height:118px}.distc .bars2 i{display:block;width:12px;border-radius:3px 3px 0 0}.distc small{font-size:11px;color:var(--muted)}
+  .lg{display:flex;gap:12px;font-size:12px;color:var(--muted);margin-top:6px;flex-wrap:wrap}.lg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;background:var(--c)}
+  .hm{display:inline-flex;gap:3px;align-items:center;white-space:nowrap}.hm .h{color:var(--muted)}.hm .m{font-weight:700;border-radius:5px;padding:0 5px;color:#fff}
+  .gap{font-size:11.5px;font-weight:700;border-radius:99px;padding:1px 7px;white-space:nowrap}.gap.lo{background:var(--bad-bg);color:var(--bad)}.gap.hi{background:var(--good-bg);color:var(--good)}.gap.ok{background:var(--surface-2);color:var(--muted)}
+  details.item{border:1px solid var(--border);border-radius:10px;margin:8px 0;padding:0 12px}details.item>summary{cursor:pointer;padding:9px 0;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}details.item[open]>summary{border-bottom:1px solid var(--border);margin-bottom:10px}
+  .essay{white-space:pre-wrap;background:var(--surface-2);border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.6}
+  pre{white-space:pre-wrap;word-break:break-word;font:11.5px/1.45 ui-monospace,Menlo,Consolas,monospace;background:var(--surface-2);border-radius:8px;padding:8px 10px}
+  .pbar{display:flex;height:8px;border-radius:5px;overflow:hidden;background:var(--surface-2);min-width:120px}.pbar i{display:block;height:100%}
+  .lvH{box-shadow:inset 3px 0 0 var(--muted)}.lvM{background:var(--data-soft)}.err{background:var(--bad-bg);color:var(--bad);padding:6px 10px;border-radius:8px}
+  .btn{font:inherit;font-size:13px;border:1px solid var(--border);background:var(--surface-2);border-radius:8px;padding:5px 11px;cursor:pointer}
+  @media print{.noprint{display:none}details.item{break-inside:avoid}}`;
+  const f = X.f, filt = [f.crit !== "all" ? `criterion ${f.crit}` : "", f.prompt, ...Object.entries(f.segs).filter(([, v]) => v).map(([k, v]) => `${k.replace(/^seg_/, "")}=${v}`), f.gap && `gap: ${f.gap}`, f.disagree && "raters disagree", f.errors && "errors only", f.q && `search “${f.q}”`].filter(Boolean).join(", ");
+  // charts for every criterion, captured from the live renderer
+  const charts = run.crits.map(c => { renderXCharts(run, rows, c); return { c, cm: $("#xConfusion").innerHTML, dist: $("#xDist").innerHTML, bias: $("#xBias").innerHTML, calib: $("#xCalib").innerHTML, len: $("#xLen").innerHTML }; });
+  X.focus = keep.focus; X.page = keep.page; renderExplore();
+  const rubric = run.crits.map(c => `<h3>${esc(c.name)}</h3><div class="wrap"><table><thead><tr><th style="width:110px">Level</th><th style="width:60px">Points</th><th>Description</th></tr></thead><tbody>${c.levels.map((l, i) => `<tr><td><b style="color:${levelColor(i, c.levels.length)}">${esc(l.label)}</b></td><td>${bfmt(l.points)}</td><td>${esc(l.desc || "")}</td></tr>`).join("")}</tbody></table></div>`).join("");
+  const sorted = rows.slice().sort((a, b) => Math.abs(rowGap(run, b)) - Math.abs(rowGap(run, a)) || String(a.essay_id).localeCompare(String(b.essay_id)));
+  const item = r => { const crits = el ? run.crits.filter(c => c.key === r.criterion) : run.crits, a = run.audits?.[r.essay_id];
+    const ctab = `<div class="wrap"><table class="num"><thead><tr><th>Criterion</th>${run.two ? "<th>Rater 1</th><th>Rater 2</th>" : ""}<th>Human</th><th>Model</th><th>Gap</th><th>Expected</th><th>Confidence</th><th style="text-align:left">Model probabilities</th></tr></thead><tbody>${crits.map(c => { const h = bnum(r[c.key + "_human"]), m = bnum(r[c.key + "_model"]), probs = c.levels.map(l => bnum(r[`${c.key}_p${bfmt(l.points)}`]) || 0);
+      return `<tr><td><b>${esc(c.name)}</b></td>${run.two ? `<td>${esc(r[c.key + "_r1"] ?? "")}</td><td>${esc(r[c.key + "_r2"] ?? "")}</td>` : ""}<td>${h ?? "—"}</td><td><b>${m ?? "—"}</b></td><td>${h != null && m != null ? gapPill(m - h) : ""}</td><td>${r[c.key + "_expected"] ? (+r[c.key + "_expected"]).toFixed(2) : ""}</td><td>${pct0(bnum(r[c.key + "_confidence"]))}</td><td style="text-align:left"><div class="pbar">${probs.map((p, li) => `<i style="width:${p * 100}%;background:${levelColor(li, c.levels.length)}" title="${esc(c.levels[li].label)}: ${pct0(p)}"></i>`).join("")}</div><span class="hint">${c.levels.map((l, li) => `${esc(l.label)} ${pct0(probs[li])}`).join(" · ")}</span></td></tr>`; }).join("")}${!el && run.crits.length > 1 && r.total_model !== "" ? `<tr><td><b>Total</b></td>${run.two ? "<td></td><td></td>" : ""}<td>${esc(r.total_human)}</td><td><b>${esc(r.total_model)}</b></td><td>${gapPill(+r.total_model - +r.total_human)}</td><td></td><td></td><td></td></tr>` : ""}</tbody></table></div>`;
+    const lv = crits.map(c => { const h = bnum(r[c.key + "_human"]), m = bnum(r[c.key + "_model"]); const ls = c.levels.filter(l => (h != null && Math.abs(l.points - h) < 0.51) || l.points === m);
+      return ls.length && ls.some(l => l.desc) ? `<div style="margin:4px 0"><b>${esc(c.name)}</b>${ls.map(l => { const isH = h != null && Math.abs(l.points - h) < 0.51, isM = l.points === m; return `<div class="${isM ? "lvM" : ""} ${isH ? "lvH" : ""}" style="padding:4px 8px;border-radius:6px;font-size:12.5px"><span class="hint">${isH && isM ? "Human & model" : isH ? "Human" : "Model"} · ${esc(l.label)}:</span> ${esc(l.desc)}</div>`; }).join("")}</div>` : ""; }).join("");
+    return `<details class="item" id="i-${esc(String(r.essay_id).replace(/[^\w-]/g, "_"))}"><summary><b class="mono">${esc(r.essay_id)}</b>${el ? `<span>${esc(r.element_type)}</span>` : ""}${crits.map(c => `<span title="${esc(c.name)}">${esc(c.name.length > 16 ? c.name.slice(0, 15) + "…" : c.name)} ${hmCell(run, r, c)}</span>`).join("")}${r.error ? `<span class="err">error</span>` : gapPill(rowGap(run, r))}<span class="hint">${r._w} words${run.segs.map(s => r[s] ? ` · ${esc(s.replace(/^seg_/, ""))}: ${esc(r[s])}` : "").join("")}</span></summary>
+      ${r.error ? `<p class="err">${esc(r.error)}</p>` : ""}<h3>Comparison</h3>${ctab}${lv ? `<h3>Rubric levels chosen</h3>${lv}` : ""}
+      <h3>${el ? "Argument element" : "Essay"}</h3><div class="essay">${esc(r.text)}</div>${r.context ? `<details><summary class="hint">Full essay the model saw as context</summary><div class="essay">${esc(r.context)}</div></details>` : ""}
+      <h3>Exact request sent to the model</h3>${a ? `<pre>${esc(JSON.stringify(a.request, null, 2))}</pre>` : `<p class="hint">Not available: open the run's audit file (.audit.jsonl) together with its CSV to include it.</p>`}
+      <h3>Raw model reply</h3>${a ? `<pre>${esc(fmtJSON(a.judgeText || a.responseText || ""))}</pre>` : ""}<p class="hint mono">SHA-256 ${esc(r.response_sha256 || "—")} · ${esc(r.ms ?? "")} ms · scored ${esc(r.scored_at || "")}${a?.scoringNote ? " · " + esc(a.scoringNote) : ""}</p></details>`; };
+  const cols = run.cols || Object.keys(all[0] || {}).filter(c => !c.startsWith("_") && c !== "context");
+  const csv = toCSV([cols, ...all.map(r => cols.map(c => r[c] ?? ""))]);
+  const jsonl = Object.keys(run.audits || {}).length ? all.map(r => run.audits[r.essay_id] ? JSON.stringify(Object.assign({ essay_id: r.essay_id }, run.audits[r.essay_id])) : null).filter(Boolean).join("\n") + "\n" : "";
+  const emb = (id, t) => `<script type="application/json" id="${id}">${JSON.stringify(t).replace(/</g, "\\u003c")}<\/script>`;
+  const pi = run.pinfo || {};
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(run.name)} · full benchmark report</title><style>${css}</style></head><body>
+  <h1>${esc(run.name)}</h1><p class="hint">Model <b>${esc(run.model || all[0]?.model || "")}</b> (${esc(all[0]?.provider || "")}) · dataset ${esc(all[0]?.dataset || "")} · prompt ${esc(run.prompt || all[0]?.prompt || "")} · ${nfmt(all.length)} items in the run${rows.length !== all.length ? `, <b>${nfmt(rows.length)} in this report</b>` : ""} · generated ${esc(new Date().toLocaleString())} by Nimble Rubric Evaluator ${APP_VERSION}${filt ? `<br>Filters applied: ${esc(filt)}` : ""}</p>
+  <nav class="toc noprint"><a href="#summary">Summary</a><a href="#criteria">By criterion</a><a href="#charts">Charts</a><a href="#rubric">Rubric</a>${pi.assignment ? `<a href="#assignment">Assignment</a>` : ""}<a href="#items">Every ${el ? "element" : "essay"}</a><a href="#data">Data files</a></nav>
+  <h2 id="summary">Summary</h2><div class="stats">${$("#xTiles").innerHTML}</div>
+  <h2 id="criteria">Model vs human, by criterion</h2><p class="hint">${esc($("#xCritSub").textContent)}</p><div class="wrap"><table class="num">${$("#xCritTable").innerHTML}</table></div><p class="hint">${esc($("#xCritNote").textContent)}</p>
+  <h2 id="charts">Charts, per criterion</h2><p class="hint">Grid: rows are the human score, columns the model's; outlined cells are agreement. Bias: average model minus human at each human score (left = model harsher).</p>
+  ${charts.map(x => `<h3>${esc(x.c.name)}</h3><div class="grid2"><div class="box"><b>Where the model landed</b><div class="wrap">${x.cm}</div></div><div class="box"><b>Score distribution</b>${x.dist}</div><div class="box"><b>Bias by human score</b>${x.bias}</div><div class="box"><b>Confidence vs accuracy</b>${x.calib}<b style="display:block;margin-top:10px">Gap by essay length</b>${x.len}</div></div>`).join("")}
+  <h2 id="rubric">Rubric used</h2><p class="hint">Exactly as sent to the model, level by level.</p>${rubric}
+  ${pi.assignment ? `<h2 id="assignment">Assignment given to the writers</h2><div class="essay">${esc(pi.assignment)}</div>${pi.source_text ? `<h3>Source text given to the writers</h3><div class="essay">${esc(pi.source_text)}</div>` : ""}` : ""}
+  <h2 id="items">Every ${el ? "element" : "essay"} (${nfmt(sorted.length)}), biggest gap first</h2><p class="hint noprint">Click one to open its scores, the rubric levels each side chose, the full text, the exact request and the raw reply. <button class="btn" onclick="document.querySelectorAll('details.item').forEach(d=>d.open=true)">Expand all</button> <button class="btn" onclick="document.querySelectorAll('details.item').forEach(d=>d.open=false)">Collapse all</button></p>
+  ${sorted.map(item).join("")}
+  <h2 id="data">Data files</h2><p class="hint">The complete results (every item in the run, not just the filtered ones) are embedded in this page. Save them to open in Excel, or to load back into the Benchmark explorer.</p>
+  <p class="noprint"><button class="btn" onclick="save('csvData','${esc(slug(run.name))}.csv','text/csv')">⬇ Results CSV</button> ${jsonl ? `<button class="btn" onclick="save('auditData','${esc(slug(run.name))}.audit.jsonl','application/x-ndjson')">⬇ Audit JSONL (every request and raw reply)</button>` : ""}</p>
+  ${emb("csvData", csv)}${jsonl ? emb("auditData", jsonl) : ""}
+  <script>function save(id,name,type){var t=JSON.parse(document.getElementById(id).textContent);var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000)}<\/script>
+  </body></html>`;
+}
+$("#xFull").onclick = () => { const run = xr(); if (!run) return; download(`${slug(run.name)}-full-report.html`, fullReportHTML(run), "text/html"); toast(`Full report saved${Object.keys(run.audits || {}).length ? "" : " (no requests or replies: open the run's .audit.jsonl too)"}`); };
 function setBenchSub(s){ B.sub = s; $$("#benchSub button").forEach(b => b.classList.toggle("active", b.dataset.bsub === s)); $("#bsub-run").hidden = s !== "run"; $("#bsub-explore").hidden = s !== "explore"; if (s === "explore") renderExplore(); }
 $("#benchSub").onclick = e => { const b = e.target.closest("button"); if (b) setBenchSub(b.dataset.bsub); };
 loadManifest(); renderBenchRuns();
