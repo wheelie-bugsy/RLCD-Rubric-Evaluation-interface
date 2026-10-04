@@ -1,0 +1,7 @@
+__pycache__/
+# Benchmark data: download the originals and run `python3 benchmark.py prepare` (see README)
+datasets/*
+!datasets/rubrics/
+!datasets/bench/
+datasets/bench/*
+!datasets/bench/rubrics.json

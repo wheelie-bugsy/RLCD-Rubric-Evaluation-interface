@@ -55,6 +55,13 @@ and start Ollama with `OLLAMA_ORIGINS="*" ollama serve`.
   bottom-left with **Undo** for 10 seconds (hover to pause, or press Ctrl/Cmd+Z).
 - **Colours**: colour-blind-safe Okabe-Ito scale (vermillion → orange → sky → blue, low to high);
   the rest of the UI is neutral ink, and status pills also carry ✓ / ! / ✕ icons.
+- **Benchmark** (◎ tab): checks the model against people before you trust it. Pick a public human-graded
+  dataset (ASAP-AES set 7, PERSUADE 2.0 holistic or argument elements, ELLIPSE) and one prompt, choose a sample
+  (stratified by human score, seeded so it's repeatable), and run. Each essay is scored with the dataset's own
+  rubric, word for word (`datasets/rubrics/VERIFY.md` records the check). Progress is saved after every essay;
+  pause and resume any time. **Explore results** compares model and humans: QWK, exact / within one, bias,
+  rater-vs-rater ceiling, filters by grade, gender, ELL status and so on, charts, and every essay with both
+  scores and the exact request and reply. You can also upload your own graded CSV and benchmark your own rubric.
 - **Settings**: model names, review thresholds, outcome bands, demo mode (simulated scores to try the UI without Ollama).
 
 ## Batch / automation
@@ -65,6 +72,22 @@ python3 batch_eval.py my-rubric.csv submissions.csv -o results.csv
 ```
 The rubric is the same CSV template the app uses. Alongside `results.csv` it writes
 `results.audit.jsonl`: one line per response with the request, the verbatim model output and its SHA-256.
+
+### Benchmark from the terminal
+
+```
+python3 benchmark.py list
+python3 benchmark.py run --dataset ellipse --prompt "Distance learning" --sample 200 -o ellipse-dl-nimble.csv
+python3 benchmark.py run --dataset asap7 --sample all --model tev1
+```
+Same rubrics, request, sampling and columns as the tab (the same seed picks the same essays), and its CSV opens
+in the explorer. Re-running the same command resumes. Keys come from `--key` or `JEV_API_KEY` / `OPENAI_API_KEY` /
+`ANTHROPIC_API_KEY` and are never written to the results. To rebuild from the original downloads:
+`python3 tools/build_rubrics.py` then `python3 benchmark.py prepare`.
+
+Data sources: ASAP set 7 (huggingface.co/datasets/llm-aes/asap-7-original), PERSUADE 2.0
+(github.com/scrosseye/persuade_corpus_2.0), ELLIPSE (github.com/scrosseye/ELLIPSE-Corpus).
+PERSUADE and ELLIPSE are CC BY-NC-SA 4.0: internal benchmarking with attribution only, no commercial use or redistribution.
 
 ## Files
 
@@ -78,3 +101,8 @@ The rubric is the same CSV template the app uses. Alongside `results.csv` it wri
 | `REPORT.md` | Research findings and recommendations |
 | `help/quick-start-guide.pdf` | Printable scenario-based quick start guide |
 | `help/*.png` | Annotated screenshots used by the Help tab |
+| `benchmark.py` | Command-line benchmark runner (standard library only) |
+| `tools/build_rubrics.py` | Rebuilds the benchmark rubrics from the official rubric files and checks they're word for word |
+| `datasets/bench/` | Prepared benchmark data (one CSV per prompt) and `manifest.json` the app loads. In the zip; in git only `rubrics.json` (run `python3 benchmark.py prepare`) |
+| `datasets/rubrics/` | Benchmark rubrics as importable CSVs, plus `VERIFY.md` |
+| `datasets/asap7/`, `persuade/`, `ellipse/` | Original downloads (not in the zip; see above for where to get them) |

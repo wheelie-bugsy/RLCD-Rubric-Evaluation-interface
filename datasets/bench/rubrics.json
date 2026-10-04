@@ -1,0 +1,638 @@
+{
+ "asap7": {
+  "id": "asap7",
+  "name": "ASAP set 7 (patience narrative)",
+  "source": "llm-aes/asap-7-original, column `rubrics` (Hewlett ASAP-AES set 7)",
+  "criteria": [
+   {
+    "key": "ideas",
+    "name": "Ideas (points doubled)",
+    "type": "score",
+    "weight": 2,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "0",
+      "desc": "ideas are not focused on the task and/or are undeveloped.",
+      "points": 0
+     },
+     {
+      "label": "1",
+      "desc": "Tells a story with ideas that are minimally focused on the topic and developed with limited and/or general details.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Tells a story with ideas that are somewhat focused on the topic and are developed with a mix of specific and/or general details.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Tells a story with ideas that are clearly focused on the topic and are thoroughly developed with specific, relevant details.",
+      "points": 3
+     }
+    ]
+   },
+   {
+    "key": "organization",
+    "name": "Organization",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "0",
+      "desc": "No organization evident.",
+      "points": 0
+     },
+     {
+      "label": "1",
+      "desc": "Organization and connections between ideas and/or events are weak.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Organization and connections between ideas and/or events are logically sequenced.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Organization and connections between ideas and/or events are clear and logically sequenced.",
+      "points": 3
+     }
+    ]
+   },
+   {
+    "key": "style",
+    "name": "Style",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "0",
+      "desc": "Ineffective use of language for the writer's purpose and audience.",
+      "points": 0
+     },
+     {
+      "label": "1",
+      "desc": "Limited use of language, including lack of variety in word choice and sentences, may hinder support for the writer's purpose and audience.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Adequate command of language, including effective word choice and clear sentences, supports the writer's purpose and audience.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Command of language, including effective and compelling word choice and varied sentence structure, clearly supports the writer's purpose and audience.",
+      "points": 3
+     }
+    ]
+   },
+   {
+    "key": "conventions",
+    "name": "Conventions",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "0",
+      "desc": "Ineffective use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation.",
+      "points": 0
+     },
+     {
+      "label": "1",
+      "desc": "Limited use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation for the grade level.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Adequate use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation for the grade level.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Consistent, appropriate use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation for the grade level.",
+      "points": 3
+     }
+    ]
+   }
+  ]
+ },
+ "persuade_holistic_indy": {
+  "id": "persuade_holistic_indy",
+  "name": "PERSUADE 2.0 holistic (independent)",
+  "source": "persuade_corpus_2.0/sat_rubric_only_indy.pdf",
+  "criteria": [
+   {
+    "key": "holistic",
+    "name": "Holistic Rating Form",
+    "type": "score",
+    "weight": 1,
+    "instructions": "After reading each essay and completing the analytical rating form, assign a holistic score based on the rubric below. For the following evaluations you will need to use a grading scale between 1 (minimum) and 6 (maximum). As with the analytical rating form, the distance between each grade (e.g., 1-2, 3-4, 4-5) should be considered equal.",
+    "levels": [
+     {
+      "label": "SCORE OF 1",
+      "desc": "An essay in this category demonstrates very little or no mastery, and is severely flawed by ONE OR MORE of the following weaknesses: develops no viable point of view on the issue, or provides little or no evidence to support its position; the essay is disorganized or unfocused, resulting in a disjointed or incoherent essay; the essay displays fundamental errors in vocabulary and/or demonstrates severe flaws in sentence structure; the essay contains pervasive errors in grammar, usage, or mechanics that persistently interfere with meaning.",
+      "points": 1
+     },
+     {
+      "label": "SCORE OF 2",
+      "desc": "An essay in this category demonstrates little mastery, and is flawed by ONE OR MORE of the following weaknesses: develops a point of view on the issue that is vague or seriously limited, and demonstrates weak critical thinking, providing inappropriate or insufficient examples, reasons, or other evidence to support its position; the essay is poorly organized and/or focused, or demonstrates serious problems with coherence or progression of ideas; the essay displays very little facility in the use of language, using very limited vocabulary or incorrect word choice and/or demonstrates frequent problems in sentence structure; the essay contains errors in grammar, usage, and mechanics so serious that meaning is somewhat obscured.",
+      "points": 2
+     },
+     {
+      "label": "SCORE OF 3",
+      "desc": "An essay in this category demonstrates developing mastery, and is marked by ONE OR MORE of the following weaknesses: develops a point of view on the issue, demonstrating some critical thinking, but may do so inconsistently or use inadequate examples, reasons, or other evidence to support its position; the essay is limited in its organization or focus, or may demonstrate some lapses in coherence or progression of ideas displays; the essay may demonstrate facility in the use of language, but sometimes uses weak vocabulary or inappropriate word choice and/or lacks variety or demonstrates problems in sentence structure; the essay may contain an accumulation of errors in grammar, usage, and mechanics.",
+      "points": 3
+     },
+     {
+      "label": "SCORE OF 4",
+      "desc": "An essay in this category demonstrates adequate mastery, although it will have lapses in quality. A typical essay develops a point of view on the issue and demonstrates competent critical thinking, using adequate examples, reasons, and other evidence to support its position; the essay is generally organized and focused, demonstrating some coherence and progression of ideas exhibits adequate; the essay may demonstrate inconsistent facility in the use of language, using generally appropriate vocabulary demonstrates some variety in sentence structure; the essay may have some errors in grammar, usage, and mechanics.",
+      "points": 4
+     },
+     {
+      "label": "SCORE OF 5",
+      "desc": "An essay in this category demonstrates reasonably consistent mastery, although it will have occasional errors or lapses in quality. A typical essay effectively develops a point of view on the issue and demonstrates strong critical thinking, generally using appropriate examples, reasons, and other evidence to support its position; the essay is well organized and focused, demonstrating coherence and progression of ideas; the essay exhibits facility in the use of language, using appropriate vocabulary demonstrates variety in sentence structure; the essay is generally free of most errors in grammar, usage, and mechanics.",
+      "points": 5
+     },
+     {
+      "label": "SCORE OF 6",
+      "desc": "An essay in this category demonstrates clear and consistent mastery, although it may have a few minor errors. A typical essay effectively and insightfully develops a point of view on the issue and demonstrates outstanding critical thinking, using clearly appropriate examples, reasons, and other evidence to support its position; the essay is well organized and clearly focused, demonstrating clear coherence and smooth progression of ideas; the essay exhibits skillful use of language, using a varied, accurate, and apt vocabulary and demonstrates meaningful variety in sentence structure; the essay is free of most errors in grammar, usage, and mechanics.",
+      "points": 6
+     }
+    ]
+   }
+  ]
+ },
+ "persuade_holistic_source": {
+  "id": "persuade_holistic_source",
+  "name": "PERSUADE 2.0 holistic (source-based)",
+  "source": "persuade_corpus_2.0/sat_rubric_only_source_based.pdf",
+  "criteria": [
+   {
+    "key": "holistic",
+    "name": "Holistic Rating Form",
+    "type": "score",
+    "weight": 1,
+    "instructions": "After reading each essay and completing the analytical rating form, assign a holistic score based on the rubric below. For the following evaluations you will need to use a grading scale between 1 (minimum) and 6 (maximum). As with the analytical rating form, the distance between each grade (e.g., 1-2, 3-4, 4-5) should be considered equal.",
+    "levels": [
+     {
+      "label": "SCORE OF 1",
+      "desc": "An essay in this category demonstrates very little or no mastery, and is severely flawed by ONE OR MORE of the following weaknesses: develops no viable point of view on the issue, or provides little or no evidence to support its position; the essay is disorganized or unfocused, resulting in a disjointed or incoherent essay; the essay displays fundamental errors in vocabulary and/or demonstrates severe flaws in sentence structure; the essay contains pervasive errors in grammar, usage, or mechanics that persistently interfere with meaning.",
+      "points": 1
+     },
+     {
+      "label": "SCORE OF 2",
+      "desc": "An essay in this category demonstrates little mastery, and is flawed by ONE OR MORE of the following weaknesses: develops a point of view on the issue that is vague or seriously limited, and demonstrates weak critical thinking; the essay provides inappropriate or insufficient examples, reasons, or other evidence taken from the source text to support its position; the essay is poorly organized and/or focused, or demonstrates serious problems with coherence or progression of ideas; the essay displays very little facility in the use of language, using very limited vocabulary or incorrect word choice and/or demonstrates frequent problems in sentence structure; the essay contains errors in grammar, usage, and mechanics so serious that meaning is somewhat obscured.",
+      "points": 2
+     },
+     {
+      "label": "SCORE OF 3",
+      "desc": "An essay in this category demonstrates developing mastery, and is marked by ONE OR MORE of the following weaknesses: develops a point of view on the issue, demonstrating some critical thinking, but may do so inconsistently or use inadequate examples, reasons, or other evidence taken from the source texts to support its position; the essay is limited in its organization or focus, or may demonstrate some lapses in coherence or progression of ideas displays; the essay may demonstrate facility in the use of language, but sometimes uses weak vocabulary or inappropriate word choice and/or lacks variety or demonstrates problems in sentence structure; the essay may contain an accumulation of errors in grammar, usage, and mechanics.",
+      "points": 3
+     },
+     {
+      "label": "SCORE OF 4",
+      "desc": "An essay in this category demonstrates adequate mastery, although it will have lapses in quality. A typical essay develops a point of view on the issue and demonstrates competent critical thinking; the essay using adequate examples, reasons, and other evidence taken from the source text(s) to support its position; the essay is generally organized and focused, demonstrating some coherence and progression of ideas exhibits adequate; the essay may demonstrate inconsistent facility in the use of language, using generally appropriate vocabulary demonstrates some variety in sentence structure; the essay may have some errors in grammar, usage, and mechanics.",
+      "points": 4
+     },
+     {
+      "label": "SCORE OF 5",
+      "desc": "An essay in this category demonstrates reasonably consistent mastery, although it will have occasional errors or lapses in quality. A typical essay effectively develops a point of view on the issue and demonstrates strong critical thinking; the essay generally using appropriate examples, reasons, and other evidence taken from the source text(s) to support its position; the essay is well organized and focused, demonstrating coherence and progression of ideas; the essay exhibits facility in the use of language, using appropriate vocabulary demonstrates variety in sentence structure; the essay is generally free of most errors in grammar, usage, and mechanics.",
+      "points": 5
+     },
+     {
+      "label": "SCORE OF 6",
+      "desc": "An essay in this category demonstrates clear and consistent mastery, although it may have a few minor errors. A typical essay effectively and insightfully develops a point of view on the issue and demonstrates outstanding critical thinking; the essay uses clearly appropriate examples, reasons, and other evidence taken from the source text(s) to support its position; the essay is well organized and clearly focused, demonstrating clear coherence and smooth progression of ideas; the essay exhibits skillful use of language, using a varied, accurate, and apt vocabulary and demonstrates meaningful variety in sentence structure; the essay is free of most errors in grammar, usage, and mechanics.",
+      "points": 6
+     }
+    ]
+   }
+  ]
+ },
+ "persuade_elements": {
+  "id": "persuade_elements",
+  "name": "PERSUADE 2.0 argument element effectiveness",
+  "source": "persuade_corpus_2.0/argumentation_effectiveness_rubric.pdf",
+  "criteria": [
+   {
+    "key": "lead",
+    "name": "Lead",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "Ineffective",
+      "desc": "The lead may not grab the readers' attention and may not point to the position.",
+      "points": 0
+     },
+     {
+      "label": "Adequate",
+      "desc": "The lead attempts to grab the reader’s attention and points toward the position.",
+      "points": 1
+     },
+     {
+      "label": "Effective",
+      "desc": "The lead grabs the reader’s attention and strongly points toward the position.",
+      "points": 2
+     }
+    ]
+   },
+   {
+    "key": "position",
+    "name": "Position",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "Ineffective",
+      "desc": "The position is not relevant to the topic, and/or it shows no clear stance.",
+      "points": 0
+     },
+     {
+      "label": "Adequate",
+      "desc": "The position addresses the topic but generally repeats the prompt's stance.",
+      "points": 1
+     },
+     {
+      "label": "Effective",
+      "desc": "The position states a clear stance closely related to the topic.",
+      "points": 2
+     }
+    ]
+   },
+   {
+    "key": "claim",
+    "name": "Claim",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "Ineffective",
+      "desc": "The claim is irrelevant to the position. It may also be weak and/or not acceptable.",
+      "points": 0
+     },
+     {
+      "label": "Adequate",
+      "desc": "The claim relates to the position but may simply repeat part of the position or state a claim without support. The claim is moderately valid and acceptable.",
+      "points": 1
+     },
+     {
+      "label": "Effective",
+      "desc": "The claim is closely relevant to the position and backs up the position with specific points or perspectives. The claim is valid and acceptable.",
+      "points": 2
+     }
+    ]
+   },
+   {
+    "key": "counterclaim",
+    "name": "Counterclaim",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "Ineffective",
+      "desc": "The counterclaim is neither reasonable nor relevant.",
+      "points": 0
+     },
+     {
+      "label": "Adequate",
+      "desc": "The counterclaim is not quite a reasonable opposing opinion, or it is not closely relevant to the position.",
+      "points": 1
+     },
+     {
+      "label": "Effective",
+      "desc": "The counterclaim is reasonable and relevant. It represents a valid objection to the position.",
+      "points": 2
+     }
+    ]
+   },
+   {
+    "key": "rebuttal",
+    "name": "Rebuttal",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "Ineffective",
+      "desc": "The rebuttal misses the target. It does not refute the counterclaim.",
+      "points": 0
+     },
+     {
+      "label": "Adequate",
+      "desc": "The rebuttal does not answer the counterclaim directly and it is not strong and/or valid.",
+      "points": 1
+     },
+     {
+      "label": "Effective",
+      "desc": "The rebuttal directly answers and refutes the counterclaim.",
+      "points": 2
+     }
+    ]
+   },
+   {
+    "key": "evidence",
+    "name": "Evidence",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "Ineffective",
+      "desc": "The evidence is irrelevant to the claim it backs up and provide few valid examples. The evidence uses unsubstantiated assumptions that sound quite unacceptable.",
+      "points": 0
+     },
+     {
+      "label": "Adequate",
+      "desc": "The evidence is not closely relevant to the claim it supports. The evidence contains some detailed examples but they may not be relevant to each other and only loosely bound together. The evidence uses some unsubstantiated or unsound claims or assumptions.",
+      "points": 1
+     },
+     {
+      "label": "Effective",
+      "desc": "The evidence is closely relevant to the claim they support and back up the claim objectively with concrete facts, examples, research, statistics, or studies. The reasons in the evidence support the claim and are sound and well substantiated.",
+      "points": 2
+     }
+    ]
+   },
+   {
+    "key": "concluding_statement",
+    "name": "Concluding summary",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "Ineffective",
+      "desc": "The concluding summary is irrelevant to the claims. The conclusion may also misrepresent the claims.",
+      "points": 0
+     },
+     {
+      "label": "Adequate",
+      "desc": "The concluding summary merely copies the claims or may restates only part of the claims. It may partially misrepresent the claims.",
+      "points": 1
+     },
+     {
+      "label": "Effective",
+      "desc": "The concluding summary effectively restates the claims using different wording. It may readdress the claims in light of the evidence provided.",
+      "points": 2
+     }
+    ]
+   }
+  ],
+  "note": "One criterion per element type. Each element is scored only on the criterion for its own type."
+ },
+ "ellipse": {
+  "id": "ellipse",
+  "name": "ELLIPSE English proficiency",
+  "source": "ELLIPSE-Corpus/ELL_Rubrics.docx",
+  "criteria": [
+   {
+    "key": "overall",
+    "name": "Overall",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "1",
+      "desc": "A limited range of familiar words or phrases loosely strung together; frequent errors in grammar (including syntax) and usage. Communication impeded in most cases by language inaccuracies.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Inconsistent facility in sentence formation, word choice, and mechanics; organization partially developed but may be missing or unsuccessful. Communication impeded in many instances by language inaccuracies.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Facility limited to the use of common structures and generic vocabulary; organization generally controlled although connection sometimes absent or unsuccessful; errors in grammar and syntax and usage. Communication is impeded by language inaccuracies in some cases.",
+      "points": 3
+     },
+     {
+      "label": "4",
+      "desc": "Facility in the use of language with syntactic variety and range of words and phrases; controlled organization; accuracy in grammar and conventions; occasional language inaccuracies that rarely impede communication.",
+      "points": 4
+     },
+     {
+      "label": "5",
+      "desc": "Native-like facility in the use of language with syntactic variety, Appropriate word choice and phrases; well-controlled text organization; precise use of grammar and conventions; rare language inaccuracies that do not impede communication.",
+      "points": 5
+     }
+    ]
+   },
+   {
+    "key": "cohesion",
+    "name": "Cohesion",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "1",
+      "desc": "No clear control of organization; cohesive devices not present or unsuccessfully used; presentation of ideas unclear.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Organization only partially developed with a lack of logical sequencing of ideas; some basic cohesive devices used but with inaccuracy or repetition.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Organization generally controlled; cohesive devices used but limited in type; Some repetitive, mechanical, or faulty use of cohesion use within and/or between sentences and paragraphs.",
+      "points": 3
+     },
+     {
+      "label": "4",
+      "desc": "Organization generally well controlled; a range of cohesive devices used appropriately such as reference and transitional words and phrases to connect ideas; generally appropriate overlap of ideas",
+      "points": 4
+     },
+     {
+      "label": "5",
+      "desc": "Text organization consistently well controlled using a variety of effective linguistic features such as reference and transitional words and phrases to connect ideas across sentences and paragraphs; appropriate overlap of ideas.",
+      "points": 5
+     }
+    ]
+   },
+   {
+    "key": "syntax",
+    "name": "Syntax",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "1",
+      "desc": "Pervasive and basic errors in sentence structure and word order that cause confusion; basic sentences errors common.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Some sentence variation used; many sentence structure problems.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Simple, compound, and complex syntactic structures present although the range may be limited; some apparent errors in sentence formation, especially in more complex sentences.",
+      "points": 3
+     },
+     {
+      "label": "4",
+      "desc": "Appropriate use of a variety of syntactic structures, such as simple, compound, and complex sentences; occasional errors or inappropriateness in sentence formation.",
+      "points": 4
+     },
+     {
+      "label": "5",
+      "desc": "Flexible and effective use of a full range of syntactic structures including simple, compound, and complex sentences; There may be rare minor and negligible errors in sentence formation.",
+      "points": 5
+     }
+    ]
+   },
+   {
+    "key": "vocabulary",
+    "name": "Vocabulary",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "1",
+      "desc": "Limited vocabulary often inappropriately used; limited control of word choice and word forms; little attempt to use topic-related terms",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Narrow range of vocabulary to convey basic and elementary meaning; topic related terms used inappropriately; errors in word formation and word choice that may distort meanings",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Minimally adequate range of vocabulary for the topic; no precise use of subtle word meanings; topic related terms only used occasionally; attempts to use less common vocabulary but with some inaccuracy",
+      "points": 3
+     },
+     {
+      "label": "4",
+      "desc": "Sufficient range of vocabulary to allow flexibility and precision; appropriate use of topic-related terms and less common lexical items",
+      "points": 4
+     },
+     {
+      "label": "5",
+      "desc": "Wide range of vocabulary flexibly and effectively used to convey precise meanings; skillful use of topic-related terms and less common words; rare negligible inaccuracies in word use.",
+      "points": 5
+     }
+    ]
+   },
+   {
+    "key": "phraseology",
+    "name": "Phraseology",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "1",
+      "desc": "Memorized chunks of language, or simple phrasal patterns predominate; many repetitions and misuses of phrases.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Narrow range of phrases, such as collocations and lexical bundles, used to convey basic and elementary meaning; many repetitions and /or misuses of phrases.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Evident use of phrases such as idioms, collocations, and lexical bundles but without much variety; some noticeable repetitions and misuses.",
+      "points": 3
+     },
+     {
+      "label": "4",
+      "desc": "Appropriate use of a variety of phrases, such as idioms, collocations, and lexical bundles; occasional inaccuracies and colloquialisms.",
+      "points": 4
+     },
+     {
+      "label": "5",
+      "desc": "Flexible and effective use of a variety of phrases, such as idioms, collocations, and lexical bundles, to convey precise and subtle meanings; rare minor inaccuracies that are negligible.",
+      "points": 5
+     }
+    ]
+   },
+   {
+    "key": "grammar",
+    "name": "Grammar",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "1",
+      "desc": "Errors in grammar and usage throughout.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Many errors in grammar and usage.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Some errors in grammar and usage.",
+      "points": 3
+     },
+     {
+      "label": "4",
+      "desc": "Minimal errors in grammar and usage.",
+      "points": 4
+     },
+     {
+      "label": "5",
+      "desc": "Command of grammar and usage with few or no errors.",
+      "points": 5
+     }
+    ]
+   },
+   {
+    "key": "conventions",
+    "name": "Conventions",
+    "type": "score",
+    "weight": 1,
+    "instructions": "",
+    "levels": [
+     {
+      "label": "1",
+      "desc": "Minimal use of conventions; spelling, capitalization, and punctuation errors throughout.",
+      "points": 1
+     },
+     {
+      "label": "2",
+      "desc": "Variable use of conventions; spelling, capitalization, and punctuation errors frequent and distracting.",
+      "points": 2
+     },
+     {
+      "label": "3",
+      "desc": "Developing use of conventions to convey meaning; errors in spelling, capitalization, and punctuation that are sometimes distracting.",
+      "points": 3
+     },
+     {
+      "label": "4",
+      "desc": "Generally consistent use of appropriate conventions to convey meaning; spelling, capitalization, and punctuation errors few and not distracting.",
+      "points": 4
+     },
+     {
+      "label": "5",
+      "desc": "Consistent use of appropriate conventions to convey meaning; spelling, capitalization, and punctuation errors nonexistent or negligible.",
+      "points": 5
+     }
+    ]
+   }
+  ]
+ }
+}

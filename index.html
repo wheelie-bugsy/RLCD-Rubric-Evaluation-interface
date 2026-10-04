@@ -396,6 +396,69 @@ dl.faq dt{font-weight:700;margin-top:12px}dl.faq dd{margin:3px 0 0 0;color:var(-
 .hsec.hide{display:none}
 .zoomimg{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);display:grid;place-items:center;padding:20px;cursor:zoom-out}.zoomimg img{max-width:100%;max-height:100%;border-radius:8px}
 @media (max-width:860px){.helpwrap{grid-template-columns:1fr}.helpnav{position:static;max-height:none;flex-direction:row;flex-wrap:wrap}.helpnav input{width:100%}.hsec{padding:18px}}
+/* ---------- benchmark tab ---------- */
+#tab-bench .card + .card{margin-top:16px}
+.bstrat{display:grid;grid-template-columns:repeat(auto-fit,minmax(26px,1fr));gap:4px;align-items:end;margin-top:6px}
+.bstrat div{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:inherit;color:var(--muted);min-width:0}
+.bstrat i{display:block;width:100%;border-radius:4px 4px 0 0;background:var(--data-soft);position:relative;min-height:2px}
+.bstrat i b{position:absolute;left:0;right:0;bottom:0;background:var(--data);border-radius:4px 4px 0 0}
+.bruns{display:grid;gap:8px}
+.brun{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--border);border-radius:11px;padding:10px 12px;background:var(--surface-2)}
+.brun .meter{margin-top:6px;max-width:320px}
+.brun b{font-size:14px}
+@media (max-width:640px){.brun{grid-template-columns:1fr}}
+.xfilters select{width:auto;max-width:220px;padding:6px 8px;font-size:13px}
+.xfilters input[type=search]{width:200px;padding:6px 8px;font-size:13px}
+.xfilters label.ck{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.xchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);border-radius:99px;padding:3px 6px 3px 11px;font-size:12.5px;font-weight:600}
+.xchip.on{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+.xchip button{border:0;background:transparent;color:inherit;cursor:pointer;font-size:14px;line-height:1;padding:0 4px;opacity:.7}
+table.xcrit td, table.xcrit th{text-align:right;font-variant-numeric:tabular-nums}
+table.xcrit td:first-child, table.xcrit th:first-child{text-align:left}
+table.xcrit tr.focus td{background:var(--data-soft)}
+.ceilbar{position:relative;height:14px;width:130px;background:var(--surface-2);border-radius:4px;display:inline-block;vertical-align:middle}
+.ceilbar i{position:absolute;left:0;top:2px;bottom:2px;border-radius:3px;background:var(--data)}
+.ceilbar em{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--text)}
+.cm{border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.cm th,.cm td{border:1px solid var(--border);padding:5px 8px;text-align:center;min-width:38px}
+.cm th{background:var(--surface-2);color:var(--muted);font-weight:600}
+.cm td{cursor:pointer;font-weight:650}
+.cm td.d{outline:2px solid var(--text);outline-offset:-2px}
+.cm td:hover{filter:brightness(.92)}
+.hbars{display:grid;gap:5px;font-size:12.5px}
+.hbars .r{display:grid;grid-template-columns:70px 1fr 64px;gap:8px;align-items:center}
+.hbars .t{position:relative;height:16px;background:var(--surface-2);border-radius:4px}
+.hbars .t i{position:absolute;top:0;bottom:0;border-radius:4px}
+.hbars .t .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.hbars .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.distc{display:flex;gap:6px;align-items:flex-end;height:150px;padding-top:6px;overflow-x:auto}
+.distc .g{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:34px;flex:1}
+.distc .bars2{display:flex;gap:2px;align-items:flex-end;height:120px}
+.distc .bars2 i{display:block;width:12px;border-radius:3px 3px 0 0}
+.distc small{font-size:11px;color:var(--muted)}
+.lg{display:flex;gap:12px;font-size:12px;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.lg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+.hm{display:inline-flex;gap:3px;align-items:center;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:12.5px}
+.hm .h{color:var(--muted)}
+.hm .m{font-weight:700;border-radius:5px;padding:0 5px;color:#fff}
+.gap{font-size:11.5px;font-weight:700;border-radius:99px;padding:1px 7px;white-space:nowrap}
+.gap.lo{background:var(--bad-bg);color:var(--bad)} .gap.hi{background:var(--good-bg);color:var(--good)} .gap.ok{background:var(--surface-2);color:var(--muted)}
+.xdraw{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px}
+@media (max-width:860px){.xdraw{grid-template-columns:1fr}}
+.xessay{white-space:pre-wrap;background:var(--surface-2);border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.6;max-height:60vh;overflow:auto}
+.xctx{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.xcritbox{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.xcritbox .lvls{display:grid;gap:4px;margin-top:6px}
+.xcritbox .lv{display:grid;grid-template-columns:auto 1fr;gap:8px;font-size:12.5px;padding:4px 6px;border-radius:6px;align-items:start}
+.xcritbox .lv.h{box-shadow:inset 3px 0 0 var(--muted)} .xcritbox .lv.m{background:var(--data-soft)}
+.xcritbox .xtag{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pbar{display:flex;height:8px;border-radius:5px;overflow:hidden;margin-top:6px;background:var(--surface-2)}
+.pbar i{display:block;height:100%}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));gap:6px;align-items:center;font-size:13px}
+.mapgrid select{padding:5px 6px;font-size:12.5px}
+#tab-bench .grid2 > .card + .card, #tab-bench .grid2 > div > .card:first-child{margin-top:0}
+.brun > *{min-width:0} .bstrat{overflow:hidden} #bLog{overflow-wrap:anywhere}
+
 @media print{
   header.top,.no-print,nav{display:none!important}
   .tab{display:none!important} #tab-results{display:block!important}
@@ -412,6 +475,7 @@ dl.faq dt{font-weight:700;margin-top:12px}dl.faq dd{margin:3px 0 0 0;color:var(-
       <button data-tab="evaluate" class="active">✎ Evaluate</button>
       <button data-tab="rubrics">☷ Rubrics</button>
       <button data-tab="results">▦ Results <span class="count" id="resCount" hidden>0</span></button>
+      <button data-tab="bench">◎ Benchmark</button>
       <button data-tab="history">⟲ History <span class="count" id="histCount" hidden>0</span></button>
       <button data-tab="settings">⚙ Settings</button>
       <button data-tab="help">? Help</button>
@@ -608,6 +672,126 @@ I was asked to lead the weekly stand-up…"></textarea>
   </div>
 </section>
 
+<!-- ===================== BENCHMARK ===================== -->
+<section class="tab" id="tab-bench">
+  <div class="row between" style="margin-bottom:14px;align-items:flex-end">
+    <div>
+      <div style="font-size:20px;font-weight:750;letter-spacing:-.02em">Benchmark against human graders</div>
+      <div class="hint">Score a sample of human-graded essays with the connected model, then compare the model with the people. <a href="#" data-help="benchmark">How this works</a></div>
+    </div>
+    <div class="seg" id="benchSub"><button data-bsub="run" class="active">1 · Run</button><button data-bsub="explore">2 · Explore results</button></div>
+  </div>
+
+  <!-- ---------------- RUN ---------------- -->
+  <div id="bsub-run">
+    <div id="bManifestAlert"></div>
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <h2><span class="step">1</span> Dataset and prompt</h2>
+          <p class="sub">Every essay in a run answers the same prompt, so one rubric is compared against all of them.</p>
+          <label class="f" for="bDataset">Dataset</label>
+          <select id="bDataset"></select>
+          <label class="f" for="bPrompt">Prompt</label>
+          <select id="bPrompt"></select>
+          <div id="bDsInfo" class="hint" style="margin-top:8px"></div>
+          <div class="row" style="margin-top:12px">
+            <label class="btn" for="bUpload">⬆ Upload dataset files…</label>
+            <input type="file" id="bUpload" accept=".csv,.tsv,.txt,.jsonl" multiple hidden>
+            <span class="hint">ASAP, PERSUADE or ELLIPSE files straight from the source, or your own graded CSV.</span>
+          </div>
+        </div>
+        <div class="card">
+          <h2><span class="step">2</span> Rubric</h2>
+          <p class="sub">Each dataset's official rubric, word for word. Only line breaks and spacing were tidied so it fits the API call.</p>
+          <div id="bRubricInfo"></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn sm" id="bShowRubric">View rubric</button>
+            <button class="btn sm" id="bPreviewReq">View the exact request</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2><span class="step">3</span> Sample</h2>
+          <p class="sub">Stratified keeps low, middle and high human scores in proportion, and always includes the rare ones. The same seed picks the same essays every time, here and in <span class="mono">benchmark.py</span>.</p>
+          <div class="row" style="align-items:flex-end">
+            <div style="width:130px"><label class="f" for="bN">Essays</label><input type="number" id="bN" min="1" value="200"></div>
+            <button class="btn sm" id="bAll" style="margin-bottom:3px">All</button>
+            <div><label class="f">Method</label><div class="seg" id="bMode"><button data-m="stratified" class="active">Stratified</button><button data-m="random">Random</button><button data-m="first">First N</button></div></div>
+            <div style="width:90px"><label class="f" for="bSeed">Seed</label><input type="number" id="bSeed" value="42"></div>
+          </div>
+          <div id="bSampleInfo" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <h2><span class="step">4</span> Run</h2>
+          <p class="sub" id="bModelInfo"></p>
+          <label class="f" for="bName">Run name</label>
+          <input type="text" id="bName" placeholder="e.g. ELLIPSE distance learning · nimble">
+          <div class="row" style="margin-top:12px">
+            <button class="btn primary big" id="bStart">▶ Start benchmark</button>
+            <button class="btn" id="bPause" hidden>⏸ Pause</button>
+          </div>
+          <div id="bProgress" hidden style="margin-top:12px">
+            <div class="row between"><b id="bProgText"></b><span class="hint" id="bProgEta"></span></div>
+            <div class="meter" style="margin-top:6px"><i id="bProgBar" style="width:0%"></i></div>
+            <div class="log mono" id="bLog" style="margin-top:8px;max-height:150px;overflow:auto;font-size:12px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="row between"><h2 style="margin:0">Benchmark runs</h2><span class="hint">Saved in this browser after every essay. Closing the tab is safe: Resume picks up where it stopped.</span></div>
+      <div id="bRuns" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <!-- ---------------- EXPLORE ---------------- -->
+  <div id="bsub-explore" hidden>
+    <div class="card">
+      <div class="row between">
+        <div class="row">
+          <label class="btn primary" for="xFile">📂 Open results CSV…</label>
+          <input type="file" id="xFile" accept=".csv" multiple hidden>
+          <span class="hint">From this tab or <span class="mono">benchmark.py</span>. Open several to compare models.</span>
+        </div>
+        <div class="row" id="xExports" hidden>
+          <button class="btn sm" id="xCsv">⬇ Filtered CSV</button>
+          <button class="btn sm" id="xReport">⬇ HTML report</button>
+        </div>
+      </div>
+      <div id="xRunChips" class="row" style="margin-top:10px"></div>
+    </div>
+    <div id="xEmpty" class="card empty"><div class="ico">◎</div><b>No results open</b><div>Run a benchmark, then click Explore on it, or open a results CSV.</div></div>
+    <div id="xBody" hidden>
+      <div class="card xfilters">
+        <div class="row" id="xFilters"></div>
+        <div class="row" id="xActive" style="margin-top:8px"></div>
+      </div>
+      <div class="stats" id="xTiles" style="margin-top:16px"></div>
+      <div class="card">
+        <div class="row between" style="align-items:flex-start"><div><h2>Model vs human, by criterion</h2><p class="sub" id="xCritSub"></p></div><span class="hint">Click a row to focus the charts below.</span></div>
+        <div class="tablewrap"><table class="data xcrit" id="xCritTable"></table></div>
+        <p class="hint" style="margin-top:8px" id="xCritNote"></p>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="card"><h2 id="xCmTitle">Where the model landed</h2><p class="sub">Rows are the human score, columns the model's. Outlined cells are agreement. Click a cell to list those essays.</p><div id="xConfusion"></div></div>
+        <div class="card"><h2>Score distribution</h2><p class="sub">How often each score was given, by people and by the model.</p><div id="xDist"></div></div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="card"><h2>Bias by human score</h2><p class="sub">Average model score minus human score, for essays at each human score. Left = model harsher.</p><div id="xBias"></div></div>
+        <div class="card"><h2>Confidence vs accuracy</h2><p class="sub">If confidence is useful, the model should agree more often when it is more confident.</p><div id="xCalib"></div><h2 style="margin-top:16px">Gap by essay length</h2><div id="xLen"></div></div>
+      </div>
+      <div class="card" id="xCompareCard" hidden style="margin-top:16px"><h2>Compare runs</h2><p class="sub">Every open results file for this dataset and prompt, on the same filters. Use it to compare models.</p><div class="tablewrap"><table class="data" id="xCompare"></table></div></div>
+      <div class="card" style="margin-top:16px">
+        <div class="row between"><h2 style="margin:0" id="xRowsTitle">Essays</h2><div class="row"><select id="xSort" style="width:auto"><option value="gap">Biggest gap first</option><option value="gapAsc">Model lowest vs human</option><option value="gapDesc">Model highest vs human</option><option value="conf">Least confident first</option><option value="words">Longest first</option><option value="id">ID</option></select></div></div>
+        <div class="tablewrap" style="margin-top:10px"><table class="data" id="xRows"></table></div>
+        <div class="row between" style="margin-top:8px"><span class="hint" id="xPageInfo"></span><div class="row"><button class="btn sm" id="xPrev">‹ Prev</button><button class="btn sm" id="xNext">Next ›</button></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== HISTORY ===================== -->
 <section class="tab" id="tab-history">
   <div class="card">
@@ -680,6 +864,7 @@ I was asked to lead the weekly stand-up…"></textarea>
     <a href="#h-results">Results and reviewing</a>
     <a href="#h-blind">Blind grading</a>
     <a href="#h-alignment">Model vs human alignment</a>
+    <a href="#h-benchmark">Benchmark against human graders</a>
     <a href="#h-history">History, exports and audit</a>
     <a href="#h-settings">Settings</a>
     <a href="#h-writing">Writing rubrics that score well</a>
@@ -970,6 +1155,83 @@ ollama pull tev1:0.8b     # tiny, for quick tests (experimental)</pre></li>
   </tbody></table></div>
   <p><b>Verdict rules.</b> Strong: exact match 80%+ and within-one 95%+. Moderate: exact match 60%+ and within-one 85%+. Otherwise weak. Use at least 30 graded responses per criterion before deciding.</p>
   <p><b>Where the record is kept.</b> The change history is saved with the run, included in the JSON export and the audit report, and each response's audit trail shows a "Human review vs model" table. The CSV export adds the model's overall score plus, for every criterion, your level, "match" or "changed (+1)", and whether you graded blind.</p>
+</article>
+
+<article class="hsec" id="h-benchmark">
+  <h2>Benchmark against human graders</h2>
+  <p>The Benchmark tab answers a different question from the rest of the app: <b>before you trust the model with your learners, how well does it grade essays that experienced people have already graded?</b> It sends a sample of publicly available, human-graded essays to the model with the dataset's own rubric, stores the model's scores next to the human scores, and gives you an explorer to compare them overall, by criterion, by group and essay by essay.</p>
+  <figure><img src="help/bench-setup.png" alt="Benchmark tab, run view" loading="lazy"><figcaption>Benchmark → 1 · Run</figcaption></figure>
+  <ol class="annot">
+    <li><span class="n">1</span> <b>Dataset and prompt.</b> Pick a dataset, then one writing prompt. Every essay in a run answers that prompt, so a single rubric is compared against all of them.</li>
+    <li><span class="n">2</span> <b>Rubric.</b> The dataset's official rubric, filled in for you. <b>View rubric</b> shows every level; <b>View the exact request</b> shows exactly what the model will receive for the first essay.</li>
+    <li><span class="n">3</span> <b>Sample.</b> How many essays, and how to pick them. <b>Stratified</b> (the default) keeps low, middle and high human scores in proportion and always includes the rare ones. The bars show the whole prompt (light) and your sample (dark).</li>
+    <li><span class="n">4</span> <b>Run.</b> Uses the model connected in Settings. Progress is saved after every essay; <b>Pause</b> and <b>Resume</b> whenever you like, even after closing the browser.</li>
+    <li><span class="n">5</span> <b>Benchmark runs.</b> Each run can be resumed, explored, downloaded as a results CSV, or downloaded as an audit file with every request and raw reply.</li>
+  </ol>
+
+  <h3>The datasets</h3>
+  <div class="tablewrap"><table class="data htable"><thead><tr><th>Dataset</th><th>What's in it</th><th>Human scores</th><th>Rubric</th></tr></thead><tbody>
+    <tr><td><b>ASAP-AES set 7</b></td><td>1,569 grade 7 stories about patience</td><td>Two raters, four traits each, 0 to 3. The "human" score is their average.</td><td>Ideas (points doubled), Organization, Style, Conventions</td></tr>
+    <tr><td><b>PERSUADE 2.0 (holistic)</b></td><td>15,594 argumentative essays, grades 6 to 12, 15 prompts</td><td>One final holistic score, 1 to 6</td><td>Holistic Rating Form (independent or source-based version, chosen per prompt)</td></tr>
+    <tr><td><b>PERSUADE 2.0 (argument elements)</b></td><td>144,289 Leads, Positions, Claims, Evidence and so on, cut from those essays</td><td>Ineffective, Adequate or Effective</td><td>One criterion per element type. Each element is scored only on its own type, with the full essay given as context.</td></tr>
+    <tr><td><b>ELLIPSE</b></td><td>6,482 essays by English language learners, grades 8 to 12, 44 prompts</td><td>Two raters, overall plus six language traits, 1 to 5. The published score is their average.</td><td>Overall, Cohesion, Syntax, Vocabulary, Phraseology, Grammar, Conventions</td></tr>
+  </tbody></table></div>
+
+  <h3>The rubrics are word for word</h3>
+  <p>Each rubric was built straight from the dataset's official rubric file, and every level description was checked by a script to be an exact copy of the source. Only spacing and line breaks were tidied, plus two words the ELLIPSE file had split in half ("capitalizatio n", "inappropri ately"). The check is recorded in <span class="mono">datasets/rubrics/VERIFY.md</span>; the rubrics are also saved as CSV files you can import in the Rubrics tab.</p>
+  <p>The API needs a few words around the rubric. This is everything the benchmark adds, and nothing else:</p>
+  <ul>
+    <li>Each criterion's question is <span class="mono">Criterion "&lt;name&gt;". Which level of this rubric criterion does the essay meet?</span> (for PERSUADE holistic, the rubric's own instruction paragraph is used instead of the second sentence).</li>
+    <li>Each level is sent as <span class="mono">&lt;label&gt;: &lt;description&gt;</span>, e.g. <span class="mono">3: Tells a story with ideas that are clearly focused…</span>, which is how the source rubrics are laid out.</li>
+    <li>The essay is sent under the headings <span class="mono">ASSIGNMENT GIVEN TO THE WRITER</span> (the prompt's own wording from the dataset), <span class="mono">SOURCE TEXT GIVEN TO THE WRITER</span> (source-based PERSUADE prompts only) and <span class="mono">ESSAY</span>.</li>
+    <li>With an LLM judge, a short system message asks for an honest, literal reading of each level and a JSON reply.</li>
+  </ul>
+
+  <h3>Getting the data</h3>
+  <p>The app ships with the data already prepared in <span class="mono">datasets/bench/</span>. To download it yourself, or refresh it:</p>
+  <div class="tablewrap"><table class="data htable"><thead><tr><th>Dataset</th><th>Where</th><th>Save as</th></tr></thead><tbody>
+    <tr><td>ASAP set 7</td><td><a href="https://huggingface.co/datasets/llm-aes/asap-7-original" target="_blank" rel="noopener">huggingface.co/datasets/llm-aes/asap-7-original</a> (no account)</td><td><span class="mono">datasets/asap7/asap-7-original.csv</span></td></tr>
+    <tr><td>PERSUADE 2.0</td><td><a href="https://github.com/scrosseye/persuade_corpus_2.0" target="_blank" rel="noopener">github.com/scrosseye/persuade_corpus_2.0</a> (Google Drive links in the README)</td><td><span class="mono">datasets/persuade/</span> (see README.md for the file names)</td></tr>
+    <tr><td>ELLIPSE</td><td><a href="https://github.com/scrosseye/ELLIPSE-Corpus" target="_blank" rel="noopener">github.com/scrosseye/ELLIPSE-Corpus</a> (zip passwords are in its README)</td><td><span class="mono">datasets/ellipse/</span></td></tr>
+  </tbody></table></div>
+  <p>Then run <span class="mono">python3 benchmark.py prepare</span> and reload the app. You can also skip that step and use <b>Upload dataset files…</b>: the app recognises the original ASAP, PERSUADE and ELLIPSE files by their columns. For ELLIPSE, upload the main CSV and the raw rater scores file together to get both raters.</p>
+
+  <h3>Your own graded work</h3>
+  <p>Upload any CSV of graded writing and the app asks which column holds the text and which columns hold the human scores for each criterion. Choose <b>My rubric in the Rubrics tab</b> to benchmark your own rubric against your own past grading. If two people graded each piece, map both: you get a real human-vs-human ceiling.</p>
+
+  <h3>Reading the explorer</h3>
+  <figure><img src="help/bench-explore.png" alt="Benchmark explorer" loading="lazy"><figcaption>Benchmark → 2 · Explore results (simulated scores, for illustration)</figcaption></figure>
+  <ol class="annot">
+    <li><span class="n">1</span> <b>Open results.</b> Click <b>Explore</b> on a run, or open one or more results CSVs (from the tab or from <span class="mono">benchmark.py</span>). Each open file gets a chip; files for the same prompt are compared side by side.</li>
+    <li><span class="n">2</span> <b>Filters.</b> Criterion, prompt, every group the dataset records (grade, gender, ELL status, economic status and so on), the human score, where the model disagreed, essays where the two raters disagreed, and text search. Everything on the page follows the filters.</li>
+    <li><span class="n">3</span> <b>Headline numbers.</b> Agreement averaged over the criteria.</li>
+    <li><span class="n">4</span> <b>By criterion.</b> Click a row to point the charts below at that criterion.</li>
+    <li><span class="n">5</span> <b>Charts.</b> The grid of human vs model scores (click a cell to list those essays), score distributions, bias at each human score, confidence vs accuracy, and gap by essay length.</li>
+    <li><span class="n">6</span> <b>Essays.</b> Sorted by the biggest gap first. Click a row to read the essay with the rubric level each side chose, the model's probabilities, and the exact request and raw reply. Use ← and → to step through.</li>
+  </ol>
+  <div class="tablewrap"><table class="data htable"><thead><tr><th>Measure</th><th>Meaning</th></tr></thead><tbody>
+    <tr><td>QWK vs human</td><td>Quadratic weighted kappa between the model and the human score: agreement beyond chance, where bigger misses cost more. 1 is perfect, 0 is chance. The standard measure for essay scoring.</td></tr>
+    <tr><td>Rater 1 vs 2</td><td>The same measure between the two people. This is the realistic ceiling: people don't fully agree either.</td></tr>
+    <tr><td>Model vs ceiling</td><td>The model against one rater, divided by one rater against the other. 100% means the model agrees with a person as well as two people agree with each other. Shown only when the raters agree enough (QWK above 0.2) for the ratio to mean something.</td></tr>
+    <tr><td>Exact / within 1</td><td>Share of identical scores, and of scores no more than one level apart. When the human score is an average such as 2.5, matching either rater counts as exact.</td></tr>
+    <tr><td>Bias</td><td>Average model score minus human score, in levels. Negative means the model is harsher.</td></tr>
+  </tbody></table></div>
+  <p><b>Downloads.</b> <b>Filtered CSV</b> saves the rows you're looking at. <b>HTML report</b> saves the headline numbers, the criterion table, the grid and the filtered essays as a page you can share.</p>
+
+  <h3>Long runs from the terminal</h3>
+  <pre class="cmd">python3 benchmark.py list
+python3 benchmark.py run --dataset ellipse --prompt "Distance learning" --sample 200 -o ellipse-dl-nimble.csv
+python3 benchmark.py run --dataset asap7 --sample all --model tev1
+python3 benchmark.py run --dataset persuade --prompt "Car-free cities" --provider openai --url https://api.openai.com/v1 --model gpt-4.1-mini</pre>
+  <p>The script uses the same rubrics, request, sampling and results columns as the tab, so the same seed picks the same essays in both, and its CSV opens in the explorer. If you stop it, run the same command again and it carries on. Keys come from <span class="mono">--key</span> or the <span class="mono">JEV_API_KEY</span>, <span class="mono">OPENAI_API_KEY</span> or <span class="mono">ANTHROPIC_API_KEY</span> environment variables, and are never written to the results.</p>
+
+  <h3>Before you rely on the numbers</h3>
+  <ul>
+    <li><b>These are school students, not adult learners.</b> A benchmark shows how faithfully the model applies a rubric. Your own graded learner work (above) is the real test for your programme.</li>
+    <li><b>Use enough essays.</b> Agreement figures from fewer than about 100 essays per criterion move around a lot. The stratified sample of 200 is a good start; run more for a decision.</li>
+    <li><b>Expect some harshness.</b> Research on decision models such as nimble found they tend to score below people on graded scales. The bias chart shows how much.</li>
+    <li><b>Licences.</b> PERSUADE and ELLIPSE are CC BY-NC-SA 4.0: fine for internal benchmarking with attribution, not for commercial use or redistribution. ASAP came from a Kaggle competition for research use.</li>
+  </ul>
 </article>
 
 <article class="hsec" id="h-history">
@@ -1810,7 +2072,7 @@ function judgePrompt(body){
     if (q.type === "noul") return `"${k}" (yes/no)\n  Question: ${q.instructions}\n  true means: ${q.criteria?.true || "yes"}\n  false means: ${q.criteria?.false || "no"}\n  Answer as {"probability_true": <0 to 1>}`;
     return `"${k}" (choose one)\n  Question: ${q.instructions}\n  Options:\n${Object.entries(q.criteria).map(([o, d]) => `    "${o}": ${d}`).join("\n")}\n  Answer as {"choice": "<option>", "probabilities": {"<option>": <0 to 1>, ...}}`;
   }).join("\n\n");
-  const system = "You are an experienced, fair assessor in a corporate learning programme. You judge a learner's written response against rubric questions. Judge only what is actually written. Apply each level description literally. Give probabilities that honestly reflect your uncertainty. Reply with one JSON object and nothing else: no prose, no markdown.";
+  const system = body.__system || "You are an experienced, fair assessor in a corporate learning programme. You judge a learner's written response against rubric questions. Judge only what is actually written. Apply each level description literally. Give probabilities that honestly reflect your uncertainty. Reply with one JSON object and nothing else: no prose, no markdown.";
   const user = `TEXT TO JUDGE:\n<<<\n${typeof body.state === "string" ? body.state : JSON.stringify(body.state, null, 2)}\n>>>\n\nQUESTIONS:\n\n${qs}\n\nReturn one JSON object whose keys are exactly: ${Object.keys(body.questions).map(k => `"${k}"`).join(", ")}.`;
   return { system, user };
 }
@@ -2119,7 +2381,7 @@ $("#previewBtn").onclick = () => {
 };
 
 /* ---------- audit trail ---------- */
-const APP_VERSION = "1.3.1";
+const APP_VERSION = "1.4";
 async function sha256(text){
   try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); } catch { return null; }
 }
@@ -2769,6 +3031,659 @@ $("#themeSeg").onclick = e => { const b = e.target.closest("button"); if (!b) re
 $("#resetSettingsBtn").onclick = () => { const prev = clone(S); S = Object.assign({}, DEFAULTS); saveSettings(); renderSettings(); checkConnection(true);
   toast("Settings reset to defaults", { undo: () => { S = prev; saveSettings(); renderSettings(); checkConnection(true); } }); };
 $("#optRelevance").onchange = preflight;
+
+/* Official benchmark rubrics, word for word (built by tools/build_rubrics.py; see datasets/rubrics/VERIFY.md). */
+const BENCH_RUBRICS = {"asap7": {"id": "asap7", "name": "ASAP set 7 (patience narrative)", "source": "llm-aes/asap-7-original, column `rubrics` (Hewlett ASAP-AES set 7)", "criteria": [{"key": "ideas", "name": "Ideas (points doubled)", "type": "score", "weight": 2, "instructions": "", "levels": [{"label": "0", "desc": "ideas are not focused on the task and/or are undeveloped.", "points": 0}, {"label": "1", "desc": "Tells a story with ideas that are minimally focused on the topic and developed with limited and/or general details.", "points": 1}, {"label": "2", "desc": "Tells a story with ideas that are somewhat focused on the topic and are developed with a mix of specific and/or general details.", "points": 2}, {"label": "3", "desc": "Tells a story with ideas that are clearly focused on the topic and are thoroughly developed with specific, relevant details.", "points": 3}]}, {"key": "organization", "name": "Organization", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "0", "desc": "No organization evident.", "points": 0}, {"label": "1", "desc": "Organization and connections between ideas and/or events are weak.", "points": 1}, {"label": "2", "desc": "Organization and connections between ideas and/or events are logically sequenced.", "points": 2}, {"label": "3", "desc": "Organization and connections between ideas and/or events are clear and logically sequenced.", "points": 3}]}, {"key": "style", "name": "Style", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "0", "desc": "Ineffective use of language for the writer's purpose and audience.", "points": 0}, {"label": "1", "desc": "Limited use of language, including lack of variety in word choice and sentences, may hinder support for the writer's purpose and audience.", "points": 1}, {"label": "2", "desc": "Adequate command of language, including effective word choice and clear sentences, supports the writer's purpose and audience.", "points": 2}, {"label": "3", "desc": "Command of language, including effective and compelling word choice and varied sentence structure, clearly supports the writer's purpose and audience.", "points": 3}]}, {"key": "conventions", "name": "Conventions", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "0", "desc": "Ineffective use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation.", "points": 0}, {"label": "1", "desc": "Limited use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation for the grade level.", "points": 1}, {"label": "2", "desc": "Adequate use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation for the grade level.", "points": 2}, {"label": "3", "desc": "Consistent, appropriate use of conventions of Standard English* for grammar, usage, spelling, capitalization, and punctuation for the grade level.", "points": 3}]}]}, "persuade_holistic_indy": {"id": "persuade_holistic_indy", "name": "PERSUADE 2.0 holistic (independent)", "source": "persuade_corpus_2.0/sat_rubric_only_indy.pdf", "criteria": [{"key": "holistic", "name": "Holistic Rating Form", "type": "score", "weight": 1, "instructions": "After reading each essay and completing the analytical rating form, assign a holistic score based on the rubric below. For the following evaluations you will need to use a grading scale between 1 (minimum) and 6 (maximum). As with the analytical rating form, the distance between each grade (e.g., 1-2, 3-4, 4-5) should be considered equal.", "levels": [{"label": "SCORE OF 1", "desc": "An essay in this category demonstrates very little or no mastery, and is severely flawed by ONE OR MORE of the following weaknesses: develops no viable point of view on the issue, or provides little or no evidence to support its position; the essay is disorganized or unfocused, resulting in a disjointed or incoherent essay; the essay displays fundamental errors in vocabulary and/or demonstrates severe flaws in sentence structure; the essay contains pervasive errors in grammar, usage, or mechanics that persistently interfere with meaning.", "points": 1}, {"label": "SCORE OF 2", "desc": "An essay in this category demonstrates little mastery, and is flawed by ONE OR MORE of the following weaknesses: develops a point of view on the issue that is vague or seriously limited, and demonstrates weak critical thinking, providing inappropriate or insufficient examples, reasons, or other evidence to support its position; the essay is poorly organized and/or focused, or demonstrates serious problems with coherence or progression of ideas; the essay displays very little facility in the use of language, using very limited vocabulary or incorrect word choice and/or demonstrates frequent problems in sentence structure; the essay contains errors in grammar, usage, and mechanics so serious that meaning is somewhat obscured.", "points": 2}, {"label": "SCORE OF 3", "desc": "An essay in this category demonstrates developing mastery, and is marked by ONE OR MORE of the following weaknesses: develops a point of view on the issue, demonstrating some critical thinking, but may do so inconsistently or use inadequate examples, reasons, or other evidence to support its position; the essay is limited in its organization or focus, or may demonstrate some lapses in coherence or progression of ideas displays; the essay may demonstrate facility in the use of language, but sometimes uses weak vocabulary or inappropriate word choice and/or lacks variety or demonstrates problems in sentence structure; the essay may contain an accumulation of errors in grammar, usage, and mechanics.", "points": 3}, {"label": "SCORE OF 4", "desc": "An essay in this category demonstrates adequate mastery, although it will have lapses in quality. A typical essay develops a point of view on the issue and demonstrates competent critical thinking, using adequate examples, reasons, and other evidence to support its position; the essay is generally organized and focused, demonstrating some coherence and progression of ideas exhibits adequate; the essay may demonstrate inconsistent facility in the use of language, using generally appropriate vocabulary demonstrates some variety in sentence structure; the essay may have some errors in grammar, usage, and mechanics.", "points": 4}, {"label": "SCORE OF 5", "desc": "An essay in this category demonstrates reasonably consistent mastery, although it will have occasional errors or lapses in quality. A typical essay effectively develops a point of view on the issue and demonstrates strong critical thinking, generally using appropriate examples, reasons, and other evidence to support its position; the essay is well organized and focused, demonstrating coherence and progression of ideas; the essay exhibits facility in the use of language, using appropriate vocabulary demonstrates variety in sentence structure; the essay is generally free of most errors in grammar, usage, and mechanics.", "points": 5}, {"label": "SCORE OF 6", "desc": "An essay in this category demonstrates clear and consistent mastery, although it may have a few minor errors. A typical essay effectively and insightfully develops a point of view on the issue and demonstrates outstanding critical thinking, using clearly appropriate examples, reasons, and other evidence to support its position; the essay is well organized and clearly focused, demonstrating clear coherence and smooth progression of ideas; the essay exhibits skillful use of language, using a varied, accurate, and apt vocabulary and demonstrates meaningful variety in sentence structure; the essay is free of most errors in grammar, usage, and mechanics.", "points": 6}]}]}, "persuade_holistic_source": {"id": "persuade_holistic_source", "name": "PERSUADE 2.0 holistic (source-based)", "source": "persuade_corpus_2.0/sat_rubric_only_source_based.pdf", "criteria": [{"key": "holistic", "name": "Holistic Rating Form", "type": "score", "weight": 1, "instructions": "After reading each essay and completing the analytical rating form, assign a holistic score based on the rubric below. For the following evaluations you will need to use a grading scale between 1 (minimum) and 6 (maximum). As with the analytical rating form, the distance between each grade (e.g., 1-2, 3-4, 4-5) should be considered equal.", "levels": [{"label": "SCORE OF 1", "desc": "An essay in this category demonstrates very little or no mastery, and is severely flawed by ONE OR MORE of the following weaknesses: develops no viable point of view on the issue, or provides little or no evidence to support its position; the essay is disorganized or unfocused, resulting in a disjointed or incoherent essay; the essay displays fundamental errors in vocabulary and/or demonstrates severe flaws in sentence structure; the essay contains pervasive errors in grammar, usage, or mechanics that persistently interfere with meaning.", "points": 1}, {"label": "SCORE OF 2", "desc": "An essay in this category demonstrates little mastery, and is flawed by ONE OR MORE of the following weaknesses: develops a point of view on the issue that is vague or seriously limited, and demonstrates weak critical thinking; the essay provides inappropriate or insufficient examples, reasons, or other evidence taken from the source text to support its position; the essay is poorly organized and/or focused, or demonstrates serious problems with coherence or progression of ideas; the essay displays very little facility in the use of language, using very limited vocabulary or incorrect word choice and/or demonstrates frequent problems in sentence structure; the essay contains errors in grammar, usage, and mechanics so serious that meaning is somewhat obscured.", "points": 2}, {"label": "SCORE OF 3", "desc": "An essay in this category demonstrates developing mastery, and is marked by ONE OR MORE of the following weaknesses: develops a point of view on the issue, demonstrating some critical thinking, but may do so inconsistently or use inadequate examples, reasons, or other evidence taken from the source texts to support its position; the essay is limited in its organization or focus, or may demonstrate some lapses in coherence or progression of ideas displays; the essay may demonstrate facility in the use of language, but sometimes uses weak vocabulary or inappropriate word choice and/or lacks variety or demonstrates problems in sentence structure; the essay may contain an accumulation of errors in grammar, usage, and mechanics.", "points": 3}, {"label": "SCORE OF 4", "desc": "An essay in this category demonstrates adequate mastery, although it will have lapses in quality. A typical essay develops a point of view on the issue and demonstrates competent critical thinking; the essay using adequate examples, reasons, and other evidence taken from the source text(s) to support its position; the essay is generally organized and focused, demonstrating some coherence and progression of ideas exhibits adequate; the essay may demonstrate inconsistent facility in the use of language, using generally appropriate vocabulary demonstrates some variety in sentence structure; the essay may have some errors in grammar, usage, and mechanics.", "points": 4}, {"label": "SCORE OF 5", "desc": "An essay in this category demonstrates reasonably consistent mastery, although it will have occasional errors or lapses in quality. A typical essay effectively develops a point of view on the issue and demonstrates strong critical thinking; the essay generally using appropriate examples, reasons, and other evidence taken from the source text(s) to support its position; the essay is well organized and focused, demonstrating coherence and progression of ideas; the essay exhibits facility in the use of language, using appropriate vocabulary demonstrates variety in sentence structure; the essay is generally free of most errors in grammar, usage, and mechanics.", "points": 5}, {"label": "SCORE OF 6", "desc": "An essay in this category demonstrates clear and consistent mastery, although it may have a few minor errors. A typical essay effectively and insightfully develops a point of view on the issue and demonstrates outstanding critical thinking; the essay uses clearly appropriate examples, reasons, and other evidence taken from the source text(s) to support its position; the essay is well organized and clearly focused, demonstrating clear coherence and smooth progression of ideas; the essay exhibits skillful use of language, using a varied, accurate, and apt vocabulary and demonstrates meaningful variety in sentence structure; the essay is free of most errors in grammar, usage, and mechanics.", "points": 6}]}]}, "persuade_elements": {"id": "persuade_elements", "name": "PERSUADE 2.0 argument element effectiveness", "source": "persuade_corpus_2.0/argumentation_effectiveness_rubric.pdf", "criteria": [{"key": "lead", "name": "Lead", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "Ineffective", "desc": "The lead may not grab the readers' attention and may not point to the position.", "points": 0}, {"label": "Adequate", "desc": "The lead attempts to grab the reader’s attention and points toward the position.", "points": 1}, {"label": "Effective", "desc": "The lead grabs the reader’s attention and strongly points toward the position.", "points": 2}]}, {"key": "position", "name": "Position", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "Ineffective", "desc": "The position is not relevant to the topic, and/or it shows no clear stance.", "points": 0}, {"label": "Adequate", "desc": "The position addresses the topic but generally repeats the prompt's stance.", "points": 1}, {"label": "Effective", "desc": "The position states a clear stance closely related to the topic.", "points": 2}]}, {"key": "claim", "name": "Claim", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "Ineffective", "desc": "The claim is irrelevant to the position. It may also be weak and/or not acceptable.", "points": 0}, {"label": "Adequate", "desc": "The claim relates to the position but may simply repeat part of the position or state a claim without support. The claim is moderately valid and acceptable.", "points": 1}, {"label": "Effective", "desc": "The claim is closely relevant to the position and backs up the position with specific points or perspectives. The claim is valid and acceptable.", "points": 2}]}, {"key": "counterclaim", "name": "Counterclaim", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "Ineffective", "desc": "The counterclaim is neither reasonable nor relevant.", "points": 0}, {"label": "Adequate", "desc": "The counterclaim is not quite a reasonable opposing opinion, or it is not closely relevant to the position.", "points": 1}, {"label": "Effective", "desc": "The counterclaim is reasonable and relevant. It represents a valid objection to the position.", "points": 2}]}, {"key": "rebuttal", "name": "Rebuttal", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "Ineffective", "desc": "The rebuttal misses the target. It does not refute the counterclaim.", "points": 0}, {"label": "Adequate", "desc": "The rebuttal does not answer the counterclaim directly and it is not strong and/or valid.", "points": 1}, {"label": "Effective", "desc": "The rebuttal directly answers and refutes the counterclaim.", "points": 2}]}, {"key": "evidence", "name": "Evidence", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "Ineffective", "desc": "The evidence is irrelevant to the claim it backs up and provide few valid examples. The evidence uses unsubstantiated assumptions that sound quite unacceptable.", "points": 0}, {"label": "Adequate", "desc": "The evidence is not closely relevant to the claim it supports. The evidence contains some detailed examples but they may not be relevant to each other and only loosely bound together. The evidence uses some unsubstantiated or unsound claims or assumptions.", "points": 1}, {"label": "Effective", "desc": "The evidence is closely relevant to the claim they support and back up the claim objectively with concrete facts, examples, research, statistics, or studies. The reasons in the evidence support the claim and are sound and well substantiated.", "points": 2}]}, {"key": "concluding_statement", "name": "Concluding summary", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "Ineffective", "desc": "The concluding summary is irrelevant to the claims. The conclusion may also misrepresent the claims.", "points": 0}, {"label": "Adequate", "desc": "The concluding summary merely copies the claims or may restates only part of the claims. It may partially misrepresent the claims.", "points": 1}, {"label": "Effective", "desc": "The concluding summary effectively restates the claims using different wording. It may readdress the claims in light of the evidence provided.", "points": 2}]}], "note": "One criterion per element type. Each element is scored only on the criterion for its own type."}, "ellipse": {"id": "ellipse", "name": "ELLIPSE English proficiency", "source": "ELLIPSE-Corpus/ELL_Rubrics.docx", "criteria": [{"key": "overall", "name": "Overall", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "1", "desc": "A limited range of familiar words or phrases loosely strung together; frequent errors in grammar (including syntax) and usage. Communication impeded in most cases by language inaccuracies.", "points": 1}, {"label": "2", "desc": "Inconsistent facility in sentence formation, word choice, and mechanics; organization partially developed but may be missing or unsuccessful. Communication impeded in many instances by language inaccuracies.", "points": 2}, {"label": "3", "desc": "Facility limited to the use of common structures and generic vocabulary; organization generally controlled although connection sometimes absent or unsuccessful; errors in grammar and syntax and usage. Communication is impeded by language inaccuracies in some cases.", "points": 3}, {"label": "4", "desc": "Facility in the use of language with syntactic variety and range of words and phrases; controlled organization; accuracy in grammar and conventions; occasional language inaccuracies that rarely impede communication.", "points": 4}, {"label": "5", "desc": "Native-like facility in the use of language with syntactic variety, Appropriate word choice and phrases; well-controlled text organization; precise use of grammar and conventions; rare language inaccuracies that do not impede communication.", "points": 5}]}, {"key": "cohesion", "name": "Cohesion", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "1", "desc": "No clear control of organization; cohesive devices not present or unsuccessfully used; presentation of ideas unclear.", "points": 1}, {"label": "2", "desc": "Organization only partially developed with a lack of logical sequencing of ideas; some basic cohesive devices used but with inaccuracy or repetition.", "points": 2}, {"label": "3", "desc": "Organization generally controlled; cohesive devices used but limited in type; Some repetitive, mechanical, or faulty use of cohesion use within and/or between sentences and paragraphs.", "points": 3}, {"label": "4", "desc": "Organization generally well controlled; a range of cohesive devices used appropriately such as reference and transitional words and phrases to connect ideas; generally appropriate overlap of ideas", "points": 4}, {"label": "5", "desc": "Text organization consistently well controlled using a variety of effective linguistic features such as reference and transitional words and phrases to connect ideas across sentences and paragraphs; appropriate overlap of ideas.", "points": 5}]}, {"key": "syntax", "name": "Syntax", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "1", "desc": "Pervasive and basic errors in sentence structure and word order that cause confusion; basic sentences errors common.", "points": 1}, {"label": "2", "desc": "Some sentence variation used; many sentence structure problems.", "points": 2}, {"label": "3", "desc": "Simple, compound, and complex syntactic structures present although the range may be limited; some apparent errors in sentence formation, especially in more complex sentences.", "points": 3}, {"label": "4", "desc": "Appropriate use of a variety of syntactic structures, such as simple, compound, and complex sentences; occasional errors or inappropriateness in sentence formation.", "points": 4}, {"label": "5", "desc": "Flexible and effective use of a full range of syntactic structures including simple, compound, and complex sentences; There may be rare minor and negligible errors in sentence formation.", "points": 5}]}, {"key": "vocabulary", "name": "Vocabulary", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "1", "desc": "Limited vocabulary often inappropriately used; limited control of word choice and word forms; little attempt to use topic-related terms", "points": 1}, {"label": "2", "desc": "Narrow range of vocabulary to convey basic and elementary meaning; topic related terms used inappropriately; errors in word formation and word choice that may distort meanings", "points": 2}, {"label": "3", "desc": "Minimally adequate range of vocabulary for the topic; no precise use of subtle word meanings; topic related terms only used occasionally; attempts to use less common vocabulary but with some inaccuracy", "points": 3}, {"label": "4", "desc": "Sufficient range of vocabulary to allow flexibility and precision; appropriate use of topic-related terms and less common lexical items", "points": 4}, {"label": "5", "desc": "Wide range of vocabulary flexibly and effectively used to convey precise meanings; skillful use of topic-related terms and less common words; rare negligible inaccuracies in word use.", "points": 5}]}, {"key": "phraseology", "name": "Phraseology", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "1", "desc": "Memorized chunks of language, or simple phrasal patterns predominate; many repetitions and misuses of phrases.", "points": 1}, {"label": "2", "desc": "Narrow range of phrases, such as collocations and lexical bundles, used to convey basic and elementary meaning; many repetitions and /or misuses of phrases.", "points": 2}, {"label": "3", "desc": "Evident use of phrases such as idioms, collocations, and lexical bundles but without much variety; some noticeable repetitions and misuses.", "points": 3}, {"label": "4", "desc": "Appropriate use of a variety of phrases, such as idioms, collocations, and lexical bundles; occasional inaccuracies and colloquialisms.", "points": 4}, {"label": "5", "desc": "Flexible and effective use of a variety of phrases, such as idioms, collocations, and lexical bundles, to convey precise and subtle meanings; rare minor inaccuracies that are negligible.", "points": 5}]}, {"key": "grammar", "name": "Grammar", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "1", "desc": "Errors in grammar and usage throughout.", "points": 1}, {"label": "2", "desc": "Many errors in grammar and usage.", "points": 2}, {"label": "3", "desc": "Some errors in grammar and usage.", "points": 3}, {"label": "4", "desc": "Minimal errors in grammar and usage.", "points": 4}, {"label": "5", "desc": "Command of grammar and usage with few or no errors.", "points": 5}]}, {"key": "conventions", "name": "Conventions", "type": "score", "weight": 1, "instructions": "", "levels": [{"label": "1", "desc": "Minimal use of conventions; spelling, capitalization, and punctuation errors throughout.", "points": 1}, {"label": "2", "desc": "Variable use of conventions; spelling, capitalization, and punctuation errors frequent and distracting.", "points": 2}, {"label": "3", "desc": "Developing use of conventions to convey meaning; errors in spelling, capitalization, and punctuation that are sometimes distracting.", "points": 3}, {"label": "4", "desc": "Generally consistent use of appropriate conventions to convey meaning; spelling, capitalization, and punctuation errors few and not distracting.", "points": 4}, {"label": "5", "desc": "Consistent use of appropriate conventions to convey meaning; spelling, capitalization, and punctuation errors nonexistent or negligible.", "points": 5}]}]}};
+/* =====================================================================
+   BENCHMARK: score human-graded essays and compare the model with people.
+   Data comes from datasets/bench (built by `python3 benchmark.py prepare`)
+   or from files uploaded here. Request format, sampling and the results CSV
+   mirror benchmark.py exactly, so runs from either open in the explorer.
+   ===================================================================== */
+const BENCH_QUESTION = "Which level of this rubric criterion does the essay meet?";
+const BENCH_QUESTION_ELEMENT = "Which level of this rubric criterion does the argument element meet?";
+const BENCH_JUDGE_SYSTEM = "You are an experienced, fair essay rater. You judge a piece of student writing against rubric questions. Judge only what is actually written. Apply each level description literally. Give probabilities that honestly reflect your uncertainty. Reply with one JSON object and nothing else: no prose, no markdown.";
+const B = { manifest: null, manifestError: null, uploaded: [], fileCache: {}, ds: null, prompt: null, rows: null, mode: "stratified", run: null, abort: null, sub: "run" };
+
+/* ---------- small helpers ---------- */
+const bnum = v => { if (v === "" || v == null) return null; const f = +v; return Number.isFinite(f) ? f : null; };
+const bfmt = v => { if (v == null || v === "") return ""; const f = +v; return Number.isInteger(f) ? String(f) : String(+f.toFixed(4)); };
+const fmt2 = (x, d = 2) => x == null || !Number.isFinite(x) ? "—" : x.toFixed(d);
+const pct0 = x => x == null || !Number.isFinite(x) ? "—" : Math.round(x * 100) + "%";
+const nfmt = n => (+n).toLocaleString();
+function mulberry32(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function stratumOf(row, keys){ const v = keys.map(k => bnum(row[k + "_human"])).filter(x => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0)) : -1; }
+/* Mirror of sample() in benchmark.py */
+function sampleRows(rows, keys, n, mode = "stratified", seed = 42){
+  const cmp = (a, b) => { const x = String(a.essay_id) + "|" + (a.criterion || ""), y = String(b.essay_id) + "|" + (b.criterion || ""); return x < y ? -1 : x > y ? 1 : 0; };
+  rows = rows.slice().sort(cmp);
+  if (mode === "first") return rows.slice(0, n);
+  const rng = mulberry32(seed);
+  for (let i = rows.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [rows[i], rows[j]] = [rows[j], rows[i]]; }
+  if (n >= rows.length) return rows;
+  if (mode === "random") return rows.slice(0, n);
+  const groups = new Map(); rows.forEach(r => { const s = stratumOf(r, keys); if (!groups.has(s)) groups.set(s, []); groups.get(s).push(r); });
+  const ks = [...groups.keys()].sort((a, b) => a - b), total = rows.length, alloc = new Map();
+  ks.forEach(k => alloc.set(k, Math.floor(n * groups.get(k).length / total)));
+  const rema = ks.slice().sort((a, b) => { const ra = n * groups.get(a).length / total - alloc.get(a), rb = n * groups.get(b).length / total - alloc.get(b); return rb - ra || a - b; });
+  let i = 0, sum = () => [...alloc.values()].reduce((a, b) => a + b, 0);
+  while (sum() < n) { const k = rema[i % rema.length]; alloc.set(k, alloc.get(k) + 1); i++; }
+  if (n >= 3 * ks.length) for (const k of ks) {
+    const want = Math.min(3, groups.get(k).length);
+    while (alloc.get(k) < want) {
+      const donor = ks.reduce((best, d) => { const s = alloc.get(d) - Math.min(3, groups.get(d).length), sb = alloc.get(best) - Math.min(3, groups.get(best).length); return s > sb || (s === sb && d < best) ? d : best; }, ks[0]);
+      if (alloc.get(donor) - Math.min(3, groups.get(donor).length) <= 0) break;
+      alloc.set(donor, alloc.get(donor) - 1); alloc.set(k, alloc.get(k) + 1);
+    }
+  }
+  const pick = new Set(); ks.forEach(k => groups.get(k).slice(0, alloc.get(k)).forEach(r => pick.add(r)));
+  return rows.filter(r => pick.has(r));
+}
+function benchLevelText(l){ return l.label && l.desc ? `${l.label}: ${l.desc}` : (l.desc || l.label); }
+/* Mirror of build_request() in benchmark.py */
+function benchRequest(rb, row, p){
+  const questions = {};
+  rb.criteria.forEach((c, i) => {
+    if (row.criterion && row.criterion !== c.key) return;
+    questions[`c${i + 1}_${c.key}`] = { type: "score", instructions: `Criterion "${c.name}". ${c.instructions || (row.element_type ? BENCH_QUESTION_ELEMENT : BENCH_QUESTION)}`, criteria: c.levels.map(benchLevelText) };
+  });
+  const parts = [];
+  if (p.assignment) parts.push("ASSIGNMENT GIVEN TO THE WRITER:\n" + p.assignment);
+  if (p.source_text) parts.push("SOURCE TEXT GIVEN TO THE WRITER:\n" + p.source_text);
+  if (row.context) parts.push("FULL ESSAY (context only):\n" + row.context);
+  parts.push((row.element_type ? `ARGUMENT ELEMENT TO SCORE (${row.element_type})` : "ESSAY") + ":\n" + row.text);
+  const body = { model: S.model, state: parts.join("\n\n"), questions };
+  if (provider() === "ollama" && S.keepAlive) body.keep_alive = S.keepAlive;
+  return body;
+}
+const RESULT_BASE = ["run_id", "run_name", "dataset", "rubric_id", "prompt", "model", "provider", "essay_id", "criterion", "element_type", "essay", "words"];
+function resultColumns(rb, segs){
+  const cols = [...RESULT_BASE, ...segs, "text"];
+  rb.criteria.forEach(c => { const k = c.key; cols.push(k + "_r1", k + "_r2", k + "_human", k + "_model", k + "_expected", k + "_confidence", ...c.levels.map(l => `${k}_p${bfmt(l.points)}`)); });
+  return cols.concat(["total_human", "total_model", "ms", "error", "response_sha256", "scored_at"]);
+}
+
+/* ---------- storage: run metadata + one record per scored item ---------- */
+const benchDB = {
+  db: null,
+  async open(){
+    if (this.db) return this.db;
+    this.db = await new Promise((res, rej) => { const q = indexedDB.open("nre-benchmark", 1); q.onupgradeneeded = () => { q.result.createObjectStore("runs", { keyPath: "id" }); q.result.createObjectStore("items", { keyPath: "key" }); }; q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+    return this.db;
+  },
+  async tx(store, mode, fn){ const db = await this.open(); return new Promise((res, rej) => { const t = db.transaction(store, mode); const q = fn(t.objectStore(store)); t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error); }); },
+  runs(){ return this.tx("runs", "readonly", s => s.getAll()); },
+  putRun(r){ return this.tx("runs", "readwrite", s => s.put(r)); },
+  putItem(it){ return this.tx("items", "readwrite", s => s.put(it)); },
+  items(runId){ return this.tx("items", "readonly", s => s.getAll(IDBKeyRange.bound(runId + "|", runId + "|￿"))); },
+  async delRun(id){ const its = await this.items(id); await this.tx("runs", "readwrite", s => s.delete(id)); await this.tx("items", "readwrite", s => { its.forEach(i => s.delete(i.key)); return null; }); return its; },
+  async restore(run, its){ await this.putRun(run); await this.tx("items", "readwrite", s => { its.forEach(i => s.put(i)); return null; }); }
+};
+
+/* ---------- datasets: prepared manifest + uploads ---------- */
+const allRubrics = () => Object.assign({}, BENCH_RUBRICS, B.manifest?.rubrics || {});
+function datasets(){ return [...(B.manifest?.datasets || []), ...B.uploaded]; }
+async function loadManifest(){
+  try { const r = await fetch("datasets/bench/manifest.json", { cache: "no-store" }); if (!r.ok) throw new Error(r.status); B.manifest = await r.json(); B.manifestError = null; }
+  catch (e) { B.manifest = null; B.manifestError = location.protocol === "file:" ? "file" : "missing"; }
+  renderBenchSetup();
+}
+async function promptRows(ds, p){
+  if (p.rows) return p.rows;
+  const key = p.file; if (B.fileCache[key]) return B.fileCache[key];
+  const r = await fetch("datasets/bench/" + p.file); if (!r.ok) throw new Error(`Could not load ${p.file} (${r.status})`);
+  const rows = csvObjects(await r.text()); B.fileCache[key] = rows; return rows;
+}
+function csvObjects(text){
+  const rows = parseCSV(text.replace(/^﻿/, "")); const h = rows.shift() || [];
+  return rows.filter(r => r.length > 1 || r[0]).map(r => { const o = {}; h.forEach((k, i) => o[k] = r[i] ?? ""); return o; });
+}
+function rubricFor(ds, p){ return (p && p.rubricObj) || ds.rubricObj || allRubrics()[(p && p.rubric) || ds.rubric]; }
+function keysOf(rb){ return rb.criteria.map(c => c.key); }
+
+function renderBenchSetup(){
+  const sel = $("#bDataset"), list = datasets(), keep = sel.value;
+  sel.innerHTML = list.length ? list.map(d => `<option value="${esc(d.id)}">${esc(d.name)}${d.uploaded ? " (uploaded)" : ""}</option>`).join("") : `<option value="">No datasets yet</option>`;
+  if (list.some(d => d.id === keep)) sel.value = keep;
+  const al = $("#bManifestAlert");
+  if (!B.manifest) al.innerHTML = `<div class="alert ${B.uploaded.length ? "info" : "warn"}" style="margin:0 0 16px">${B.manifestError === "file"
+    ? "Open the app through <b>serve.py</b> (<span class=mono>python3 serve.py</span>) to use the prepared datasets. You can still upload dataset files below."
+    : "No prepared datasets found. Download them (see Help → Benchmark) into <span class=mono>datasets/</span> and run <span class=mono>python3 benchmark.py prepare</span>, or upload the files below."}</div>`;
+  else al.innerHTML = "";
+  onDatasetChange();
+}
+function onDatasetChange(){
+  B.ds = datasets().find(d => d.id === $("#bDataset").value) || null;
+  const ps = B.ds ? B.ds.prompts.slice().sort((a, b) => b.count - a.count) : [];
+  $("#bPrompt").innerHTML = ps.map(p => `<option value="${esc(p.name)}">${esc(p.name)} · ${nfmt(p.count)} ${B.ds.unit === "element" ? "elements" : "essays"}</option>`).join("");
+  const pref = store.get("benchPrompt", {})[B.ds?.id]; if (pref && ps.some(p => p.name === pref)) $("#bPrompt").value = pref;
+  onPromptChange();
+}
+async function onPromptChange(){
+  const ds = B.ds; B.prompt = ds ? ds.prompts.find(p => p.name === $("#bPrompt").value) : null; B.rows = null;
+  if (ds && B.prompt) { const m = store.get("benchPrompt", {}); m[ds.id] = B.prompt.name; store.set("benchPrompt", m); }
+  $("#bDsInfo").innerHTML = ds ? `<div>${esc(ds.writers || "")}${ds.writers ? " · " : ""}Human score: ${esc(ds.humanIs || "")}${ds.raters === 2 ? " · <b>2 raters released</b>" : ""}</div>
+    ${B.prompt?.task ? `<div>Task: ${esc(B.prompt.task)}</div>` : ""}${ds.licence ? `<div>Licence: ${esc(ds.licence)}${ds.source ? ` · <a href="${esc(ds.source)}" target="_blank" rel="noopener">source</a>` : ""}</div>` : ""}` : "";
+  const rb = ds && rubricFor(ds, B.prompt);
+  $("#bRubricInfo").innerHTML = rb ? `<div><b>${esc(rb.name)}</b></div><div class="hint">${rb.criteria.length} criteri${rb.criteria.length === 1 ? "on" : "a"} · ${rb.criteria[0].levels.length} levels (${esc(rb.criteria[0].levels.map(l => l.label).join(", "))})${rb.source ? ` · from ${esc(rb.source)}` : ""}</div>${rb.note ? `<div class="hint">${esc(rb.note)}</div>` : ""}` : `<div class="hint">Choose a dataset.</div>`;
+  if (!$("#bName").dataset.touched) $("#bName").value = ds && B.prompt ? `${ds.name} · ${B.prompt.name} · ${S.demo ? "demo" : S.model || "model"}` : "";
+  renderModelInfo();
+  if (ds && B.prompt) { $("#bSampleInfo").innerHTML = `<span class="hint">Loading ${esc(B.prompt.name)}…</span>`; try { B.rows = await promptRows(ds, B.prompt); } catch (e) { $("#bSampleInfo").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; } }
+  renderSampleInfo();
+}
+function renderModelInfo(){
+  $("#bModelInfo").innerHTML = S.demo ? `Demo mode is on in Settings: scores are <b>simulated</b>, not from a model. Turn it off to benchmark a real model.`
+    : `Model: <b>${esc(S.model || "(not set)")}</b> via ${esc(providerLabel())}${isJudge() ? " (LLM judge: probabilities are self-reported)" : ""}. Change it in <a href="#" onclick="switchTab('settings');return false">Settings</a>.`;
+}
+function currentSample(){
+  if (!B.ds || !B.prompt || !B.rows) return [];
+  const rb = rubricFor(B.ds, B.prompt); const n = Math.max(1, Math.min(B.rows.length, parseInt($("#bN").value, 10) || 1));
+  return sampleRows(B.rows, keysOf(rb), n, B.mode, parseInt($("#bSeed").value, 10) || 0);
+}
+function strataHTML(all, pick, keys){
+  const ca = {}, cp = {}; all.forEach(r => { const s = stratumOf(r, keys); ca[s] = (ca[s] || 0) + 1; }); pick.forEach(r => { const s = stratumOf(r, keys); cp[s] = (cp[s] || 0) + 1; });
+  const ks = Object.keys(ca).map(Number).sort((a, b) => a - b), mx = Math.max(...ks.map(k => ca[k] / all.length));
+  return `<div class="bstrat" style="grid-template-columns:repeat(${ks.length},minmax(0,1fr));font-size:${ks.length > 20 ? 9.5 : 11}px">${ks.map(k => `<div title="Human ${keys.length > 1 ? "total" : "score"} ${k}: ${nfmt(cp[k] || 0)} of ${nfmt(ca[k])} picked"><i style="height:${Math.max(4, 60 * ca[k] / all.length / mx)}px"><b style="height:${Math.max(cp[k] ? 2 : 0, 60 * ((cp[k] || 0) / pick.length) / mx)}px"></b></i>${k < 0 ? "?" : k}<span>${nfmt(cp[k] || 0)}</span></div>`).join("")}</div>
+  <div class="lg"><span style="--c:var(--data-soft)">All ${B.ds.unit === "element" ? "elements" : "essays"}</span><span style="--c:var(--data)">This sample</span><span>Number under each bar = picked</span></div>`;
+}
+function renderSampleInfo(){
+  if (!B.rows) return;
+  const rb = rubricFor(B.ds, B.prompt), pick = currentSample(), keys = keysOf(rb);
+  const unit = B.ds.unit === "element" ? "elements" : "essays";
+  $("#bSampleInfo").innerHTML = `<div><b>${nfmt(pick.length)}</b> of ${nfmt(B.rows.length)} ${unit}, grouped by human ${keys.length > 1 ? "total" : "score"}:</div>${strataHTML(B.rows, pick, keys)}`;
+}
+
+/* ---------- uploads: raw source files or any graded CSV ---------- */
+$("#bUpload").onchange = async e => {
+  const files = [...e.target.files]; e.target.value = ""; if (!files.length) return;
+  try {
+    const tables = [];
+    for (const f of files) {
+      const t = (await readFileText(f)).replace(/^﻿/, "");
+      if (/\.jsonl$/i.test(f.name)) { const objs = t.split("\n").filter(l => l.trim()).map(l => JSON.parse(l)); tables.push({ name: f.name, rows: objs, cols: Object.keys(objs[0] || {}) }); }
+      else { const delim = /\.tsv$/i.test(f.name) || (t.split("\n")[0].split("\t").length > t.split("\n")[0].split(",").length) ? "\t" : ","; const rows = parseCSV(t, delim); const h = rows.shift(); tables.push({ name: f.name, cols: h, rows: rows.filter(r => r.some(Boolean)).map(r => { const o = {}; h.forEach((k, i) => o[k] = r[i] ?? ""); return o; }) }); }
+    }
+    const ds = convertKnown(tables);
+    if (ds) addUploaded(ds); else openMapDialog(tables[0]);
+  } catch (err) { toast("Could not read that file: " + err.message, { kind: "bad" }); }
+};
+function addUploaded(ds){
+  ds.uploaded = true; B.uploaded = B.uploaded.filter(d => d.id !== ds.id).concat(ds);
+  renderBenchSetup(); $("#bDataset").value = ds.id; onDatasetChange();
+  toast(`Loaded ${ds.name}: ${nfmt(ds.prompts.reduce((a, p) => a + p.count, 0))} ${ds.unit === "element" ? "elements" : "essays"}`, { kind: "ok" });
+}
+function byPrompt(rows, extra = () => ({})){
+  const m = new Map(); rows.forEach(r => { if (!m.has(r.prompt)) m.set(r.prompt, Object.assign({ name: r.prompt, rows: [] }, extra(r))); m.get(r.prompt).rows.push(r); });
+  return [...m.values()].map(p => Object.assign(p, { count: p.rows.length }));
+}
+/* Recognise ASAP, PERSUADE and ELLIPSE files by their columns (same conversion as benchmark.py prepare). */
+function convertKnown(tables){
+  const R = allRubrics(), has = (t, ...c) => c.every(x => t.cols.includes(x)), wc = s => (String(s).match(/\S+/g) || []).length;
+  const asap = tables.find(t => has(t, "essay_set", "essay", "rater1_trait1", "rater2_trait1"));
+  if (asap) {
+    const keys = keysOf(R.asap7), rows = asap.rows.filter(r => String(r.essay_set) === "7").map(r => {
+      const o = { essay_id: String(r.essay_id), prompt: "Patience", text: r.essay, words: wc(r.essay) };
+      keys.forEach((k, i) => { const a = bnum(r[`rater1_trait${i + 1}`]), b = bnum(r[`rater2_trait${i + 1}`]); o[k + "_r1"] = bfmt(a); o[k + "_r2"] = bfmt(b); o[k + "_human"] = a != null && b != null ? bfmt((a + b) / 2) : bfmt(a ?? b); });
+      return o; });
+    if (!rows.length) throw new Error("That ASAP file has no essay set 7 rows. Only set 7 has a converted rubric.");
+    const assignment = asap.rows.find(r => r.prompt)?.prompt || "Write about patience. Being patient means that you are understanding and tolerant. A patient person experience difficulties without complaining.\nDo only one of the following: write a story about a time when you were patient OR write a story about a time when someone you know was patient OR write a story in your own way about patience.";
+    return { id: "up-asap7", name: "ASAP-AES set 7", rubric: "asap7", raters: 2, humanIs: "mean of rater 1 and rater 2", writers: "US students, grade 7", segments: [], prompts: byPrompt(rows, () => ({ assignment, task: "Narrative" })) };
+  }
+  const per = tables.find(t => has(t, "full_text", "holistic_essay_score", "prompt_name"));
+  if (per && per.cols.includes("discourse_effectiveness")) {
+    const eff = { Ineffective: 0, Adequate: 1, Effective: 2 }, keys = keysOf(R.persuade_elements), full = {}, info = {};
+    per.rows.forEach(r => { full[r.essay_id_comp] = r.full_text; info[r.prompt_name] = info[r.prompt_name] || { assignment: r.assignment, task: r.task }; });
+    const seq = {};
+    const rows = per.rows.map(r => { seq[r.essay_id_comp] = (seq[r.essay_id_comp] || 0) + 1; return Object.assign({ _n: seq[r.essay_id_comp] }, r); }).filter(r => r.discourse_type && r.discourse_type !== "Unannotated" && r.discourse_effectiveness in eff).map(r => {
+      const k = r.discourse_type === "Concluding Statement" ? "concluding_statement" : r.discourse_type.toLowerCase();
+      const o = { essay_id: r.essay_id_comp + ":" + String(r._n).padStart(2, "0"), prompt: r.prompt_name, criterion: k, element_type: r.discourse_type, essay: r.essay_id_comp, context: full[r.essay_id_comp], text: r.discourse_text.trim(), words: wc(r.discourse_text), seg_element: r.discourse_type, seg_grade: bfmt(bnum(r.grade_level)), seg_ell: r.ell_status || "", seg_holistic: r.holistic_essay_score };
+      keys.forEach(kk => o[kk + "_r1"] = o[kk + "_r2"] = o[kk + "_human"] = ""); o[k + "_human"] = String(eff[r.discourse_effectiveness]); return o; });
+    return { id: "up-persuade-elements", name: "PERSUADE 2.0 (argument elements)", rubric: "persuade_elements", raters: 1, unit: "element", humanIs: "final effectiveness rating", writers: "US students, grades 6 to 12", segments: ["seg_element", "seg_grade", "seg_ell", "seg_holistic"], prompts: byPrompt(rows, r => info[r.prompt]) };
+  }
+  if (per) {
+    const seen = new Set(), rows = [];
+    per.rows.forEach(r => { if (seen.has(r.essay_id_comp) || !r.holistic_essay_score) return; seen.add(r.essay_id_comp);
+      rows.push({ essay_id: r.essay_id_comp, prompt: r.prompt_name, text: r.full_text, words: r.essay_word_count || r.word_count || wc(r.full_text), seg_grade: bfmt(bnum(r.grade_level)), seg_gender: r.gender || "", seg_ell: r.ell_status || "", seg_economic: r.economically_disadvantaged || "", seg_race: r.race_ethnicity || "", seg_disability: r.student_disability_status || "", holistic_r1: "", holistic_r2: "", holistic_human: bfmt(bnum(r.holistic_essay_score)), _a: r.assignment, _t: r.task, _s: r.source_text }); });
+    return { id: "up-persuade", name: "PERSUADE 2.0 (holistic)", rubric: "persuade_holistic_indy", raters: 1, humanIs: "final holistic score", writers: "US students, grades 6 to 12",
+      segments: ["seg_grade", "seg_gender", "seg_ell", "seg_economic", "seg_race", "seg_disability"],
+      prompts: byPrompt(rows, r => ({ assignment: r._a, task: r._t, source_text: r._t !== "Independent" ? r._s : "", rubric: r._t === "Independent" ? "persuade_holistic_indy" : "persuade_holistic_source" })) };
+  }
+  const ell = tables.find(t => has(t, "full_text", "prompt", "Overall", "Cohesion", "Conventions"));
+  if (ell) {
+    const raw = tables.find(t => has(t, "text_id_kaggle", "Overall_1", "Overall_2")), rmap = {}; (raw?.rows || []).forEach(r => rmap[r.text_id_kaggle] = r);
+    const crits = R.ellipse.criteria, rows = ell.rows.map(r => { const rr = rmap[r.text_id_kaggle] || {};
+      const o = { essay_id: r.text_id_kaggle, prompt: r.prompt, text: r.full_text, words: r.num_words || wc(r.full_text), seg_grade: r.grade || "", seg_gender: r.gender || "", seg_economic: r.SES || "", seg_race: r.race_ethnicity || "", seg_split: r.set || "" };
+      crits.forEach(c => { o[c.key + "_r1"] = rr[c.name + "_1"] || ""; o[c.key + "_r2"] = rr[c.name + "_2"] || ""; o[c.key + "_human"] = r[c.name]; }); return o; });
+    if (!raw) toast("Tip: also upload ellipsis_raw_rater_scores_anon_all_essay.csv to get both raters' scores", { kind: "info", ms: 6000 });
+    return { id: "up-ellipse", name: "ELLIPSE (English learners)", rubric: "ellipse", raters: raw ? 2 : 1, humanIs: "published score", writers: "English language learners, grades 8 to 12", segments: ["seg_grade", "seg_gender", "seg_economic", "seg_race", "seg_split"], prompts: byPrompt(rows, r => ({ assignment: r.prompt, task: "Independent" })) };
+  }
+  return null;
+}
+/* Any other CSV: choose the text column and which column holds the human score for each criterion. */
+function openMapDialog(t){
+  const opts = (sel, guess) => `<option value="">—</option>` + t.cols.map(c => `<option${c === guess ? " selected" : ""}>${esc(c)}</option>`).join("");
+  const guess = re => t.cols.find(c => re.test(c)) || "";
+  const avg = t.cols.map(c => t.rows.slice(0, 50).reduce((a, r) => a + String(r[c] || "").length, 0)); const textGuess = t.cols[avg.indexOf(Math.max(...avg))];
+  const rbs = [["app", `My rubric in the Rubrics tab: ${rubric.name || "Untitled"}`], ...Object.values(allRubrics()).map(r => [r.id, r.name])];
+  $("#viewTitle").textContent = "Map your file";
+  $("#viewBody").innerHTML = `<p class="hint" style="margin-top:0">${esc(t.name)} · ${nfmt(t.rows.length)} rows. Tell the app which columns hold the writing and the human scores. Scores must use the rubric's points.</p>
+    <div class="grid2" style="gap:12px"><div><label class="f">Text to score</label><select id="mText">${opts(0, textGuess)}</select></div><div><label class="f">ID (optional)</label><select id="mId">${opts(0, guess(/^(id|essay_id|.*_id)$/i))}</select></div>
+    <div><label class="f">Prompt / task column (optional)</label><select id="mPrompt">${opts(0, guess(/prompt|task|question/i))}</select></div><div><label class="f">Rubric</label><select id="mRubric">${rbs.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join("")}</select></div></div>
+    <div id="mCrits" style="margin-top:14px"></div><div class="row" style="margin-top:14px"><span class="spacer"></span><button class="btn primary" id="mGo">Use this file</button></div>`;
+  const drawCrits = () => {
+    const rb = $("#mRubric").value === "app" ? appRubricForBench() : allRubrics()[$("#mRubric").value];
+    $("#mCrits").innerHTML = `<div class="mapgrid"><b>Criterion</b><b>Human score</b><b>Rater 1 (opt.)</b><b>Rater 2 (opt.)</b>${rb.criteria.map(c => { const g = guess(new RegExp("^" + c.key.replace(/_/g, ".?") + "|" + c.name.replace(/[^a-z]/gi, ".?"), "i")); return `<span>${esc(c.name)}</span><select data-k="${esc(c.key)}" data-s="human">${opts(0, g)}</select><select data-k="${esc(c.key)}" data-s="r1">${opts(0, "")}</select><select data-k="${esc(c.key)}" data-s="r2">${opts(0, "")}</select>`; }).join("")}</div>`;
+  };
+  $("#mRubric").onchange = drawCrits; drawCrits();
+  $("#mGo").onclick = () => {
+    const tc = $("#mText").value; if (!tc) return toast("Choose the text column", { kind: "warn" });
+    const rid = $("#mRubric").value, rb = rid === "app" ? appRubricForBench() : allRubrics()[rid];
+    const map = {}; $$("#mCrits select").forEach(s => { if (s.value) (map[s.dataset.k] = map[s.dataset.k] || {})[s.dataset.s] = s.value; });
+    if (!Object.values(map).some(m => m.human || m.r1)) return toast("Map at least one human score column", { kind: "warn" });
+    const idc = $("#mId").value, pc = $("#mPrompt").value;
+    const rows = t.rows.filter(r => String(r[tc] || "").trim()).map((r, i) => { const o = { essay_id: idc ? String(r[idc]) : String(i + 1), prompt: pc ? String(r[pc] || "(none)") : "All", text: r[tc], words: words(String(r[tc])) };
+      rb.criteria.forEach(c => { const m = map[c.key] || {}; const a = bnum(r[m.r1]), b = bnum(r[m.r2]), h = bnum(r[m.human]); o[c.key + "_r1"] = bfmt(a); o[c.key + "_r2"] = bfmt(b); o[c.key + "_human"] = h != null ? bfmt(h) : a != null && b != null ? bfmt((a + b) / 2) : bfmt(a ?? b); }); return o; });
+    const twoR = Object.values(map).some(m => m.r1 && m.r2);
+    const ds = { id: "up-" + slug(t.name), name: t.name.replace(/\.[^.]+$/, ""), rubricObj: rb, raters: twoR ? 2 : 1, humanIs: "your mapped column", segments: [], prompts: byPrompt(rows, () => ({ assignment: rid === "app" ? rb.prompt || "" : "" })) };
+    $("#viewDlg").close(); addUploaded(ds);
+  };
+  $("#viewDlg").showModal();
+}
+function appRubricForBench(){
+  const rb = compiled(); const used = new Set();
+  return { id: "app-" + (rubric.id || "rubric"), name: rb.name || "My rubric", prompt: rb.prompt || "", source: "Rubrics tab",
+    criteria: rb.criteria.filter(c => c.type === "score").map(c => { let k = slug(c.name || "criterion").replace(/-/g, "_") || "c"; while (used.has(k)) k += "_"; used.add(k); return { key: k, name: c.name, type: "score", weight: c.weight, instructions: c.instructions || "", levels: c.levels.map(l => ({ label: l.label, desc: l.desc, points: l.points })) }; }) };
+}
+
+/* ---------- rubric view and request preview ---------- */
+$("#bShowRubric").onclick = () => {
+  const rb = B.ds && rubricFor(B.ds, B.prompt); if (!rb) return;
+  $("#viewTitle").textContent = rb.name;
+  $("#viewBody").innerHTML = `<p class="hint" style="margin-top:0">Source: ${esc(rb.source || "")}. Each level is sent to the model exactly as written here.</p>` + rb.criteria.map(c => `<div class="xcritbox"><b>${esc(c.name)}</b>${+c.weight !== 1 ? ` <span class="pill acc">weight ${esc(c.weight)}</span>` : ""}${c.instructions ? `<div class="hint" style="margin-top:4px">${esc(c.instructions)}</div>` : ""}<div class="lvls">${c.levels.map((l, i) => `<div class="lv"><span class="hm"><span class="m" style="background:${levelColor(i, c.levels.length)}">${esc(l.label)}</span></span><span>${esc(l.desc)}</span></div>`).join("")}</div></div>`).join("");
+  $("#viewDlg").showModal();
+};
+$("#bPreviewReq").onclick = async () => {
+  const pick = currentSample(); if (!pick.length) return toast("Choose a dataset first");
+  await loadContext(B.ds, B.prompt);
+  const row = withContext(B.ds, B.prompt, [pick[0]])[0], body = benchRequest(rubricFor(B.ds, B.prompt), row, B.prompt);
+  const toks = `(~${approxTokens(JSON.stringify(body)).toLocaleString()} tokens)`;
+  if (isJudge() && !S.demo) { const pr = judgePrompt(Object.assign({}, body, { __system: BENCH_JUDGE_SYSTEM })); $("#previewPre").textContent = `LLM judge ${S.model || ""} ${toks}\n\n--- system ---\n${pr.system}\n\n--- user ---\n${pr.user}`; }
+  else { const b = Object.assign({}, body); if (provider() === "jev") delete b.keep_alive; $("#previewPre").textContent = `POST ${apiBase()}${provider() === "jev" ? "/systemone" : "/v1/systemone"}   ${toks}\nFirst item in the sample: ${row.essay_id}\n\n` + JSON.stringify(b, null, 2); }
+  $("#copyPreviewBtn").hidden = true; $("#previewDlg").showModal();
+};
+function withContext(ds, p, rows){
+  if (!ds.contextFrom) return rows;
+  const src = datasets().find(d => d.id === ds.contextFrom), sp = src?.prompts.find(x => x.name === p.name);
+  const full = B.fileCache["ctx:" + ds.contextFrom + p.name];
+  if (!full) return rows;
+  return rows.map(r => Object.assign({}, r, { context: r.context || full[r.essay] || "" }));
+}
+async function loadContext(ds, p){
+  if (!ds.contextFrom) return;
+  const key = "ctx:" + ds.contextFrom + p.name; if (B.fileCache[key]) return;
+  const src = datasets().find(d => d.id === ds.contextFrom), sp = src?.prompts.find(x => x.name === p.name);
+  const m = {}; if (sp) (await promptRows(src, sp)).forEach(r => m[r.essay_id] = r.text); B.fileCache[key] = m;
+}
+
+/* ---------- run loop ---------- */
+$("#bName").addEventListener("input", e => e.target.dataset.touched = "1");
+$("#bN").addEventListener("input", renderSampleInfo); $("#bSeed").addEventListener("input", renderSampleInfo);
+$("#bAll").onclick = () => { if (B.rows) { $("#bN").value = B.rows.length; renderSampleInfo(); } };
+$("#bMode").onclick = e => { const b = e.target.closest("button"); if (!b) return; B.mode = b.dataset.m; $$("#bMode button").forEach(x => x.classList.toggle("active", x === b)); renderSampleInfo(); };
+$("#bDataset").onchange = onDatasetChange; $("#bPrompt").onchange = onPromptChange;
+$("#bStart").onclick = async () => {
+  if (B.abort) return;
+  if (!B.ds || !B.prompt || !B.rows) return toast("Choose a dataset and prompt first", { kind: "warn" });
+  if (!S.demo && !S.model) return toast("Choose a model in Settings first", { kind: "warn" });
+  await loadContext(B.ds, B.prompt);
+  const rb = rubricFor(B.ds, B.prompt), pick = withContext(B.ds, B.prompt, currentSample());
+  const seed = parseInt($("#bSeed").value, 10) || 0;
+  const run = { id: uid() + uid(), name: $("#bName").value.trim() || `${B.ds.name} · ${B.prompt.name}`, created: new Date().toISOString(), appVersion: APP_VERSION,
+    dataset: B.ds.id.replace(/^up-/, "").replace(/-/g, "_"), datasetName: B.ds.name, prompt: B.prompt.name, pinfo: { assignment: B.prompt.assignment || "", source_text: B.prompt.source_text || "", task: B.prompt.task || "" },
+    rubricId: rb.id, rubric: rb, segments: B.ds.segments || [], unit: B.ds.unit || "essay", raters: B.ds.raters || 1, humanIs: B.ds.humanIs || "",
+    model: S.demo ? "demo-simulator" : S.model, provider: S.demo ? "demo" : provider(), providerLabel: S.demo ? "Demo" : providerLabel(), demo: !!S.demo,
+    sampling: { n: pick.length, mode: B.mode, seed, population: B.rows.length }, rows: pick, total: pick.length, done: 0, errors: 0, status: "running" };
+  await benchDB.putRun(run); runBench(run);
+};
+$("#bPause").onclick = () => { if (B.abort) { B.abort.abort(); blog("Pausing… (essays in flight are re-sent on resume)"); } };
+function blog(s){ const l = $("#bLog"); l.insertAdjacentHTML("beforeend", `<div>${esc(new Date().toLocaleTimeString())}  ${esc(s)}</div>`); l.scrollTop = l.scrollHeight; }
+async function runBench(run){
+  const items = await benchDB.items(run.id), doneIds = new Set(items.filter(i => !i.row.error).map(i => i.itemId));
+  const todo = run.rows.filter(r => !doneIds.has(r.essay_id));
+  B.abort = new AbortController(); B.run = run; run.status = "running"; await benchDB.putRun(run);
+  $("#bStart").disabled = true; $("#bPause").hidden = false; $("#bProgress").hidden = false; $("#bLog").innerHTML = "";
+  let done = run.total - todo.length, errs = items.filter(i => i.row.error && !doneIds.has(i.itemId)).length, msSum = 0, msN = 0;
+  const conc = Math.max(1, Math.min(8, +S.conc || 1)), t0 = performance.now();
+  const prog = () => { $("#bProgText").textContent = `${nfmt(done)} of ${nfmt(run.total)} scored${errs ? ` · ${errs} error${errs > 1 ? "s" : ""}` : ""}`; $("#bProgBar").style.width = (done / run.total * 100) + "%";
+    const rate = msN ? (performance.now() - t0) / msN : 0; $("#bProgEta").textContent = msN && done < run.total ? `about ${Math.max(1, Math.round(rate * (run.total - done) / 60000))} min left` : ""; };
+  prog(); blog(`${run.datasetName} · ${run.prompt}: ${todo.length} to score with ${run.model}${run.demo ? " (simulated)" : " via " + run.providerLabel}`);
+  const queue = todo.slice(); let fatal = false;
+  const worker = async () => {
+    while (queue.length && !B.abort.signal.aborted && !fatal) {
+      const row = queue.shift();
+      try {
+        const it = await scoreBenchItem(run, row, B.abort.signal);
+        await benchDB.putItem(it); msSum += it.row.ms; msN++;
+        if (it.row.error) { errs++; blog(`✗ ${row.essay_id}: ${it.row.error}`); if (msN === 1 && /reach |API key|401|403|404|not found/i.test(it.row.error)) { fatal = true; blog("Stopping: fix the connection in Settings, then Resume."); } }
+        else { done++; }
+        prog();
+      } catch (e) { if (e.name !== "AbortError") { errs++; blog("✗ " + e.message); } }
+    }
+  };
+  try { await Promise.all(Array.from({ length: conc }, worker)); }
+  finally {
+    const paused = B.abort.signal.aborted || fatal; B.abort = null; B.run = null; prog();
+    run.done = done; run.errors = errs; run.status = done >= run.total ? "done" : "paused"; run.updated = new Date().toISOString();
+    await benchDB.putRun(run);
+    $("#bStart").disabled = false; $("#bPause").hidden = true;
+    blog(run.status === "done" ? `Finished: ${done} scored${errs ? `, ${errs} errors` : ""}.` : `Paused at ${done} of ${run.total}.`);
+    toast(run.status === "done" ? "Benchmark finished" : paused ? `Paused at ${done} of ${run.total}` : "Stopped", { kind: run.status === "done" ? "ok" : "info" });
+    renderBenchRuns();
+  }
+}
+async function scoreBenchItem(run, row, signal){
+  const rb = run.rubric, body = benchRequest(rb, row, run.pinfo), t0 = performance.now();
+  const audit = { provider: run.provider, startedAt: new Date().toISOString(), request: body };
+  const res = { run_id: run.id, run_name: run.name, dataset: run.dataset, rubric_id: rb.id, prompt: run.prompt, model: run.model, provider: run.provider, scored_at: audit.startedAt };
+  [...RESULT_BASE.slice(7), ...run.segments, "text"].forEach(k => { if (row[k] != null) res[k] = row[k]; });
+  rb.criteria.forEach(c => ["_r1", "_r2", "_human"].forEach(s => res[c.key + s] = row[c.key + s] ?? ""));
+  try {
+    const call = run.demo ? simulate(body) : decide(isJudge() ? Object.assign({}, body, { __system: BENCH_JUDGE_SYSTEM }) : body, signal, audit);
+    const data = await call;
+    if (run.demo) audit.responseText = JSON.stringify(data);
+    if (audit.judgeText) audit.scoringNote = "LLM judge: probabilities are self-reported";
+    const answers = data.answers || data.results || {};
+    let tm = 0, th = 0, complete = true, nq = 0;
+    rb.criteria.forEach((c, i) => {
+      const q = `c${i + 1}_${c.key}`; if (!(q in body.questions)) return; nq++;
+      if (!answers[q]) throw new Error(`No answer for ${c.name}`);
+      const a = interpret(c, answers[q]); if (a.error) throw new Error(a.error);
+      const base = c.levels[0].points;
+      res[c.key + "_model"] = bfmt(c.levels[a.level].points); res[c.key + "_expected"] = a.expected != null ? bfmt(base + a.expected) : "";
+      res[c.key + "_confidence"] = bfmt(+a.confidence.toFixed(4)); c.levels.forEach((l, li) => res[`${c.key}_p${bfmt(l.points)}`] = bfmt(+(+a.probs[li] || 0).toFixed(4)));
+      tm += c.levels[a.level].points; const h = bnum(row[c.key + "_human"]); if (h == null) complete = false; else th += h;
+    });
+    if (nq > 1) { res.total_model = bfmt(tm); res.total_human = complete ? bfmt(th) : ""; }
+  } catch (e) {
+    if (e.name === "AbortError") throw e;
+    res.error = e.message; audit.error = e.message;
+  }
+  res.ms = Math.round(performance.now() - t0);
+  res.response_sha256 = audit.responseText ? await sha256(audit.responseText) : ""; audit.responseSha256 = res.response_sha256; audit.finishedAt = new Date().toISOString();
+  return { key: run.id + "|" + row.essay_id, runId: run.id, itemId: row.essay_id, row: res, audit };
+}
+
+/* ---------- saved runs ---------- */
+async function renderBenchRuns(){
+  let list = []; try { list = await benchDB.runs(); } catch {}
+  list.sort((a, b) => String(b.created).localeCompare(String(a.created)));
+  $("#bRuns").innerHTML = list.length ? `<div class="bruns">${list.map(r => `<div class="brun" data-id="${esc(r.id)}"><div><b>${esc(r.name)}</b><div class="hint">${esc(r.model)}${r.demo ? " (simulated)" : ""} · ${esc(r.sampling.mode)} sample of ${nfmt(r.total)} (seed ${r.sampling.seed}) · ${new Date(r.created).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}</div>
+      <div class="meter"><i style="width:${r.done / r.total * 100}%"></i></div><div class="hint">${r.status === "done" ? "✓ Finished" : B.run?.id === r.id ? "Running…" : "⏸ Paused"} · ${nfmt(r.done)} of ${nfmt(r.total)}${r.errors ? ` · ${r.errors} errors` : ""}</div></div>
+      <div class="row">${r.status !== "done" && B.run?.id !== r.id ? `<button class="btn sm" data-act="resume">▶ Resume</button>` : ""}<button class="btn sm primary" data-act="explore">Explore</button><button class="btn sm" data-act="csv">⬇ CSV</button><button class="btn sm" data-act="audit" title="Every request and raw reply, one JSON line per essay">⬇ Audit</button><button class="btn sm ghost danger" data-act="del">Delete</button></div></div>`).join("")}</div>`
+    : `<div class="hint">No benchmark runs yet.</div>`;
+}
+$("#bRuns").onclick = async e => {
+  const b = e.target.closest("[data-act]"); if (!b) return; const id = b.closest(".brun").dataset.id;
+  const run = (await benchDB.runs()).find(r => r.id === id); if (!run) return;
+  const act = b.dataset.act;
+  if (act === "resume") { if (B.abort) return toast("Another run is in progress", { kind: "warn" }); return runBench(run); }
+  const items = await benchDB.items(id);
+  if (act === "csv") return download(`${slug(run.name)}.csv`, resultsCSV(run, items), "text/csv");
+  if (act === "audit") return download(`${slug(run.name)}.audit.jsonl`, items.map(i => JSON.stringify(Object.assign({ essay_id: i.itemId }, i.audit))).join("\n") + "\n", "application/x-ndjson");
+  if (act === "explore") { addExploreRun(runToExplore(run, items)); return setBenchSub("explore"); }
+  if (act === "del") { if (B.run?.id === id) return toast("Pause the run first", { kind: "warn" }); const its = await benchDB.delRun(id); renderBenchRuns(); toast(`Deleted "${run.name}"`, { undo: async () => { await benchDB.restore(run, its); renderBenchRuns(); } }); }
+};
+function resultsCSV(run, items){
+  const cols = resultColumns(run.rubric, run.segments), ord = new Map(run.rows.map((r, i) => [r.essay_id, i]));
+  const rows = items.map(i => i.row).sort((a, b) => (ord.get(a.essay_id) ?? 0) - (ord.get(b.essay_id) ?? 0));
+  return toCSV([cols, ...rows.map(r => cols.map(c => r[c] ?? ""))]);
+}
+
+/* ======================= EXPLORER ======================= */
+const X = { runs: [], active: null, f: { crit: "all", prompt: "", segs: {}, human: "", gap: "", disagree: false, errors: false, q: "", cell: null }, focus: null, page: 0, sort: "gap" };
+function runToExplore(run, items){
+  const rows = items.map(i => Object.assign({}, i.row, { context: run.rows.find(r => r.essay_id === i.itemId)?.context || "" }));
+  return makeExploreRun({ id: run.id, name: run.name, rows, rubric: run.rubric, audits: Object.fromEntries(items.map(i => [i.itemId, i.audit])), pinfo: run.pinfo, raters: run.raters, humanIs: run.humanIs });
+}
+function makeExploreRun(o){
+  const r0 = o.rows[0] || {}, cols = Object.keys(r0);
+  const rb = o.rubric || allRubrics()[r0.rubric_id] || null;
+  const keys = cols.filter(c => c.endsWith("_model") && c !== "total_model").map(c => c.slice(0, -6));
+  const crits = keys.map(k => { const c = rb?.criteria.find(x => x.key === k); const pts = cols.filter(x => x.startsWith(k + "_p") && /^-?\d+(\.\d+)?$/.test(x.slice(k.length + 2))).map(x => +x.slice(k.length + 2));
+    return { key: k, name: c?.name || k.replace(/_/g, " "), levels: c ? c.levels : pts.map(p => ({ label: String(p), desc: "", points: p })) }; });
+  const segs = cols.filter(c => c.startsWith("seg_"));
+  o.rows.forEach(r => { r._w = +r.words || 0; });
+  const two = keys.some(k => o.rows.some(r => r[k + "_r1"] !== "" && r[k + "_r1"] != null && r[k + "_r2"] !== "" && r[k + "_r2"] != null));
+  return Object.assign({ crits, segs, two, model: r0.model, dataset: r0.dataset, prompt: r0.prompt, unit: cols.includes("element_type") && o.rows.some(r => r.element_type) ? "element" : "essay", audits: {} }, o);
+}
+function addExploreRun(er){
+  X.runs = X.runs.filter(r => r.id !== er.id).concat(er); X.active = er.id; X.focus = null; X.page = 0;
+  X.f = { crit: "all", prompt: "", segs: {}, human: "", gap: "", disagree: false, errors: false, q: "", cell: null }; renderExplore();
+}
+$("#xFile").onchange = async e => {
+  const files = [...e.target.files]; e.target.value = "";
+  for (const f of files) {
+    try { const rows = csvObjects(await readFileText(f)); if (!rows.length || !Object.keys(rows[0]).some(c => c.endsWith("_model"))) throw new Error("this isn't a benchmark results CSV (no *_model columns)");
+      addExploreRun(makeExploreRun({ id: "f-" + slug(f.name) + "-" + uid(), name: rows[0].run_name || f.name.replace(/\.csv$/i, ""), rows, file: f.name })); }
+    catch (err) { toast(`${f.name}: ${err.message}`, { kind: "bad" }); }
+  }
+};
+const xr = () => X.runs.find(r => r.id === X.active);
+/* --- agreement maths --- */
+function qwkVals(a, b){
+  const n = a.length; if (n < 5) return null;
+  const all = a.concat(b), step = all.some(v => !Number.isInteger(v * 1)) ? 0.5 : 1, mn = Math.min(...all), K = Math.round((Math.max(...all) - mn) / step) + 1;
+  if (K < 2) return null;
+  const O = Array.from({ length: K }, () => new Array(K).fill(0)); for (let i = 0; i < n; i++) O[Math.round((a[i] - mn) / step)][Math.round((b[i] - mn) / step)]++;
+  const ra = O.map(r => r.reduce((x, y) => x + y, 0)), cb = O[0].map((_, j) => O.reduce((x, r) => x + r[j], 0));
+  let num = 0, den = 0; for (let i = 0; i < K; i++) for (let j = 0; j < K; j++) { const w = (i - j) ** 2; num += w * O[i][j]; den += w * ra[i] * cb[j] / n; }
+  return den ? 1 - num / den : null;
+}
+const tolOf = h => Number.isInteger(h) ? 0.001 : 0.501;
+function pairStats(pairs){ // [h, m]
+  if (!pairs.length) return { n: 0 };
+  const exact = pairs.filter(([h, m]) => Math.abs(m - h) <= tolOf(h)).length / pairs.length, adj = pairs.filter(([h, m]) => Math.abs(m - h) <= 1 + (Number.isInteger(h) ? 0.001 : 0.001)).length / pairs.length;
+  const bias = pairs.reduce((s, [h, m]) => s + (m - h), 0) / pairs.length;
+  return { n: pairs.length, qwk: qwkVals(pairs.map(p => p[0]), pairs.map(p => p[1])), exact, adj, bias, meanH: pairs.reduce((s, p) => s + p[0], 0) / pairs.length, meanM: pairs.reduce((s, p) => s + p[1], 0) / pairs.length };
+}
+function critStats(rows, k){
+  const get = (r, s) => bnum(r[k + s]);
+  const mh = [], m1 = [], m2 = [], rr = [];
+  rows.forEach(r => { const m = get(r, "_model"); if (m == null || r.error) return; const h = get(r, "_human"), a = get(r, "_r1"), b = get(r, "_r2");
+    if (h != null) mh.push([h, m]); if (a != null) m1.push([a, m]); if (b != null) m2.push([b, m]); if (a != null && b != null) rr.push([a, b]); });
+  const s = pairStats(mh), s1 = pairStats(m1), s2 = pairStats(m2), sr = pairStats(rr);
+  const single = s1.qwk != null && s2.qwk != null ? (s1.qwk + s2.qwk) / 2 : null;
+  return Object.assign(s, { r1: s1, r2: s2, rr: sr, single, ofCeil: single != null && sr.qwk > 0.2 ? single / sr.qwk : null });
+}
+function totalPairs(rows){ return rows.filter(r => !r.error && r.total_model !== "" && r.total_human !== "" && r.total_model != null).map(r => [+r.total_human, +r.total_model]); }
+/* --- filtering --- */
+function xRows(run, ignoreCell){
+  const f = X.f, q = f.q.toLowerCase();
+  const ks = f.crit === "all" || f.crit === "total" ? run.crits.map(c => c.key) : [f.crit];
+  return run.rows.filter(r => {
+    if (f.errors) { if (!r.error) return false; } else if (r.error) return false;
+    if (f.prompt && r.prompt !== f.prompt) return false;
+    for (const [s, v] of Object.entries(f.segs)) if (v !== "" && String(r[s]) !== v) return false;
+    if (q && !(String(r.text).toLowerCase().includes(q) || String(r.essay_id).toLowerCase().includes(q))) return false;
+    const has = ks.filter(k => bnum(r[k + "_model"]) != null);
+    if (f.crit !== "all" && f.crit !== "total" && !has.length) return false;
+    if (f.human !== "" && !has.some(k => bnum(r[k + "_human"]) === +f.human)) return false;
+    if (f.disagree && !has.some(k => { const a = bnum(r[k + "_r1"]), b = bnum(r[k + "_r2"]); return a != null && b != null && a !== b; })) return false;
+    if (f.gap) { const ok = has.some(k => { const h = bnum(r[k + "_human"]), m = bnum(r[k + "_model"]); if (h == null) return false; const d = m - h;
+      return f.gap === "exact" ? Math.abs(d) <= tolOf(h) : f.gap === "higher" ? d > tolOf(h) : f.gap === "lower" ? d < -tolOf(h) : Math.abs(d) >= 2 - 0.001; }); if (!ok) return false; }
+    if (!ignoreCell && f.cell) { const h = bnum(r[f.cell.k + "_human"]), m = bnum(r[f.cell.k + "_model"]); if (h !== f.cell.h || m !== f.cell.m) return false; }
+    return true;
+  });
+}
+function rowGap(run, r){ let g = 0, ks = X.f.crit === "all" || X.f.crit === "total" ? run.crits.map(c => c.key) : [X.f.crit]; ks.forEach(k => { const h = bnum(r[k + "_human"]), m = bnum(r[k + "_model"]); if (h != null && m != null && Math.abs(m - h) > Math.abs(g)) g = m - h; }); return g; }
+function rowConf(run, r){ const v = run.crits.map(c => bnum(r[c.key + "_confidence"])).filter(x => x != null); return v.length ? Math.min(...v) : null; }
+/* --- render --- */
+function renderExplore(){
+  const run = xr(); $("#xEmpty").hidden = !!run; $("#xBody").hidden = !run; $("#xExports").hidden = !run;
+  $("#xRunChips").innerHTML = X.runs.map(r => `<span class="xchip ${r.id === X.active ? "on" : ""}" data-id="${esc(r.id)}" title="${esc(r.name)}">${esc(r.name.length > 60 ? r.name.slice(0, 58) + "…" : r.name)}<button data-x="1" title="Close">×</button></span>`).join("");
+  if (!run) return;
+  renderXFilters(run);
+  const rows = xRows(run, true), rowsC = X.f.cell ? xRows(run) : rows;
+  const focusKey = X.f.crit !== "all" && X.f.crit !== "total" ? X.f.crit : (X.focus || run.crits[0]?.key);
+  const stats = run.crits.map(c => ({ c, s: critStats(rows, c.key) }));
+  const tp = totalPairs(rows), multi = run.crits.length > 1 && run.unit !== "element";
+  // tiles
+  const valid = stats.filter(x => x.s.n);
+  const avg = f => { const v = valid.map(x => f(x.s)).filter(y => y != null && Number.isFinite(y)); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  const qH = avg(s => s.qwk), qS = avg(s => s.single), qC = avg(s => s.rr.qwk), ofc = qS != null && qC > 0.2 ? qS / qC : null;
+  const scored = run.rows.filter(r => !r.error).length, errs = run.rows.length - scored;
+  $("#xTiles").innerHTML = [
+    [run.unit === "element" ? "Elements" : "Essays", nfmt(rows.length), `${nfmt(scored)} scored${errs ? ` · ${errs} errors` : ""}${rows.length !== scored ? " · filtered" : ""}`],
+    ["Model vs human (QWK)", fmt2(qH), `average of ${valid.length} criteri${valid.length === 1 ? "on" : "a"}`],
+    run.two ? ["Human vs human (QWK)", fmt2(qC), "rater 1 vs rater 2: the ceiling"] : ["Human vs human", "n/a", "only one human score is released"],
+    run.two ? ["Model, as % of ceiling", pct0(ofc), qC != null && qC <= 0.2 ? "people barely agree here, so there is no useful ceiling" : "model vs one rater ÷ rater vs rater"] : ["Exact agreement", pct0(avg(s => s.exact)), "model = human score"],
+    ["Within one level", pct0(avg(s => s.adj)), run.two ? `people: ${pct0(avg(s => s.rr.adj))}` : ""],
+    ["Bias", (avg(s => s.bias) ?? 0) > 0 ? "+" + fmt2(avg(s => s.bias)) : fmt2(avg(s => s.bias)), avg(s => s.bias) < -0.05 ? "levels · model harsher" : avg(s => s.bias) > 0.05 ? "levels · model more generous" : "levels · balanced"]
+  ].map(([k, v, s]) => `<div class="stat"><div class="k">${esc(k)}</div><div class="v">${v}</div><div class="s">${esc(s)}</div></div>`).join("");
+  // criterion table
+  $("#xCritSub").textContent = `${run.model || ""}${run.prompt ? " · " + run.prompt : ""} · human = ${run.humanIs || (run.two ? "mean of the two raters" : "the released score")}. QWK: 1 is perfect agreement, 0 is chance.`;
+  const head = `<thead><tr><th>Criterion</th><th>n</th><th>QWK vs human</th>${run.two ? "<th>vs rater 1</th><th>vs rater 2</th><th>Rater 1 vs 2</th><th>Model vs ceiling</th>" : ""}<th>Exact</th><th>Within 1</th><th>Bias</th><th>Mean human</th><th>Mean model</th></tr></thead>`;
+  const line = (label, s, key, isTotal) => `<tr data-k="${esc(key)}" class="${key === focusKey ? "focus" : ""}"><td><b>${esc(label)}</b></td><td>${nfmt(s.n || 0)}</td><td>${fmt2(s.qwk)}</td>${run.two ? `<td>${fmt2(s.r1?.qwk)}</td><td>${fmt2(s.r2?.qwk)}</td><td>${fmt2(s.rr?.qwk)}</td><td>${s.ofCeil != null ? `<span class="ceilbar" title="Bar: model vs one rater (${fmt2(s.single)}). Tick: rater vs rater (${fmt2(s.rr.qwk)})"><i style="width:${Math.max(0, Math.min(100, s.single * 100))}%"></i><em style="left:${Math.max(0, Math.min(100, s.rr.qwk * 100))}%"></em></span> ${pct0(s.ofCeil)}` : "—"}</td>` : ""}<td>${pct0(s.exact)}</td><td>${pct0(s.adj)}</td><td>${s.n ? (s.bias > 0 ? "+" : "") + fmt2(s.bias) : "—"}</td><td>${fmt2(s.meanH)}</td><td>${fmt2(s.meanM)}</td></tr>`;
+  let tot = "";
+  if (multi && tp.length) { const s = pairStats(tp); const t1 = rows.filter(r => !r.error).map(r => { let a = 0, b = 0, ok = true; run.crits.forEach(c => { const x = bnum(r[c.key + "_r1"]), y = bnum(r[c.key + "_r2"]); if (x == null || y == null) ok = false; else { a += x; b += y; } }); return ok ? [a, b, +r.total_model] : null; }).filter(Boolean);
+    if (run.two && t1.length) { s.r1 = pairStats(t1.map(t => [t[0], t[2]])); s.r2 = pairStats(t1.map(t => [t[1], t[2]])); s.rr = pairStats(t1.map(t => [t[0], t[1]])); s.single = s.r1.qwk != null && s.r2.qwk != null ? (s.r1.qwk + s.r2.qwk) / 2 : null; s.ofCeil = s.single != null && s.rr.qwk > 0.2 ? s.single / s.rr.qwk : null; }
+    tot = line("Total (sum of criteria)", s, "total", true); }
+  $("#xCritTable").innerHTML = head + `<tbody>${stats.map(x => line(x.c.name, x.s, x.c.key)).join("")}${tot}</tbody>`;
+  $("#xCritNote").textContent = run.two ? "“Model vs ceiling” compares like with like: the model against one rater, divided by one rater against the other. 100% means the model agrees with a person as well as two people agree with each other." : (stats.some(x => x.s.n && x.s.meanH % 1) ? "" : "Only one human score per item is released, so there is no rater-vs-rater ceiling for this dataset.");
+  // charts on focus criterion
+  const fc = run.crits.find(c => c.key === focusKey) || run.crits[0];
+  if (fc) renderXCharts(run, rows, fc);
+  // compare
+  const others = X.runs.filter(r => r.crits.length && r.dataset === run.dataset && r.prompt === run.prompt);
+  $("#xCompareCard").hidden = others.length < 2;
+  if (others.length >= 2) {
+    const allKeys = [...new Set(others.flatMap(r => r.crits.map(c => c.key)))];
+    $("#xCompare").innerHTML = `<thead><tr><th>Run</th><th>Model</th><th>n</th>${allKeys.map(k => `<th>${esc(others.find(r => r.crits.some(c => c.key === k)).crits.find(c => c.key === k).name)}</th>`).join("")}<th>Exact</th><th>Bias</th></tr></thead><tbody>${others.map(r => {
+      const rs = xRowsFor(r), st = allKeys.map(k => r.crits.some(c => c.key === k) ? critStats(rs, k) : null), v = st.filter(s => s && s.n);
+      const av = f => { const a = v.map(f).filter(x => x != null); return a.length ? a.reduce((x, y) => x + y, 0) / a.length : null; };
+      return `<tr><td><b>${esc(r.name)}</b></td><td>${esc(r.model || "")}</td><td>${nfmt(rs.length)}</td>${st.map(s => `<td>${s ? fmt2(s.qwk) : "—"}</td>`).join("")}<td>${pct0(av(s => s.exact))}</td><td>${fmt2(av(s => s.bias))}</td></tr>`; }).join("")}</tbody>`;
+  }
+  // rows table
+  renderXRows(run, rowsC);
+}
+function xRowsFor(run){ const a = X.active; X.active = run.id; const segs = X.f.segs; X.f.segs = Object.fromEntries(Object.entries(segs).filter(([k]) => run.segs.includes(k))); const r = xRows(run, true); X.f.segs = segs; X.active = a; return r; }
+function renderXFilters(run){
+  const f = X.f, uniq = c => [...new Set(run.rows.map(r => r[c]).filter(v => v !== "" && v != null))].sort((a, b) => (+a - +b) || String(a).localeCompare(String(b)));
+  const prompts = uniq("prompt"), segName = s => ({ seg_grade: "Grade", seg_gender: "Gender", seg_ell: "ELL status", seg_economic: "Economic status", seg_race: "Race / ethnicity", seg_disability: "Disability", seg_split: "Split", seg_element: "Element type", seg_holistic: "Essay score" }[s] || s.replace(/^seg_/, ""));
+  const focus = f.crit !== "all" && f.crit !== "total" ? run.crits.find(c => c.key === f.crit) : null;
+  const hv = focus ? uniq(focus.key + "_human") : [];
+  $("#xFilters").innerHTML = `<select id="xfCrit"><option value="all">All criteria</option>${run.crits.map(c => `<option value="${esc(c.key)}"${f.crit === c.key ? " selected" : ""}>${esc(c.name)}</option>`).join("")}</select>
+    ${prompts.length > 1 ? `<select id="xfPrompt"><option value="">All prompts</option>${prompts.map(p => `<option${f.prompt === p ? " selected" : ""}>${esc(p)}</option>`).join("")}</select>` : ""}
+    ${run.segs.map(s => `<select data-seg="${esc(s)}"><option value="">${esc(segName(s))}: any</option>${uniq(s).map(v => `<option value="${esc(v)}"${f.segs[s] === String(v) ? " selected" : ""}>${esc(v)}</option>`).join("")}</select>`).join("")}
+    ${focus ? `<select id="xfHuman"><option value="">Human score: any</option>${hv.map(v => `<option${f.human === String(v) ? " selected" : ""}>${esc(v)}</option>`).join("")}</select>` : ""}
+    <select id="xfGap"><option value="">Model vs human: any</option><option value="exact"${f.gap === "exact" ? " selected" : ""}>Agrees</option><option value="lower"${f.gap === "lower" ? " selected" : ""}>Model lower</option><option value="higher"${f.gap === "higher" ? " selected" : ""}>Model higher</option><option value="off2"${f.gap === "off2" ? " selected" : ""}>Off by 2 or more</option></select>
+    ${run.two ? `<label class="ck"><input type="checkbox" id="xfDis"${f.disagree ? " checked" : ""}> Raters disagree</label>` : ""}
+    <label class="ck"><input type="checkbox" id="xfErr"${f.errors ? " checked" : ""}> Errors only</label>
+    <input type="search" id="xfQ" placeholder="Search text or ID…" value="${esc(f.q)}">`;
+  const act = [];
+  if (f.cell) act.push(`<span class="xchip on">${esc(run.crits.find(c => c.key === f.cell.k)?.name)}: human ${f.cell.h}, model ${f.cell.m}<button data-clear="cell">×</button></span>`);
+  if (Object.values(f.segs).some(Boolean) || f.prompt || f.human || f.gap || f.disagree || f.errors || f.q || f.cell || f.crit !== "all") act.push(`<button class="btn sm ghost" data-clear="all">Clear filters</button>`);
+  $("#xActive").innerHTML = act.join("");
+}
+$("#xFilters").addEventListener("change", e => {
+  const t = e.target, f = X.f;
+  if (t.id === "xfCrit") { f.crit = t.value; f.human = ""; f.cell = null; X.focus = t.value === "all" ? X.focus : t.value; }
+  else if (t.id === "xfPrompt") f.prompt = t.value; else if (t.id === "xfHuman") f.human = t.value; else if (t.id === "xfGap") f.gap = t.value;
+  else if (t.id === "xfDis") f.disagree = t.checked; else if (t.id === "xfErr") f.errors = t.checked; else if (t.dataset.seg) f.segs[t.dataset.seg] = t.value;
+  X.page = 0; renderExplore();
+});
+let xqTimer; $("#xFilters").addEventListener("input", e => { if (e.target.id !== "xfQ") return; clearTimeout(xqTimer); xqTimer = setTimeout(() => { X.f.q = e.target.value; X.page = 0; const p = e.target.selectionStart; renderExplore(); const i = $("#xfQ"); i.focus(); i.setSelectionRange(p, p); }, 250); });
+$("#xActive").onclick = e => { const b = e.target.closest("[data-clear]"); if (!b) return; if (b.dataset.clear === "cell") X.f.cell = null; else X.f = { crit: "all", prompt: "", segs: {}, human: "", gap: "", disagree: false, errors: false, q: "", cell: null }; X.page = 0; renderExplore(); };
+$("#xRunChips").onclick = e => { const c = e.target.closest(".xchip"); if (!c) return; if (e.target.closest("[data-x]")) { X.runs = X.runs.filter(r => r.id !== c.dataset.id); if (X.active === c.dataset.id) X.active = X.runs[0]?.id || null; } else X.active = c.dataset.id; X.page = 0; renderExplore(); };
+$("#xCritTable").onclick = e => { const tr = e.target.closest("tr[data-k]"); if (!tr || tr.dataset.k === "total") return; X.focus = tr.dataset.k; renderExplore(); };
+function renderXCharts(run, rows, c){
+  const k = c.key, pts = c.levels.map(l => l.points), n = pts.length;
+  $("#xCmTitle").textContent = `Where the model landed: ${c.name}`;
+  const pairs = rows.filter(r => !r.error).map(r => [bnum(r[k + "_human"]), bnum(r[k + "_model"])]).filter(p => p[0] != null && p[1] != null);
+  const hvals = [...new Set(pairs.map(p => p[0]))].sort((a, b) => a - b);
+  const cnt = (h, m) => pairs.filter(p => p[0] === h && p[1] === m).length;
+  $("#xConfusion").innerHTML = pairs.length ? `<div class="tablewrap" style="border:0"><table class="cm"><thead><tr><th>Human ↓ / Model →</th>${pts.map((p, i) => `<th style="color:${levelColor(i, n)}">${esc(c.levels[i].label)}</th>`).join("")}<th>n</th></tr></thead><tbody>${hvals.map(h => { const tot = pairs.filter(p => p[0] === h).length;
+    return `<tr><th>${h}</th>${pts.map(m => { const v = cnt(h, m), a = tot ? v / tot : 0, on = X.f.cell && X.f.cell.k === k && X.f.cell.h === h && X.f.cell.m === m; return `<td data-h="${h}" data-m="${m}" class="${Math.abs(m - h) <= tolOf(h) ? "d" : ""}" style="background:color-mix(in srgb,var(--data) ${Math.round(a * 70)}%,transparent);${a > 0.45 ? "color:#fff;" : ""}${on ? "box-shadow:inset 0 0 0 3px var(--warn);" : ""}">${v || ""}</td>`; }).join("")}<td class="hint" style="cursor:default">${tot}</td></tr>`; }).join("")}</tbody></table></div>` : `<div class="hint">No scored items match the filters.</div>`;
+  $$("#xConfusion td[data-h]").forEach(td => td.onclick = () => { const h = +td.dataset.h, m = +td.dataset.m; X.f.cell = X.f.cell && X.f.cell.k === k && X.f.cell.h === h && X.f.cell.m === m ? null : { k, h, m }; X.page = 0; renderExplore(); $("#xRows").scrollIntoView({ block: "start", behavior: "smooth" }); });
+  // distribution
+  const grid = [...new Set([...pts, ...hvals])].sort((a, b) => a - b);
+  const hc = grid.map(v => pairs.filter(p => p[0] === v).length), mc = grid.map(v => pairs.filter(p => p[1] === v).length), mx = Math.max(1, ...hc, ...mc);
+  $("#xDist").innerHTML = `<div class="distc">${grid.map((v, i) => `<div class="g"><div class="bars2"><i style="height:${hc[i] / mx * 118}px;background:var(--muted)" title="Human ${v}: ${hc[i]}"></i><i style="height:${mc[i] / mx * 118}px;background:var(--data)" title="Model ${v}: ${mc[i]}"></i></div><small>${v}</small></div>`).join("")}</div><div class="lg"><span style="--c:var(--muted)">Human</span><span style="--c:var(--data)">Model</span></div>`;
+  // bias by human
+  const bh = hvals.map(h => { const ps = pairs.filter(p => p[0] === h); return [h, ps.reduce((s, p) => s + p[1] - p[0], 0) / ps.length, ps.length]; }), bm = Math.max(0.5, ...bh.map(b => Math.abs(b[1])));
+  $("#xBias").innerHTML = `<div class="hbars">${bh.map(([h, b, nn]) => `<div class="r"><span>Human ${h}</span><span class="t"><span class="mid"></span><i style="${b < 0 ? `right:50%;width:${-b / bm * 50}%;background:var(--bad)` : `left:50%;width:${b / bm * 50}%;background:var(--good)`}"></i></span><span class="v">${b > 0 ? "+" : ""}${b.toFixed(2)} · ${nn}</span></div>`).join("")}</div><div class="lg"><span style="--c:var(--bad)">Model lower</span><span style="--c:var(--good)">Model higher</span><span>Value · number of items</span></div>`;
+  // calibration
+  const cf = rows.filter(r => !r.error).map(r => [bnum(r[k + "_confidence"]), bnum(r[k + "_human"]), bnum(r[k + "_model"])]).filter(x => x[0] != null && x[1] != null && x[2] != null);
+  const bins = [[0, .4], [.4, .55], [.55, .7], [.7, .85], [.85, 1.01]].map(([a, b]) => { const s = cf.filter(x => x[0] >= a && x[0] < b); return [`${Math.round(a * 100)}–${Math.min(100, Math.round(b * 100))}%`, s.length ? s.filter(x => Math.abs(x[2] - x[1]) <= tolOf(x[1])).length / s.length : null, s.length]; });
+  $("#xCalib").innerHTML = `<div class="hbars">${bins.map(([l, a, nn]) => `<div class="r"><span>${l}</span><span class="t"><i style="left:0;width:${(a || 0) * 100}%;background:var(--data)"></i></span><span class="v">${a == null ? "—" : pct0(a)} · ${nn}</span></div>`).join("")}</div><div class="lg"><span>Confidence band → share that agrees with the human · number of items</span></div>`;
+  // length
+  const ls = pairs.length ? rows.filter(r => !r.error && bnum(r[k + "_model"]) != null && bnum(r[k + "_human"]) != null).map(r => [r._w, Math.abs(+r[k + "_model"] - +r[k + "_human"])]).sort((a, b) => a[0] - b[0]) : [];
+  const q4 = [0, 1, 2, 3].map(i => ls.slice(Math.floor(i * ls.length / 4), Math.floor((i + 1) * ls.length / 4))).filter(s => s.length), lm = Math.max(0.5, ...q4.map(s => s.reduce((a, x) => a + x[1], 0) / s.length));
+  $("#xLen").innerHTML = `<div class="hbars">${q4.map(s => { const g = s.reduce((a, x) => a + x[1], 0) / s.length; return `<div class="r"><span>${s[0][0]}–${s[s.length - 1][0]}</span><span class="t"><i style="left:0;width:${g / lm * 100}%;background:var(--warn)"></i></span><span class="v">${g.toFixed(2)} · ${s.length}</span></div>`; }).join("")}</div><div class="lg"><span>Word count (quarters) → average gap in levels · number of items</span></div>`;
+}
+function hmCell(run, r, c){
+  const h = bnum(r[c.key + "_human"]), m = bnum(r[c.key + "_model"]); if (m == null && h == null) return `<span class="hint">—</span>`;
+  const i = c.levels.findIndex(l => l.points === m), a = r[c.key + "_r1"], b = r[c.key + "_r2"];
+  return `<span class="hm" title="${run.two && a !== "" ? `Rater 1: ${a}, rater 2: ${b}. ` : ""}Human ${h ?? "—"}, model ${m ?? "—"}"><span class="h">${h ?? "—"}</span>→<span class="m" style="background:${i >= 0 ? levelColor(i, c.levels.length) : "var(--muted)"}">${m ?? "?"}</span></span>`;
+}
+function gapPill(g){ return Math.abs(g) < 0.01 ? `<span class="gap ok">=</span>` : `<span class="gap ${g < 0 ? "lo" : "hi"}">${g > 0 ? "+" : ""}${+g.toFixed(1)}</span>`; }
+const XPAGE = 50;
+function renderXRows(run, rows){
+  const s = X.sort, sorted = rows.slice();
+  const by = { gap: r => -Math.abs(rowGap(run, r)), gapAsc: r => rowGap(run, r), gapDesc: r => -rowGap(run, r), conf: r => rowConf(run, r) ?? 9, words: r => -r._w, id: r => r.essay_id };
+  sorted.sort((a, b) => { const x = by[s](a), y = by[s](b); return x < y ? -1 : x > y ? 1 : 0; });
+  X.visible = sorted; const pages = Math.max(1, Math.ceil(sorted.length / XPAGE)); X.page = Math.min(X.page, pages - 1);
+  const pg = sorted.slice(X.page * XPAGE, (X.page + 1) * XPAGE), el = run.unit === "element";
+  const crits = X.f.crit !== "all" && X.f.crit !== "total" ? run.crits.filter(c => c.key === X.f.crit) : run.crits;
+  const seg1 = run.segs[0];
+  $("#xRowsTitle").textContent = `${el ? "Elements" : "Essays"} (${nfmt(sorted.length)})`;
+  $("#xRows").innerHTML = `<thead><tr><th>ID</th><th>Words</th>${el ? "<th>Element</th><th>Human → model</th>" : crits.map(c => `<th title="${esc(c.name)}">${esc(c.name.length > 14 ? c.name.slice(0, 13) + "…" : c.name)}</th>`).join("")}${!el && crits.length > 1 && run.crits.length > 1 ? "<th>Total</th>" : ""}<th>Biggest gap</th><th>Confidence</th>${seg1 && !el ? `<th>${esc(seg1.replace(/^seg_/, ""))}</th>` : ""}<th>Start of text</th></tr></thead><tbody>${pg.map((r, i) => {
+    const cc = el ? run.crits.find(c => c.key === r.criterion) : null;
+    return `<tr data-i="${X.page * XPAGE + i}"><td class="mono">${esc(r.essay_id)}</td><td>${r._w}</td>${el ? `<td>${esc(r.element_type)}</td><td>${cc ? hmCell(run, r, cc) : ""}</td>` : crits.map(c => `<td>${hmCell(run, r, c)}</td>`).join("")}${!el && crits.length > 1 && run.crits.length > 1 ? `<td class="hint" style="white-space:nowrap">${esc(r.total_human)} → <b>${esc(r.total_model)}</b></td>` : ""}<td>${r.error ? `<span class="pill bad">error</span>` : gapPill(rowGap(run, r))}</td><td>${pct0(rowConf(run, r))}</td>${seg1 && !el ? `<td>${esc(r[seg1])}</td>` : ""}<td class="hint" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(String(r.text).slice(0, 90))}</td></tr>`; }).join("")}</tbody>`;
+  $("#xPageInfo").textContent = sorted.length ? `${X.page * XPAGE + 1}–${Math.min(sorted.length, (X.page + 1) * XPAGE)} of ${nfmt(sorted.length)}` : "Nothing matches these filters.";
+  $("#xPrev").disabled = X.page === 0; $("#xNext").disabled = X.page >= pages - 1;
+}
+$("#xSort").onchange = e => { X.sort = e.target.value; X.page = 0; const run = xr(); if (run) renderXRows(run, xRows(run)); };
+$("#xPrev").onclick = () => { X.page--; renderXRows(xr(), xRows(xr())); };
+$("#xNext").onclick = () => { X.page++; renderXRows(xr(), xRows(xr())); };
+$("#xRows").onclick = e => { const tr = e.target.closest("tr[data-i]"); if (tr) openXDetail(+tr.dataset.i); };
+function openXDetail(i){
+  const run = xr(), r = X.visible[i]; if (!r) return; X.dlgIndex = i;
+  const crits = run.unit === "element" ? run.crits.filter(c => c.key === r.criterion) : run.crits, audit = run.audits[r.essay_id];
+  const box = c => { const h = bnum(r[c.key + "_human"]), m = bnum(r[c.key + "_model"]), a = r[c.key + "_r1"], b = r[c.key + "_r2"];
+    const probs = c.levels.map(l => bnum(r[`${c.key}_p${bfmt(l.points)}`]) || 0);
+    return `<div class="xcritbox"><div class="row between"><b>${esc(c.name)}</b>${hmCell(run, r, c)}</div>
+      <div class="hint">${run.two && a !== "" && a != null ? `Rater 1: <b>${esc(a)}</b> · Rater 2: <b>${esc(b)}</b> · ` : ""}Human: <b>${h ?? "—"}</b> · Model: <b>${m ?? "—"}</b>${r[c.key + "_expected"] ? ` (expected ${(+r[c.key + "_expected"]).toFixed(2)})` : ""} · confidence ${pct0(bnum(r[c.key + "_confidence"]))}</div>
+      <div class="pbar" title="Model probabilities">${probs.map((p, li) => `<i style="width:${p * 100}%;background:${levelColor(li, c.levels.length)}" title="${esc(c.levels[li].label)}: ${pct0(p)}"></i>`).join("")}</div>
+      <div class="lvls">${c.levels.map((l, li) => { const isH = h != null && Math.abs(l.points - h) < 0.51, isM = l.points === m; return (isH || isM) && l.desc ? `<div class="lv ${isM ? "m" : ""} ${isH ? "h" : ""}"><span class="xtag">${isH && isM ? "Human & model" : isH ? "Human" : "Model"} · ${esc(l.label)}</span><span>${esc(l.desc)}</span></div>` : ""; }).join("")}</div></div>`; };
+  $("#viewTitle").textContent = `${run.unit === "element" ? r.element_type + " · " : ""}${r.essay_id}`;
+  $("#viewBody").innerHTML = `<div class="row" style="margin-bottom:10px"><button class="btn sm" id="xdPrev">‹ Previous</button><button class="btn sm" id="xdNext">Next ›</button><span class="hint">${i + 1} of ${nfmt(X.visible.length)} in this view</span><span class="spacer"></span>${run.segs.map(s => r[s] ? `<span class="pill">${esc(s.replace(/^seg_/, ""))}: ${esc(r[s])}</span>` : "").join("")}</div>
+    <div class="xdraw"><div>${run.pinfo?.assignment ? `<div class="xctx"><b>Assignment:</b> ${esc(run.pinfo.assignment.slice(0, 400))}${run.pinfo.assignment.length > 400 ? "…" : ""}</div>` : ""}${run.pinfo?.source_text ? `<details style="margin-bottom:8px"><summary class="hint">Source text the writer was given</summary><div class="xessay" style="margin-top:6px">${esc(run.pinfo.source_text)}</div></details>` : ""}<div class="xessay">${esc(r.text)}</div>${r.context ? `<details style="margin-top:8px"><summary class="hint">Full essay (context the model saw)</summary><div class="xessay" style="margin-top:6px">${esc(r.context)}</div></details>` : ""}</div>
+    <div>${r.error ? `<div class="alert bad">${esc(r.error)}</div>` : ""}${crits.map(box).join("")}
+    ${audit ? `<details><summary class="hint">Exact request and raw model reply</summary><pre class="mono" style="white-space:pre-wrap;max-height:300px;overflow:auto">${esc(JSON.stringify(audit.request, null, 2))}\n\n--- reply ---\n${esc(fmtJSON(audit.judgeText || audit.responseText))}</pre></details>` : `<p class="hint">${r.response_sha256 ? `Raw reply SHA-256 ${esc(r.response_sha256.slice(0, 16))}…, in the run's audit file.` : ""}</p>`}</div></div>`;
+  $("#xdPrev").disabled = i === 0; $("#xdNext").disabled = i >= X.visible.length - 1;
+  $("#xdPrev").onclick = () => openXDetail(i - 1); $("#xdNext").onclick = () => openXDetail(i + 1);
+  if (!$("#viewDlg").open) $("#viewDlg").showModal();
+}
+document.addEventListener("keydown", e => { if (!$("#viewDlg").open || X.dlgIndex == null || !$("#xdNext")) return; if (e.key === "ArrowRight" && !$("#xdNext").disabled) openXDetail(X.dlgIndex + 1); if (e.key === "ArrowLeft" && !$("#xdPrev").disabled) openXDetail(X.dlgIndex - 1); });
+$("#viewDlg").addEventListener("close", () => { X.dlgIndex = null; });
+$("#xCsv").onclick = () => { const run = xr(); if (!run) return; const rows = X.visible || xRows(run); const cols = Object.keys(run.rows[0]).filter(c => !c.startsWith("_") && c !== "context");
+  download(`${slug(run.name)}-filtered.csv`, toCSV([cols, ...rows.map(r => cols.map(c => r[c] ?? ""))]), "text/csv"); };
+$("#xReport").onclick = () => {
+  const run = xr(); if (!run) return;
+  const css = `body{font:14px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1d1d1b;max-width:1100px;margin:24px auto;padding:0 16px}table{border-collapse:collapse;width:100%;font-size:12.5px;margin:8px 0 18px}th,td{border:1px solid #ddd;padding:5px 7px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#f3f2ee}.stats{display:flex;flex-wrap:wrap;gap:10px}.stat{border:1px solid #ddd;border-radius:10px;padding:8px 12px;min-width:150px}.k{font-size:11px;color:#666;text-transform:uppercase}.v{font-size:22px;font-weight:700}.s{font-size:12px;color:#666}.hint{color:#666;font-size:12.5px}.ceilbar{display:none}.cm td.d{outline:2px solid #1d1d1b;outline-offset:-2px}.hm .m{color:#fff;border-radius:4px;padding:0 4px;font-weight:700}`;
+  const filt = [X.f.crit !== "all" ? `criterion ${X.f.crit}` : "", X.f.prompt, ...Object.entries(X.f.segs).filter(([, v]) => v).map(([k, v]) => `${k.replace(/^seg_/, "")}=${v}`), X.f.gap && `gap: ${X.f.gap}`, X.f.disagree && "raters disagree", X.f.q && `search “${X.f.q}”`].filter(Boolean).join(", ");
+  const rows = (X.visible || []).slice(0, 500);
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>${esc(run.name)} · benchmark report</title><style>${css}</style></head><body>
+  <h1 style="font-size:22px;margin:0">${esc(run.name)}</h1><p class="hint">Model ${esc(run.model || "")} · ${esc(run.prompt || "")} · generated ${new Date().toLocaleString()} by Nimble Rubric Evaluator ${APP_VERSION}${filt ? ` · filters: ${esc(filt)}` : ""}</p>
+  <div class="stats">${$("#xTiles").innerHTML}</div><h2 style="font-size:16px">By criterion</h2><p class="hint">${esc($("#xCritSub").textContent)}</p><table>${$("#xCritTable").innerHTML}</table><p class="hint">${esc($("#xCritNote").textContent)}</p>
+  <h2 style="font-size:16px">${esc($("#xCmTitle").textContent)}</h2>${$("#xConfusion").innerHTML}
+  <h2 style="font-size:16px">Items (${rows.length}${(X.visible || []).length > 500 ? " of " + X.visible.length : ""}, sorted by ${esc($("#xSort").selectedOptions[0].textContent.toLowerCase())})</h2><table>${$("#xRows").querySelector("thead").outerHTML}<tbody>${(() => { const keep = X.page; let out = ""; for (let p = 0; p * XPAGE < rows.length; p++) { X.page = p; renderXRows(run, X.visible); out += $("#xRows tbody").innerHTML; } X.page = keep; renderXRows(run, X.visible); return out; })()}</tbody></table></body></html>`;
+  download(`${slug(run.name)}-report.html`, html, "text/html");
+};
+function setBenchSub(s){ B.sub = s; $$("#benchSub button").forEach(b => b.classList.toggle("active", b.dataset.bsub === s)); $("#bsub-run").hidden = s !== "run"; $("#bsub-explore").hidden = s !== "explore"; if (s === "explore") renderExplore(); }
+$("#benchSub").onclick = e => { const b = e.target.closest("button"); if (b) setBenchSub(b.dataset.bsub); };
+loadManifest(); renderBenchRuns();
 
 /* ---------- help ---------- */
 function openHelp(id){ switchTab("help"); const el = document.getElementById(id.startsWith("h-") ? id : "h-" + id); if (el) setTimeout(() => el.scrollIntoView({ block: "start" }), 30); }
